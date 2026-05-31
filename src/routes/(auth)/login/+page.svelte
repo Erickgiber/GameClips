@@ -1,8 +1,12 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+
 	// import { goto } from '$app/navigation';
 	import { m } from '$lib/paraglide/messages';
 	import { Eye, EyeOff, Mail, Lock, Gamepad2 } from 'lucide-svelte';
+	import { resolve } from '$app/paths';
 	import { fly } from 'svelte/transition';
+	import { user } from '$lib/stores/user.svelte';
 
 	let showPassword = $state(false);
 	let email = $state('');
@@ -10,7 +14,8 @@
 
 	function handleSubmit(e: Event) {
 		e.preventDefault();
-		// goto('/');
+		user.authenticated = true;
+		goto(resolve('/'));
 	}
 </script>
 
@@ -21,7 +26,7 @@
 		<div in:fly={{ y: -20, duration: 400 }} class="mb-8 text-center">
 			<div class="mb-4 inline-flex items-center gap-3">
 				<div
-					class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary shadow-lg shadow-primary/30"
+					class="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-primary to-secondary shadow-lg shadow-primary/30"
 				>
 					<Gamepad2 class="h-7 w-7 text-white" />
 				</div>
@@ -93,7 +98,7 @@
 						<span class="text-muted-foreground">{m.remember_me()}</span>
 					</label>
 					<a
-						href="/forgot-password"
+						href={resolve('/forgot-password')}
 						class="font-medium text-accent transition-colors hover:text-accent/80"
 					>
 						{m.forgot_password()}
@@ -155,7 +160,7 @@
 
 			<p class="mt-6 text-center text-sm text-muted-foreground">
 				{m.no_account()}
-				<a href="/register" class="font-bold text-accent transition-colors hover:text-accent/80">
+				<a href={resolve('/register')} class="font-bold text-accent transition-colors hover:text-accent/80">
 					{m.sign_up()}
 				</a>
 			</p>
@@ -163,9 +168,9 @@
 
 		<p class="mt-6 text-center text-xs text-muted-foreground">
 			{m.terms_agreement()}
-			<a href="/" class="text-accent hover:text-accent/80">{m.terms_of_service()}</a>
+			<a href={resolve('/')} class="text-accent hover:text-accent/80">{m.terms_of_service()}</a>
 			{m.and()}
-			<a href="/" class="text-accent hover:text-accent/80">{m.privacy_policy()}</a>
+			<a href={resolve('/')} class="text-accent hover:text-accent/80">{m.privacy_policy()}</a>
 		</p>
 	</div>
 </div>

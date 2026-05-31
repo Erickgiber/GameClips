@@ -1,18 +1,13 @@
 <script lang="ts">
 	import { m } from '$lib/paraglide/messages';
 
-	// Importamos las funciones de traducción generadas por Paraglide
-
-	// Definimos la interfaz de las Runas de Svelte 5
 	interface Props {
-		activeCategory: string;
-		onCategoryChange: (category: string) => void;
+		activeCategory?: string;
+		onCategoryChange?: (category: string) => void;
 	}
 
-	// Desestructuramos las propiedades usando la runa $props()
-	let { activeCategory, onCategoryChange }: Props = $props();
+	let { activeCategory = 'for_you', onCategoryChange }: Props = $props();
 
-	// Mapeamos los identificadores con sus respectivas funciones de traducción de Paraglide
 	const categories = [
 		{ id: 'for_you', label: m.category_for_you },
 		{ id: 'fps', label: m.category_fps },
@@ -34,7 +29,7 @@
 		{#each categories as category (category.id)}
 			<button
 				type="button"
-				onclick={() => onCategoryChange(category.id)}
+				onclick={() => onCategoryChange?.(category.id)}
 				class="h-max rounded-full px-4 py-1.5 text-sm font-medium whitespace-nowrap transition-all md:cursor-pointer
           {activeCategory === category.id
 					? 'bg-primary text-primary-foreground shadow-lg shadow-primary/30'

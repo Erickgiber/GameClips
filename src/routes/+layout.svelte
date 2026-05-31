@@ -3,15 +3,19 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import Header from '$lib/components/Header.svelte';
 	import CategoryNav from '$lib/components/CategoryNav.svelte';
+	import { user } from '$lib/stores/user.svelte';
+	import { useAuthGuard } from '$lib/stores/authGuard.svelte';
 
 	let { children } = $props();
-	let activeCategory = $state('for_you');
+
+	useAuthGuard();
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
-<Header />
-
-<CategoryNav {activeCategory} onCategoryChange={(category) => (activeCategory = category)} />
+{#if user.authenticated}
+	<Header />
+	<CategoryNav />
+{/if}
 
 {@render children()}

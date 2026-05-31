@@ -3,6 +3,7 @@
 	import { Eye, EyeOff, Mail, Lock, User, Gamepad2 } from 'lucide-svelte';
 	import { fly } from 'svelte/transition';
 	import * as m from '$lib/paraglide/messages';
+	import { resolve } from '$app/paths';
 
 	let showPassword = $state(false);
 	let showConfirmPassword = $state(false);
@@ -20,7 +21,7 @@
 			alert(m.passwords_do_not_match());
 			return;
 		}
-		goto('/');
+		goto(resolve('/'));
 	}
 </script>
 
@@ -147,11 +148,11 @@
 						/>
 						<span class="text-muted-foreground">
 							{m.i_agree_to()}
-							<a href="/" class="text-accent hover:text-accent/80 font-medium">
+							<a href={resolve('/')} class="text-accent hover:text-accent/80 font-medium">
 								{m.terms_of_service()}
 							</a>
 							{m.and()}
-							<a href="/" class="text-accent hover:text-accent/80 font-medium">
+							<a href={resolve('/')} class="text-accent hover:text-accent/80 font-medium">
 								{m.privacy_policy()}
 							</a>
 						</span>
@@ -199,7 +200,7 @@
 
 			<p class="text-center text-sm text-muted-foreground mt-6">
 				{m.already_have_account()}
-				<a href="/login" class="text-accent hover:text-accent/80 font-bold transition-colors">
+				<a href={resolve('/login')} class="text-accent hover:text-accent/80 font-bold transition-colors">
 					{m.sign_in()}
 				</a>
 			</p>
