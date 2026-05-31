@@ -46,5 +46,16 @@
 	"create_account_button": "Create Account",
 	"already_have_account": "Already have an account? ",
 	"sign_in": "Sign In",
-	"passwords_do_not_match": "Passwords do not match"
+	"passwords_do_not_match": "Passwords do not match",
+	"follow": "Follow",
+	"nav_home": "Home",
+	"nav_discover": "Discover",
+	"nav_inbox": "Inbox",
+	"nav_profile": "Profile",
+	"swipe_indicator": "Swipe up/down",
+	"loading": "Loading...",
+	"almostThere": "Almost There...",
+	"gettingReady": "We're getting everything ready for you...",
+	"sitTight": "Sit tight for just a moment.",
+	"appreciatePatience": "Appreciate your patience. Almost there!"
 }

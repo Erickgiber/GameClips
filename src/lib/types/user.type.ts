@@ -1,4 +1,4 @@
 export type User = {
-    id?: string;
-    authenticated: boolean;
-}
+	id?: string;
+	authenticated: boolean;
+};

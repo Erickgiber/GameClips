@@ -1,7 +1,7 @@
 import type { User } from '$lib/types/user.type';
 
 const userInitial: User = {
-	authenticated: false
+	authenticated: true
 };
 
 export const user: User = $state(userInitial);

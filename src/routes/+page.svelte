@@ -1,19 +1,14 @@
-<script>
-	import TrendingPanel from '$lib/components/TrendingPanel.svelte';
-	import VideoGallery from '$lib/components/ui/card/VideoGallery.svelte';
-	import { mockVideos } from '$lib/mocks/videos';
+<script lang="ts">
+	import HomeDesktop from '$lib/components/views/home/HomeDesktop.svelte';
+	import HomeMobile from '$lib/components/views/home/HomeMobile.svelte';
+	import { client } from '$lib/stores/isClient.svelte';
+	import { screen } from '$lib/stores/isMobile.svelte';
 </script>
 
-<section id="home" class="flex h-full w-full justify-between gap-6">
-	<div class="w-full p-4">
-		<VideoGallery {mockVideos} />
-	</div>
-
-	<TrendingPanel />
-</section>
-
-<style>
-	#home {
-		min-height: calc(100dvh - var(--spacing-header) - var(--spacing-category-nav));
-	}
-</style>
+{#if client.current}
+	{#if screen.isMobile}
+		<HomeMobile />
+	{:else}
+		<HomeDesktop />
+	{/if}
+{/if}

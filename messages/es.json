@@ -46,5 +46,16 @@
 	"create_account_button": "Crear Cuenta",
 	"already_have_account": "¿Ya tienes una cuenta? ",
 	"sign_in": "Iniciar Sesión",
-	"passwords_do_not_match": "Las contraseñas no coinciden"
+	"passwords_do_not_match": "Las contraseñas no coinciden",
+	"follow": "Seguir",
+	"nav_home": "Inicio",
+	"nav_discover": "Descubrir",
+	"nav_inbox": "Bandeja",
+	"nav_profile": "Perfil",
+	"swipe_indicator": "Desliza arriba/abajo",
+	"loading": "Cargando...",
+	"almostThere": "Ya casi está...",
+	"gettingReady": "Estamos preparando todo para ti...",
+	"sitTight": "Espera un momento.",
+	"appreciatePatience": "Agradecemos tu paciencia. ¡Ya casi terminamos!"
 }

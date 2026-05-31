@@ -1,38 +1,16 @@
 <script lang="ts">
+	import { theme } from '$lib/stores/theme.svelte';
 	import { onMount } from 'svelte';
-	import { tick } from 'svelte';
-	let theme: 'light' | 'dark' = $state('light');
+
 	let mounted = $state(false);
 
-	// Check local storage or system preference
+	const toggleTheme = () => {
+		theme.isDark = !theme.isDark;
+	};
+
 	onMount(() => {
-		const stored = localStorage.getItem('theme');
-		if (
-			stored === 'dark' ||
-			(!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)
-		) {
-			theme = 'dark';
-		} else {
-			theme = 'light';
-		}
-		setTheme(theme);
 		mounted = true;
 	});
-
-	function setTheme(t: 'light' | 'dark') {
-		theme = t;
-		localStorage.setItem('theme', t);
-		if (t === 'dark') {
-			document.documentElement.classList.add('dark');
-		} else {
-			document.documentElement.classList.remove('dark');
-		}
-	}
-
-	async function toggleTheme() {
-		setTheme(theme === 'dark' ? 'light' : 'dark');
-		await tick();
-	}
 </script>
 
 <button
@@ -43,10 +21,10 @@
 >
 	<span
 		class="absolute top-1 left-1 h-6 w-6 transform rounded-full bg-white shadow-md transition-transform duration-300 dark:bg-gray-900"
-		style="transform: translateX({theme === 'dark' ? '24px' : '0px'});"
+		style="transform: translateX({theme.isDark ? '24px' : '0px'});"
 	>
 		<span class="absolute inset-0 flex items-center justify-center transition-opacity duration-300">
-			{#if theme === 'dark'}
+			{#if theme.isDark}
 				<!-- Moon Icon -->
 				<svg
 					class="h-4 w-4 text-yellow-400"

@@ -160,7 +160,10 @@
 
 			<p class="mt-6 text-center text-sm text-muted-foreground">
 				{m.no_account()}
-				<a href={resolve('/register')} class="font-bold text-accent transition-colors hover:text-accent/80">
+				<a
+					href={resolve('/register')}
+					class="font-bold text-accent transition-colors hover:text-accent/80"
+				>
 					{m.sign_up()}
 				</a>
 			</p>
