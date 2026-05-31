@@ -2,18 +2,17 @@ import adapter from '@sveltejs/adapter-static';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	compilerOptions: {
-		// Force runes mode for the project, except for libraries. Can be removed in svelte 6.
-		runes: ({ filename }) => (filename.split(/[/\\]/).includes('node_modules') ? undefined : true)
-	},
 	kit: {
 		adapter: adapter({
 			pages: 'build',
 			assets: 'build',
-			fallback: 'index.html', // Obligatorio para el enrutamiento de Capacitor (SPA)
-			precompress: false,
-			strict: true
-		})
+			fallback: 'index.html' // 👈 esto convierte todo en SPA
+		}),
+
+		prerender: {
+			entries: ['*'], // importante para evitar errores de crawling
+			handleUnseenRoutes: 'ignore'
+		}
 	}
 };
 
