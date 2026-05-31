@@ -193,7 +193,7 @@
 			<div class="absolute right-0 bottom-20 left-0 z-20 px-4">
 				<div class="mb-2">
 					<span
-						class="mb-3 text-white inline-block rounded-full bg-primary/90 px-3 py-1 text-xs font-bold backdrop-blur-md"
+						class="mb-3 inline-block rounded-full bg-primary/90 px-3 py-1 text-xs font-bold text-white backdrop-blur-md"
 					>
 						{currentVideo.game}
 					</span>
@@ -230,7 +230,9 @@
 		</div>
 	{/key}
 
-	<div class="absolute right-0 bottom-0 left-0 z-50 border-t border-[#1e293b] bg-card-foreground/10 backdrop-blur-md">
+	<div
+		class="absolute right-0 bottom-0 left-0 z-50 border-t border-[#1e293b] bg-card-foreground/10 backdrop-blur-md"
+	>
 		<div class="flex items-center justify-around py-2">
 			<button
 				class="flex flex-col items-center gap-1 px-4 py-2 transition-transform active:scale-90"
@@ -258,7 +260,8 @@
 				<span class="text-xs font-medium text-muted-foreground">{m.nav_inbox()}</span>
 				<div class="absolute top-1.5 right-3 h-2 w-2 rounded-full bg-destructive"></div>
 			</button>
-			<a href={resolve(`/${user.username}`)}
+			<a
+				href={resolve(`/${user.username}`)}
 				class="flex flex-col items-center gap-1 px-4 py-2 transition-transform active:scale-90"
 			>
 				<User class="h-6 w-6 text-muted-foreground" />

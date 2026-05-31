@@ -8,5 +8,5 @@ export const client = $state({
 if (browser) {
 	setTimeout(() => {
 		client.showLoader = false;
-	}, 100); 
+	}, 100);
 }

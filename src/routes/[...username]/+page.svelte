@@ -17,9 +17,7 @@
 	let isLoaded = $state(false);
 	let fetchedProfile: User | null = $state(null);
 
-	const userProfile = $derived(
-		isSelfProfile ? user : fetchedProfile
-	);
+	const userProfile = $derived(isSelfProfile ? user : fetchedProfile);
 
 	async function loadProfile() {
 		if (!browser) return;

@@ -32,7 +32,7 @@
 	<div class="flex items-center gap-3">
 		<ToggleTheme />
 
-		<button  class="relative rounded-lg p-2 transition-colors hover:bg-muted">
+		<button class="relative rounded-lg p-2 transition-colors hover:bg-muted">
 			<Bell class="h-5 w-5" />
 			<div class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-destructive"></div>
 		</button>
