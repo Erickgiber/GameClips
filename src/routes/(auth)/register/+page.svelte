@@ -147,11 +147,11 @@
 						/>
 						<span class="text-muted-foreground">
 							{m.i_agree_to()}
-							<a href="/terms" class="text-accent hover:text-accent/80 font-medium">
+							<a href="/" class="text-accent hover:text-accent/80 font-medium">
 								{m.terms_of_service()}
 							</a>
 							{m.and()}
-							<a href="/privacy" class="text-accent hover:text-accent/80 font-medium">
+							<a href="/" class="text-accent hover:text-accent/80 font-medium">
 								{m.privacy_policy()}
 							</a>
 						</span>
