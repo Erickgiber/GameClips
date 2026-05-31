@@ -2,6 +2,8 @@
 	import { t } from '$lib/helpers/translate';
 	import { Search, Bell, User } from 'lucide-svelte';
 	import ToggleTheme from './ui/ToggleTheme.svelte';
+	import { resolve } from '$app/paths';
+	import { user } from '$lib/stores/user.svelte';
 </script>
 
 <nav
@@ -30,12 +32,12 @@
 	<div class="flex items-center gap-3">
 		<ToggleTheme />
 
-		<button class="relative rounded-lg p-2 transition-colors hover:bg-muted">
+		<button  class="relative rounded-lg p-2 transition-colors hover:bg-muted">
 			<Bell class="h-5 w-5" />
 			<div class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-destructive"></div>
 		</button>
-		<button class="rounded-lg p-2 transition-colors hover:bg-muted">
+		<a href={resolve(`/${user.username}`)} class="rounded-lg p-2 transition-colors hover:bg-muted">
 			<User class="h-5 w-5" />
-		</button>
+		</a>
 	</div>
 </nav>

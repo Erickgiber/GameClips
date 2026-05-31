@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import { m } from '$lib/paraglide/messages';
 
 	interface Props {
@@ -22,21 +23,23 @@
 	];
 </script>
 
-<div
-	class=" scrollbar-hide flex items-center overflow-x-auto border-b border-border bg-card/30 backdrop-blur-sm"
->
-	<div class="flex h-category-nav items-center gap-2 px-4">
-		{#each categories as category (category.id)}
-			<button
-				type="button"
-				onclick={() => onCategoryChange?.(category.id)}
-				class="h-max rounded-full px-4 py-1.5 text-sm font-medium whitespace-nowrap transition-all md:cursor-pointer
+{#if page.url.pathname === '/'}
+	<div
+		class=" scrollbar-hide flex items-center overflow-x-auto border-b border-border bg-card/30 backdrop-blur-sm"
+	>
+		<div class="flex h-category-nav items-center gap-2 px-4">
+			{#each categories as category (category.id)}
+				<button
+					type="button"
+					onclick={() => onCategoryChange?.(category.id)}
+					class="h-max rounded-full px-4 py-1.5 text-sm font-medium whitespace-nowrap transition-all md:cursor-pointer
           {activeCategory === category.id
-					? 'bg-primary text-primary-foreground shadow-lg shadow-primary/30'
-					: 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground'}"
-			>
-				{category.label()}
-			</button>
-		{/each}
+						? 'bg-primary text-primary-foreground shadow-lg shadow-primary/30'
+						: 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground'}"
+				>
+					{category.label()}
+				</button>
+			{/each}
+		</div>
 	</div>
-</div>
+{/if}

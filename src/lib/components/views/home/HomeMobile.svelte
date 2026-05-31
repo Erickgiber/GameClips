@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { m } from '$lib/paraglide/messages';
+	import { user } from '$lib/stores/user.svelte';
 	import {
 		Heart,
 		MessageCircle,
@@ -110,9 +112,9 @@
 			>
 				<div class="h-3 w-3 rounded-sm bg-accent"></div>
 			</div>
-			<span class="text-lg font-black tracking-tight">GAMECLIP</span>
+			<span class="text-lg font-black tracking-tight text-white">GAMECLIP</span>
 		</div>
-		<Search class="h-6 w-6" />
+		<Search class="h-6 w-6" color="white" />
 	</div>
 
 	{#key currentVideo.id}
@@ -145,9 +147,9 @@
 							? 'bg-destructive/90'
 							: 'bg-black/20'}"
 					>
-						<Heart class="h-6 w-6 {isLiked ? 'fill-white' : ''}" />
+						<Heart class="h-6 w-6 {isLiked ? 'fill-white' : ''}" color="white" />
 					</div>
-					<span class="font-mono text-xs font-medium">
+					<span class="font-mono text-xs font-medium text-white">
 						{formatNumber(currentVideo.likes + (isLiked ? 1 : 0))}
 					</span>
 				</button>
@@ -156,9 +158,9 @@
 					<div
 						class="flex h-12 w-12 items-center justify-center rounded-full bg-black/20 backdrop-blur-md"
 					>
-						<MessageCircle class="h-6 w-6" />
+						<MessageCircle class="h-6 w-6" color="white" />
 					</div>
-					<span class="font-mono text-xs font-medium">
+					<span class="font-mono text-xs font-medium text-white">
 						{formatNumber(currentVideo.comments)}
 					</span>
 				</button>
@@ -167,9 +169,9 @@
 					<div
 						class="flex h-12 w-12 items-center justify-center rounded-full bg-black/20 backdrop-blur-md"
 					>
-						<Share2 class="h-6 w-6" />
+						<Share2 class="h-6 w-6" color="white" />
 					</div>
-					<span class="font-mono text-xs font-medium">
+					<span class="font-mono text-xs font-medium text-white">
 						{formatNumber(currentVideo.shares)}
 					</span>
 				</button>
@@ -183,7 +185,7 @@
 							? 'bg-accent/90'
 							: 'bg-black/20'}"
 					>
-						<Bookmark class="h-6 w-6 {isSaved ? 'fill-white' : ''}" />
+						<Bookmark class="h-6 w-6 {isSaved ? 'fill-white' : ''}" color="white" />
 					</div>
 				</button>
 			</div>
@@ -191,7 +193,7 @@
 			<div class="absolute right-0 bottom-20 left-0 z-20 px-4">
 				<div class="mb-2">
 					<span
-						class="mb-3 inline-block rounded-full bg-primary/90 px-3 py-1 text-xs font-bold backdrop-blur-md"
+						class="mb-3 text-white inline-block rounded-full bg-primary/90 px-3 py-1 text-xs font-bold backdrop-blur-md"
 					>
 						{currentVideo.game}
 					</span>
@@ -203,8 +205,8 @@
 						alt={currentVideo.creator}
 						class="h-10 w-10 rounded-full border-2 border-white/20"
 					/>
-					<div class="flex-1">
-						<p class="text-sm font-bold">{currentVideo.creator}</p>
+					<div>
+						<p class="text-sm font-bold text-white">{currentVideo.creator}</p>
 					</div>
 					<button
 						class="rounded-full bg-white px-4 py-1.5 text-xs font-bold text-black transition-transform active:scale-95"
@@ -213,7 +215,7 @@
 					</button>
 				</div>
 
-				<p class="mb-2 line-clamp-2 text-sm font-bold">
+				<p class="mb-2 line-clamp-2 text-sm font-bold text-white">
 					{currentVideo?.title ?? ''}
 				</p>
 
@@ -228,7 +230,7 @@
 		</div>
 	{/key}
 
-	<div class="absolute right-0 bottom-0 left-0 z-50 border-t bg-card/50">
+	<div class="absolute right-0 bottom-0 left-0 z-50 border-t border-[#1e293b] bg-card-foreground/10 backdrop-blur-md">
 		<div class="flex items-center justify-around py-2">
 			<button
 				class="flex flex-col items-center gap-1 px-4 py-2 transition-transform active:scale-90"
@@ -239,8 +241,8 @@
 			<button
 				class="flex flex-col items-center gap-1 px-4 py-2 transition-transform active:scale-90"
 			>
-				<Compass class="h-6 w-6 text-muted-foreground" />
-				<span class="text-xs font-medium text-muted-foreground">{m.nav_discover()}</span>
+				<Compass class="h-6 w-6" color="white" />
+				<span class="text-xs font-medium text-white">{m.nav_discover()}</span>
 			</button>
 			<button class="-mt-3 flex flex-col items-center gap-1 transition-transform active:scale-90">
 				<div
@@ -256,12 +258,12 @@
 				<span class="text-xs font-medium text-muted-foreground">{m.nav_inbox()}</span>
 				<div class="absolute top-1.5 right-3 h-2 w-2 rounded-full bg-destructive"></div>
 			</button>
-			<button
+			<a href={resolve(`/${user.username}`)}
 				class="flex flex-col items-center gap-1 px-4 py-2 transition-transform active:scale-90"
 			>
 				<User class="h-6 w-6 text-muted-foreground" />
 				<span class="text-xs font-medium text-muted-foreground">{m.nav_profile()}</span>
-			</button>
+			</a>
 		</div>
 	</div>
 
