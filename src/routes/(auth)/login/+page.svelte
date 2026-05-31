@@ -163,9 +163,9 @@
 
 		<p class="mt-6 text-center text-xs text-muted-foreground">
 			{m.terms_agreement()}
-			<a href="/terms" class="text-accent hover:text-accent/80">{m.terms_of_service()}</a>
+			<a href="/" class="text-accent hover:text-accent/80">{m.terms_of_service()}</a>
 			{m.and()}
-			<a href="/privacy" class="text-accent hover:text-accent/80">{m.privacy_policy()}</a>
+			<a href="/" class="text-accent hover:text-accent/80">{m.privacy_policy()}</a>
 		</p>
 	</div>
 </div>
