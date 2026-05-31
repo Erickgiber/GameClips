@@ -34,5 +34,17 @@
 	"terms_agreement": "By continuing, you agree to GameClip's ",
 	"terms_of_service": "Terms of Service",
 	"and": " and ",
-	"privacy_policy": "Privacy Policy"
+	"privacy_policy": "Privacy Policy",
+	"join_community": "Join the ultimate gaming community",
+	"create_account_title": "Create Account",
+	"username": "Username",
+	"choose_username": "Choose a username",
+	"create_password": "Create a password",
+	"confirm_password": "Confirm Password",
+	"confirm_your_password": "Confirm your password",
+	"i_agree_to": "I agree to the ",
+	"create_account_button": "Create Account",
+	"already_have_account": "Already have an account? ",
+	"sign_in": "Sign In",
+	"passwords_do_not_match": "Passwords do not match"
 }
