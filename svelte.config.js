@@ -6,11 +6,11 @@ const config = {
 		adapter: adapter({
 			pages: 'build',
 			assets: 'build',
-			fallback: 'index.html' // 👈 esto convierte todo en SPA
+			fallback: 'index.html'
 		}),
 
 		prerender: {
-			entries: ['*'], // importante para evitar errores de crawling
+			entries: ['*'],
 			handleUnseenRoutes: 'ignore'
 		}
 	}
