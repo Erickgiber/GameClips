@@ -75,8 +75,7 @@
 	"empty_videos_msg": "Sube tu primer clip de gameplay",
 	"empty_saved_msg": "Guarda los videos que quieras ver después",
 	"empty_liked_msg": "Dale me gusta a videos para verlos aquí",
-	"load_more": "Cargar Más"
-	,
+	"load_more": "Cargar Más",
 	"seo.default_description": "Descubre highlights de videojuegos, clips de creadores y grandes momentos de esports en un solo feed para jugadores y fans.",
 	"seo.discover_title": "Descubre clips y creadores en tendencia | GameClips",
 	"seo.discover_description": "Explora creadores emergentes, juegos en tendencia y nuevos highlights de gaming seleccionados para la comunidad de GameClips.",
@@ -95,5 +94,20 @@
 	"seo.paraglide_title": "Demo de i18n con Paraglide | GameClips",
 	"seo.paraglide_description": "Demostración interna de localización para verificar mensajes multilenguaje en la app de GameClips.",
 	"seo.profile_title": "Perfil de {username} | GameClips",
-	"seo.profile_description": "Mira los clips de gaming, highlights, estadísticas y actividad reciente de la comunidad de {username} en GameClips."
+	"seo.profile_description": "Mira los clips de gaming, highlights, estadísticas y actividad reciente de la comunidad de {username} en GameClips.",
+	"notifications": "Notificaciones",
+	"unread_notification": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{count} notificación no leída",
+				"countPlural=other": "{count} notificaciones no leídas"
+			}
+		}
+	],
+	"open_notifications": "Abrir notificaciones",
+	"notifications_empty_title": "Aún no hay notificaciones",
+	"notifications_empty": "Cuando alguien reacciona a tus clips, sigue tu perfil o te menciona, las actualizaciones aparecerán aquí.",
+	"explore_creators": "Explorar creadores"
 }

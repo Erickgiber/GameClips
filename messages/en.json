@@ -75,8 +75,7 @@
 	"empty_videos_msg": "Upload your first gameplay clip",
 	"empty_saved_msg": "Save videos you want to watch later",
 	"empty_liked_msg": "Like videos to see them here",
-	"load_more": "Load More"
-	,
+	"load_more": "Load More",
 	"seo.default_description": "Discover gaming highlights, creator clips, and standout esports moments in one feed built for players and fans.",
 	"seo.discover_title": "Discover trending clips and creators | GameClips",
 	"seo.discover_description": "Explore rising creators, trending games, and fresh gaming highlights curated for the GameClips community.",
@@ -95,5 +94,20 @@
 	"seo.paraglide_title": "Paraglide i18n demo | GameClips",
 	"seo.paraglide_description": "Internal localization demo used to verify multilingual messaging in the GameClips app.",
 	"seo.profile_title": "{username} profile | GameClips",
-	"seo.profile_description": "Watch clips from {username}, along with creator highlights, stats, and the latest community activity on GameClips."
+	"seo.profile_description": "Watch clips from {username}, along with creator highlights, stats, and the latest community activity on GameClips.",
+	"notifications": "Notifications",
+	"unread_notification": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{count} unread notification",
+				"countPlural=other": "{count} unread notifications"
+			}
+		}
+	],
+	"open_notifications": "Open notifications",
+	"notifications_empty_title": "No notifications yet",
+	"notifications_empty": "When someone reacts to your clips, follows your profile or mentions you, the updates will show up here.",
+	"explore_creators": "Explore creators"
 }

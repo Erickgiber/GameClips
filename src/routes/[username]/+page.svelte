@@ -24,7 +24,7 @@
 
 		try {
 			if (isSelfProfile) {
-					isLoaded = true;
+				isLoaded = true;
 				return;
 			}
 
@@ -38,7 +38,7 @@
 		} catch (error) {
 			console.error('Error fetching profile:', error);
 		} finally {
-				isLoaded = true;
+			isLoaded = true;
 		}
 	}
 

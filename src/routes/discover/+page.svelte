@@ -1,29 +1,37 @@
 <script lang="ts">
-	import { resolve } from "$app/paths";
-	import AuthGuard from "$lib/components/auth/AuthGuard.svelte";
-	import { m } from "$lib/paraglide/messages";
-	import { Compass, Sparkles, TrendingUp, ArrowLeft } from "lucide-svelte";
+	import { resolve } from '$app/paths';
+	import AuthGuard from '$lib/components/auth/AuthGuard.svelte';
+	import { m } from '$lib/paraglide/messages';
+	import { Compass, Sparkles, TrendingUp, ArrowLeft } from 'lucide-svelte';
 </script>
 
 <AuthGuard>
 	<div class="min-h-screen bg-background px-4 pt-6 pb-28 text-foreground">
 		<div class="mx-auto flex max-w-3xl flex-col gap-6">
 			<a
-				href={resolve("/")}
+				href={resolve('/')}
 				class="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2 text-sm font-medium backdrop-blur-sm transition-colors hover:bg-card"
 			>
 				<ArrowLeft class="h-4 w-4" />
 				{m.back_to_home()}
 			</a>
 
-			<section class="relative overflow-hidden rounded-4xl border border-border bg-card/70 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
-				<div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.22),transparent_45%),radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.18),transparent_35%)]"></div>
+			<section
+				class="relative overflow-hidden rounded-4xl border border-border bg-card/70 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl"
+			>
+				<div
+					class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.22),transparent_45%),radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.18),transparent_35%)]"
+				></div>
 				<div class="relative space-y-5">
-					<div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/15 text-primary ring-1 ring-primary/20">
+					<div
+						class="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/15 text-primary ring-1 ring-primary/20"
+					>
 						<Compass class="h-8 w-8" />
 					</div>
 					<div>
-						<p class="text-xs font-semibold tracking-[0.3em] text-primary uppercase">{m.almostThere()}</p>
+						<p class="text-xs font-semibold tracking-[0.3em] text-primary uppercase">
+							{m.almostThere()}
+						</p>
 						<h1 class="mt-2 text-3xl font-black sm:text-4xl">{m.nav_discover()}</h1>
 						<p class="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
 							{m.gettingReady()}

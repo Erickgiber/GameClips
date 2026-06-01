@@ -28,7 +28,12 @@ const NOINDEX_ROBOTS = 'noindex, nofollow';
 
 function getKeywords(locale: ReturnType<typeof getLocale>) {
 	if (locale === 'es') {
-		return ['clips de juegos', 'highlights gaming', 'clips de esports', 'plataforma para creadores'];
+		return [
+			'clips de juegos',
+			'highlights gaming',
+			'clips de esports',
+			'plataforma para creadores'
+		];
 	}
 
 	return ['game clips', 'gaming highlights', 'esports clips', 'creator platform'];
@@ -67,7 +72,12 @@ function buildSeoPage(input: RouteSeoInput): Omit<SeoMetadata, 'canonical'> {
 				twitterCard: 'summary',
 				keywords:
 					locale === 'es'
-						? [...defaultKeywords, 'descubrir creadores', 'juegos en tendencia', 'clips virales gaming']
+						? [
+								...defaultKeywords,
+								'descubrir creadores',
+								'juegos en tendencia',
+								'clips virales gaming'
+							]
 						: [...defaultKeywords, 'discover creators', 'trending games', 'viral gaming clips']
 			};
 
@@ -93,7 +103,12 @@ function buildSeoPage(input: RouteSeoInput): Omit<SeoMetadata, 'canonical'> {
 				twitterCard: 'summary',
 				keywords:
 					locale === 'es'
-						? [...defaultKeywords, 'bandeja de creador', 'actividad de comunidad', 'notificaciones gaming']
+						? [
+								...defaultKeywords,
+								'bandeja de creador',
+								'actividad de comunidad',
+								'notificaciones gaming'
+							]
 						: [...defaultKeywords, 'creator inbox', 'community activity', 'gaming notifications']
 			};
 
@@ -104,7 +119,10 @@ function buildSeoPage(input: RouteSeoInput): Omit<SeoMetadata, 'canonical'> {
 				robots: NOINDEX_ROBOTS,
 				ogType: 'website',
 				twitterCard: 'summary',
-				keywords: locale === 'es' ? [...defaultKeywords, 'iniciar sesión', 'acceso a cuenta'] : [...defaultKeywords, 'login', 'account access']
+				keywords:
+					locale === 'es'
+						? [...defaultKeywords, 'iniciar sesión', 'acceso a cuenta']
+						: [...defaultKeywords, 'login', 'account access']
 			};
 
 		case '/(auth)/register':
@@ -140,7 +158,10 @@ function buildSeoPage(input: RouteSeoInput): Omit<SeoMetadata, 'canonical'> {
 				robots: NOINDEX_ROBOTS,
 				ogType: 'website',
 				twitterCard: 'summary',
-				keywords: locale === 'es' ? [...defaultKeywords, 'demo', 'prototipo'] : [...defaultKeywords, 'demo', 'prototype']
+				keywords:
+					locale === 'es'
+						? [...defaultKeywords, 'demo', 'prototipo']
+						: [...defaultKeywords, 'demo', 'prototype']
 			};
 
 		case '/demo/paraglide':
