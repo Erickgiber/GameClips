@@ -48,7 +48,7 @@
 <svelte:document onkeydown={handleDocumentKeydown} />
 
 <nav
-	class="z-50 flex h-header items-center justify-between border-b border-border bg-card/50 px-4 backdrop-blur-md"
+	class="z-50 flex h-nav-desktop items-center justify-between border-b border-border bg-card/50 px-4 backdrop-blur-md"
 >
 	<div class="flex items-center gap-2">
 		<div

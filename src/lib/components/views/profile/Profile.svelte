@@ -121,7 +121,7 @@
 	</div>
 
 	<div
-		class="sticky top-0 z-50 hidden h-category-nav border-b border-border bg-card/30 backdrop-blur-sm lg:flex"
+		class="sticky top-0 z-50 hidden h-nav-category border-b border-border bg-card/30 backdrop-blur-sm lg:flex"
 	>
 		<div class="flex w-full items-center justify-between px-6">
 			<a href={resolve('/')} class="flex items-center gap-2 transition-colors hover:text-primary">

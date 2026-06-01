@@ -51,7 +51,7 @@
 <style>
 	section {
 		width: 100%;
-		min-height: calc(100dvh - var(--spacing-header));
+		min-height: calc(100dvh - var(--spacing-nav-desktop));
 	}
 	#ghost {
 		position: relative;

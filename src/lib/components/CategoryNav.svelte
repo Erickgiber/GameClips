@@ -27,7 +27,7 @@
 	<div
 		class=" scrollbar-hide flex items-center overflow-x-auto border-b border-border bg-card/30 backdrop-blur-sm"
 	>
-		<div class="flex h-category-nav items-center gap-2 px-4">
+		<div class="flex h-nav-category items-center gap-2 px-4">
 			{#each categories as category (category.id)}
 				<button
 					type="button"

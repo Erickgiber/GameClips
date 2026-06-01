@@ -139,7 +139,7 @@
 
 <style>
 	#trending-panel {
-		height: calc(100dvh - var(--spacing-header) - var(--spacing-category-nav));
-		max-height: calc(100dvh - var(--spacing-header) - var(--spacing-category-nav));
+		height: calc(100dvh - var(--spacing-nav-desktop) - var(--spacing-nav-category));
+		max-height: calc(100dvh - var(--spacing-nav-desktop) - var(--spacing-nav-category));
 	}
 </style>

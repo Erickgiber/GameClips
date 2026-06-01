@@ -17,6 +17,6 @@
 
 <style>
 	#home {
-		min-height: calc(100dvh - var(--spacing-header) - var(--spacing-category-nav));
+		min-height: calc(100dvh - var(--spacing-nav-desktop) - var(--spacing-nav-category));
 	}
 </style>
