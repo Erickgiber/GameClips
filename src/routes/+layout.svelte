@@ -4,6 +4,7 @@
 	import Header from '$lib/components/Header.svelte';
 	import { useAuthGuard } from '$lib/stores/authGuard.svelte';
 	import AuthGuard from '$lib/components/auth/AuthGuard.svelte';
+	import NavMobile from '$lib/components/NavMobile.svelte';
 
 	let { children } = $props();
 
@@ -17,3 +18,7 @@
 </AuthGuard>
 
 {@render children()}
+
+<AuthGuard onlyMobile>
+	<NavMobile />
+</AuthGuard>

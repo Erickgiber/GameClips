@@ -253,46 +253,6 @@
 		</div>
 	{/key}
 
-	<div
-		style="padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem);"
-		class="absolute right-0 bottom-0 left-0 z-50 border-t border-[#1e293b] bg-card-foreground/10 backdrop-blur-md"
-	>
-		<div class="flex items-center justify-around pt-2">
-			<button
-				class="flex flex-col items-center gap-1 px-4 py-2 transition-transform active:scale-90"
-			>
-				<House class="h-6 w-6 text-white" />
-				<span class="text-xs font-medium text-white">{m.nav_home()}</span>
-			</button>
-			<button
-				class="flex flex-col items-center gap-1 px-4 py-2 transition-transform active:scale-90"
-			>
-				<Compass class="h-6 w-6" color="white" />
-				<span class="text-xs font-medium text-white">{m.nav_discover()}</span>
-			</button>
-			<button class="-mt-3 flex flex-col items-center gap-1 transition-transform active:scale-90">
-				<div
-					class="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-primary to-secondary shadow-lg shadow-primary/50"
-				>
-					<SquarePlus class="h-6 w-6 text-white" />
-				</div>
-			</button>
-			<button
-				class="relative flex flex-col items-center gap-1 px-4 py-2 transition-transform active:scale-90"
-			>
-				<Bell class="h-6 w-6 text-muted-foreground" />
-				<span class="text-xs font-medium text-muted-foreground">{m.nav_inbox()}</span>
-				<div class="absolute top-1.5 right-3 h-2 w-2 rounded-full bg-destructive"></div>
-			</button>
-			<a
-				href={resolve(`/${user.username}`)}
-				class="flex flex-col items-center gap-1 px-4 py-2 transition-transform active:scale-90"
-			>
-				<User class="h-6 w-6 text-muted-foreground" />
-				<span class="text-xs font-medium text-muted-foreground">{m.nav_profile()}</span>
-			</a>
-		</div>
-	</div>
 
 	<div class="pointer-events-none absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
 		<div class="animate-pulse text-center font-mono text-xs text-white/30">

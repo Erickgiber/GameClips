@@ -2,17 +2,7 @@
 	import { m } from '$lib/paraglide/messages';
 	import { Play } from 'lucide-svelte';
 
-	// Definimos la interfaz del video para TypeScript
-	type Video = {
-		id: string;
-		title: string;
-		thumbnail: string;
-		game: string;
-		avatar: string;
-		creator: string;
-		views: number;
-		likes: number;
-	};
+	type Video = (typeof import('$lib/mocks/videos').mockVideos)[number];
 
 	let {
 		video,

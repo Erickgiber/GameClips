@@ -1,19 +1,11 @@
 <script lang="ts">
 	import VideoCard from './VideoCard.svelte';
+	type Video = (typeof import('$lib/mocks/videos').mockVideos)[number];
 
-	let { mockVideos } = $props();
-
-	// Manejo de estado en Svelte 5
-	let selectedVideo = $state(null);
-	let isLiked = $state(false);
-	let isSaved = $state(false);
+	let { mockVideos }: { mockVideos: Video[] } = $props();
 
 	// Función que se dispara al hacer click en una tarjeta
-	function handleVideoSelect(video) {
-		selectedVideo = video;
-		isLiked = false;
-		isSaved = false;
-
+	function handleVideoSelect(video: Video) {
 		// Aquí puedes agregar lógica adicional (ej: abrir modal)
 		console.log('Video seleccionado:', video.title);
 	}

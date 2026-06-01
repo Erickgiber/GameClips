@@ -3,10 +3,10 @@
 	import { client } from '$lib/stores/isClient.svelte';
 	import { screen } from '$lib/stores/isMobile.svelte';
 
-	let { children, onlyDesktop = false } = $props();
+	let { children, onlyDesktop = false, onlyMobile = false } = $props();
 
 	const canRender = $derived(
-		user.authenticated && client.current && (!onlyDesktop || !screen.isMobile)
+		user.authenticated && client.current && (!onlyDesktop || !screen.isMobile) && (!onlyMobile || screen.isMobile)
 	);
 </script>
 
