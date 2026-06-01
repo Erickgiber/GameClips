@@ -24,9 +24,7 @@
 
 		try {
 			if (isSelfProfile) {
-				setTimeout(() => {
 					isLoaded = true;
-				}, 1000);
 				return;
 			}
 
@@ -40,9 +38,7 @@
 		} catch (error) {
 			console.error('Error fetching profile:', error);
 		} finally {
-			setTimeout(() => {
 				isLoaded = true;
-			}, 1000);
 		}
 	}
 
