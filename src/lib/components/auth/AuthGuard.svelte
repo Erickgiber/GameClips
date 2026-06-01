@@ -1,0 +1,15 @@
+<script lang="ts">
+	import { user } from '$lib/stores/user.svelte';
+	import { client } from '$lib/stores/isClient.svelte';
+	import { screen } from '$lib/stores/isMobile.svelte';
+
+	let { children, onlyDesktop = false } = $props();
+
+	const canRender = $derived(
+		user.authenticated && client.current && (!onlyDesktop || !screen.isMobile)
+	);
+</script>
+
+{#if canRender}
+	{@render children()}
+{/if}

@@ -155,9 +155,22 @@
 		font-size: var(--font-size);
 	}
 
+	html.mobile-scroll-lock,
+	body.mobile-scroll-lock {
+		height: 100%;
+		overflow: hidden;
+		overscroll-behavior: none;
+	}
+
 	body {
 		@apply bg-background text-foreground;
 		font-family: var(--font-body);
+	}
+
+	body.mobile-scroll-lock {
+		position: fixed;
+		inset: 0;
+		width: 100%;
 	}
 
 	h1,

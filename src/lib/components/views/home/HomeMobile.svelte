@@ -14,6 +14,7 @@
 		User,
 		SquarePlus
 	} from 'lucide-svelte';
+	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
 	const mockVideos = [
@@ -63,6 +64,20 @@
 	let touchStart = $state(0);
 	let touchEnd = $state(0);
 
+	onMount(() => {
+		if (typeof document === 'undefined') {
+			return;
+		}
+
+		document.documentElement.classList.add('mobile-scroll-lock');
+		document.body.classList.add('mobile-scroll-lock');
+
+		return () => {
+			document.documentElement.classList.remove('mobile-scroll-lock');
+			document.body.classList.remove('mobile-scroll-lock');
+		};
+	});
+
 	let currentVideo = $derived(mockVideos[currentVideoIndex]);
 
 	function formatNumber(num: number): string {
@@ -102,7 +117,15 @@
 	}
 </script>
 
-<div class="relative mx-auto h-dvh w-full">
+<div
+	style="
+		padding-top: env(safe-area-inset-top);
+		padding-bottom: env(safe-area-inset-bottom);
+		height: 100dvh;
+		min-height: 100svh;
+	"
+	class="relative mx-auto w-full touch-none overflow-hidden overscroll-none"
+>
 	<div
 		class="absolute top-0 right-0 left-0 z-50 flex items-center justify-between bg-linear-to-b from-black/60 to-transparent px-4 py-3"
 	>
@@ -231,9 +254,10 @@
 	{/key}
 
 	<div
+		style="padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem);"
 		class="absolute right-0 bottom-0 left-0 z-50 border-t border-[#1e293b] bg-card-foreground/10 backdrop-blur-md"
 	>
-		<div class="flex items-center justify-around py-2">
+		<div class="flex items-center justify-around pt-2">
 			<button
 				class="flex flex-col items-center gap-1 px-4 py-2 transition-transform active:scale-90"
 			>

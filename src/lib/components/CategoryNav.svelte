@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { page } from '$app/state';
 	import { m } from '$lib/paraglide/messages';
+	import { screen } from '$lib/stores/isMobile.svelte';
 
 	interface Props {
 		activeCategory?: string;
@@ -23,7 +23,7 @@
 	];
 </script>
 
-{#if page.url.pathname === '/'}
+{#if !screen.isMobile}
 	<div
 		class=" scrollbar-hide flex items-center overflow-x-auto border-b border-border bg-card/30 backdrop-blur-sm"
 	>

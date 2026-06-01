@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import {
 		ArrowLeft,
 		Settings,
@@ -111,12 +110,9 @@
 <div class="size-full overflow-y-auto bg-background text-foreground">
 	<div class="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-lg lg:hidden">
 		<div class="flex items-center justify-between px-4 py-3">
-			<button
-				onclick={() => goto(resolve('/'))}
-				class="-ml-2 rounded-lg p-2 transition-colors hover:bg-muted"
-			>
+			<a href={resolve('/')} class="-ml-2 rounded-lg p-2 transition-colors hover:bg-muted">
 				<ArrowLeft class="h-6 w-6" />
-			</button>
+			</a>
 			<h2 class="text-lg font-black">{user.username}</h2>
 			<button class="-mr-2 rounded-lg p-2 transition-colors hover:bg-muted">
 				<EllipsisVertical class="h-6 w-6" />
@@ -124,15 +120,14 @@
 		</div>
 	</div>
 
-	<div class="sticky top-0 z-50 hidden border-b border-border bg-card/80 backdrop-blur-lg lg:block">
-		<div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-			<button
-				onclick={() => goto(resolve('/'))}
-				class="flex items-center gap-2 transition-colors hover:text-primary"
-			>
+	<div
+		class="sticky top-0 z-50 hidden h-category-nav border-b border-border bg-card/30 backdrop-blur-sm lg:flex"
+	>
+		<div class="flex w-full items-center justify-between px-6">
+			<a href={resolve('/')} class="flex items-center gap-2 transition-colors hover:text-primary">
 				<ArrowLeft class="h-5 w-5" />
 				<span class="font-semibold">{m.back_to_home()}</span>
-			</button>
+			</a>
 			<div class="flex items-center gap-3">
 				<button class="rounded-lg p-2 transition-colors hover:bg-muted">
 					<Share2 class="h-5 w-5" />
