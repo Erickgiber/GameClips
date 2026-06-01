@@ -8,7 +8,7 @@
 		Share2,
 		Bookmark,
 		Search,
-		Home,
+		House,
 		Compass,
 		Bell,
 		User,
@@ -261,7 +261,7 @@
 			<button
 				class="flex flex-col items-center gap-1 px-4 py-2 transition-transform active:scale-90"
 			>
-				<Home class="h-6 w-6 text-white" />
+				<House class="h-6 w-6 text-white" />
 				<span class="text-xs font-medium text-white">{m.nav_home()}</span>
 			</button>
 			<button
