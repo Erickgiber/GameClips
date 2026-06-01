@@ -40,7 +40,7 @@
 	}
 </script>
 
-{#if notifications.length > 6}
+{#if notifications.length > 0}
 	<div class:space-y-3={compact} class:space-y-4={!compact} class:pb-40={compact}>
 		{#each notifications as notification (notification.id)}
 			{@const meta = getNotificationMeta(notification.type)}

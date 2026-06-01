@@ -15,6 +15,7 @@
 	const unreadNotifications = $derived(
 		mockNotifications.filter((notification) => notification.unread)
 	);
+
 	const unreadCount = $derived(unreadNotifications.length);
 	const hasNotifications = $derived(mockNotifications.length > 0);
 
@@ -32,10 +33,26 @@
 		}
 	}
 
-	$effect(() => {
-		if (!browser) {
-			return;
+	const navActions = [
+		{
+			id: 'theme',
+			component: ToggleTheme
+		},
+		{
+			id: 'notifications',
+			component: Bell,
+			onClick: openNotifications,
+			showBadge: true
+		},
+		{
+			id: 'profile',
+			component: User,
+			href: resolve(`/${user.username}`)
 		}
+	] as const;
+
+	$effect(() => {
+		if (!browser) return;
 
 		document.body.style.overflow = isNotificationsOpen ? 'hidden' : '';
 
@@ -56,12 +73,14 @@
 		>
 			<div class="h-4 w-4 rounded-sm bg-accent"></div>
 		</div>
+
 		<h1 class="text-xl font-black tracking-tight">GAMECLIP</h1>
 	</div>
 
 	<div class="mx-8 hidden max-w-md flex-1 md:block">
 		<div class="relative">
 			<Search class="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+
 			<input
 				type="text"
 				placeholder={t['search.placeholder']}
@@ -71,25 +90,32 @@
 	</div>
 
 	<div class="flex items-center gap-3">
-		<ToggleTheme />
+		{#each navActions as action (action.id)}
+			{#if 'href' in action}
+				<a
+					href={action.href}
+					class="rounded-lg p-2 transition-colors hover:bg-muted"
+				>
+					<action.component class="h-5 w-5" />
+				</a>
+			{:else if 'onClick' in action}
+				<button
+					type="button"
+					class="relative rounded-lg p-2 transition-colors hover:bg-muted"
+					onclick={action.onClick}
+				>
+					<action.component class="h-5 w-5" />
 
-		<button
-			type="button"
-			class="relative rounded-lg p-2 transition-colors hover:bg-muted"
-			aria-controls="notifications-modal"
-			aria-expanded={isNotificationsOpen}
-			aria-haspopup="dialog"
-			aria-label={`Open notifications${unreadCount ? `. ${unreadCount} unread` : ''}`}
-			onclick={openNotifications}
-		>
-			<Bell class="h-5 w-5" />
-			{#if hasNotifications}
-				<div class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-destructive"></div>
+					{#if action.showBadge && hasNotifications}
+						<div
+							class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-destructive"
+						></div>
+					{/if}
+				</button>
+			{:else}
+				<action.component />
 			{/if}
-		</button>
-		<a href={resolve(`/${user.username}`)} class="rounded-lg p-2 transition-colors hover:bg-muted">
-			<User class="h-5 w-5" />
-		</a>
+		{/each}
 	</div>
 </nav>
 
