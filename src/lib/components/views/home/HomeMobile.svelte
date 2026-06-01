@@ -1,19 +1,6 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
 	import { m } from '$lib/paraglide/messages';
-	import { user } from '$lib/stores/user.svelte';
-	import {
-		Heart,
-		MessageCircle,
-		Share2,
-		Bookmark,
-		Search,
-		House,
-		Compass,
-		Bell,
-		User,
-		SquarePlus
-	} from 'lucide-svelte';
+	import { Heart, MessageCircle, Share2, Bookmark, Search } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
