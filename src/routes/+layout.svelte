@@ -3,7 +3,7 @@
 	import { buildSeoMetadata } from '$lib/helpers/seo';
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
-	import Header from '$lib/components/Header.svelte';
+	import Header from '$lib/components/NavDesktop.svelte';
 	import { useAuthGuard } from '$lib/stores/authGuard.svelte';
 	import AuthGuard from '$lib/components/auth/AuthGuard.svelte';
 	import NavMobile from '$lib/components/NavMobile.svelte';
