@@ -10,7 +10,7 @@
 		const pathname = page.url.pathname;
 
 		// si está dentro de settings (incluye subrutas)
-		if (pathname.startsWith('/settings')) {
+		if (pathname.startsWith('/settings') && pathname !== '/settings') {
 			return '/settings';
 		}
 
@@ -18,7 +18,7 @@
 	});
 </script>
 
-<TopNavProfile customGoBack={customBack} customTitle={m.settings_title()} />
+<TopNavProfile customGoBack={customBack()} customTitle={m.settings_title()} />
 
 <div class="h-[calc(100dvh - var(--spacing-nav-category))] bg-background px-4 py-6 text-foreground">
 	{@render children()}
