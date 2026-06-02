@@ -19,7 +19,7 @@
 		<VideoGallery videos={videosState.items} />
 	</div>
 
-	<TrendingPanel />
+	<TrendingPanel videos={videosState.items} />
 </section>
 
 <style>

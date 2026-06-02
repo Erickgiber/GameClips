@@ -95,21 +95,33 @@ export type Database = {
 					id: string;
 					user_id: string;
 					video_url: string;
+					thumbnail_url: string | null;
 					title: string;
+					game: string;
+					tags: string[];
+					views_count: number;
 					created_at: string;
 				};
 				Insert: {
 					id?: string;
 					user_id: string;
 					video_url: string;
+					thumbnail_url?: string | null;
 					title: string;
+					game?: string;
+					tags?: string[];
+					views_count?: number;
 					created_at?: string;
 				};
 				Update: {
 					id?: string;
 					user_id?: string;
 					video_url?: string;
+					thumbnail_url?: string | null;
 					title?: string;
+					game?: string;
+					tags?: string[];
+					views_count?: number;
 					created_at?: string;
 				};
 				Relationships: [];
@@ -210,6 +222,11 @@ export type Database = {
 					user_id: string;
 					title: string;
 					video_url: string;
+					thumbnail_url: string;
+					game: string;
+					tags: string[];
+					views_count: number;
+					likes_count: number;
 					created_at: string;
 					username: string | null;
 					avatar_url: string | null;

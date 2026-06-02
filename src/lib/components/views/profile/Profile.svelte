@@ -14,91 +14,73 @@
 		Calendar
 	} from 'lucide-svelte';
 	import { fly } from 'svelte/transition';
+	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
 	import { m } from '$lib/paraglide/messages';
+	import {
+		getLikedVideosByProfile,
+		getSavedVideosByProfile,
+		getVideosByProfile
+	} from '$lib/services/profile-videos.service';
+	import { user as currentUser } from '$lib/stores/user.svelte';
 	import type { User } from '$lib/types/user.type';
+	import type { Video as AppVideo } from '$lib/types/video.type';
 
 	let { user }: { user: User } = $props();
-
-	const userVideos = [
-		{
-			id: 1,
-			thumbnail: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=600&fit=crop',
-			views: 890000,
-			likes: 45000,
-			game: 'Valorant'
-		},
-		{
-			id: 2,
-			thumbnail:
-				'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&h=600&fit=crop',
-			views: 654000,
-			likes: 32000,
-			game: 'League of Legends'
-		},
-		{
-			id: 3,
-			thumbnail:
-				'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=400&h=600&fit=crop',
-			views: 723000,
-			likes: 38000,
-			game: 'Apex Legends'
-		},
-		{
-			id: 4,
-			thumbnail: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=400&h=600&fit=crop',
-			views: 412000,
-			likes: 28000,
-			game: 'Elden Ring'
-		},
-		{
-			id: 5,
-			thumbnail: 'https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?w=400&h=600&fit=crop',
-			views: 567000,
-			likes: 35000,
-			game: 'CS:GO'
-		},
-		{
-			id: 6,
-			thumbnail:
-				'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?w=400&h=600&fit=crop',
-			views: 789000,
-			likes: 42000,
-			game: 'Fortnite'
-		}
-	];
-
-	const savedVideos = [
-		{
-			id: 7,
-			thumbnail: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=400&h=600&fit=crop',
-			views: 990000,
-			likes: 52000,
-			game: 'Overwatch'
-		},
-		{
-			id: 8,
-			thumbnail:
-				'https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=400&h=600&fit=crop',
-			views: 445000,
-			likes: 29000,
-			game: 'Minecraft'
-		},
-		{
-			id: 9,
-			thumbnail: 'https://images.unsplash.com/photo-1551103782-8ab07afd45c1?w=400&h=600&fit=crop',
-			views: 678000,
-			likes: 38000,
-			game: 'GTA V'
-		}
-	];
+	let profileVideos = $state<AppVideo[]>([]);
+	let savedVideos = $state<AppVideo[]>([]);
+	let likedVideos = $state<AppVideo[]>([]);
+	let tabLoading = $state(false);
+	let tabError = $state<string | null>(null);
 
 	let activeTab = $state<'videos' | 'saved' | 'liked'>('videos');
 	let isFollowing = $state(false);
+	const isOwnProfile = $derived(Boolean(currentUser.id) && currentUser.id === user.id);
 
 	let currentVideos = $derived(
-		activeTab === 'videos' ? userVideos : activeTab === 'saved' ? savedVideos : []
+		activeTab === 'videos' ? profileVideos : activeTab === 'saved' ? savedVideos : likedVideos
 	);
+
+	onMount(() => {
+		void loadTabVideos();
+	});
+
+	function setActiveTab(tab: 'videos' | 'saved' | 'liked') {
+		if (activeTab === tab) return;
+		activeTab = tab;
+		void loadTabVideos();
+	}
+
+	async function loadTabVideos() {
+		if (!user.id) return;
+
+		tabLoading = true;
+		tabError = null;
+
+		try {
+			if (activeTab === 'videos') {
+				profileVideos = await getVideosByProfile(user.id);
+				return;
+			}
+
+			if (!isOwnProfile) {
+				if (activeTab === 'saved') savedVideos = [];
+				if (activeTab === 'liked') likedVideos = [];
+				return;
+			}
+
+			if (activeTab === 'saved') {
+				savedVideos = await getSavedVideosByProfile(user.id);
+				return;
+			}
+
+			likedVideos = await getLikedVideosByProfile(user.id);
+		} catch (error) {
+			tabError = error instanceof Error ? error.message : 'Unable to load videos.';
+		} finally {
+			tabLoading = false;
+		}
+	}
 
 	function formatNumber(num: number) {
 		if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
@@ -236,7 +218,7 @@
 		<div class="mb-6 border-b border-border">
 			<div class="flex gap-8 lg:gap-12">
 				<button
-					onclick={() => (activeTab = 'videos')}
+					onclick={() => setActiveTab('videos')}
 					class="flex items-center gap-2 border-b-2 pb-3 transition-colors {activeTab === 'videos'
 						? 'border-primary font-bold text-foreground'
 						: 'border-transparent text-muted-foreground hover:text-foreground'}"
@@ -248,10 +230,13 @@
 					</span>
 				</button>
 				<button
-					onclick={() => (activeTab = 'saved')}
+					onclick={() => setActiveTab('saved')}
+					disabled={!isOwnProfile}
 					class="flex items-center gap-2 border-b-2 pb-3 transition-colors {activeTab === 'saved'
 						? 'border-primary font-bold text-foreground'
-						: 'border-transparent text-muted-foreground hover:text-foreground'}"
+						: !isOwnProfile
+							? 'border-transparent text-muted-foreground/40'
+							: 'border-transparent text-muted-foreground hover:text-foreground'}"
 				>
 					<Bookmark class="h-5 w-5" />
 					<span class="hidden sm:inline">{m.tab_saved()}</span>
@@ -260,10 +245,13 @@
 					</span>
 				</button>
 				<button
-					onclick={() => (activeTab = 'liked')}
+					onclick={() => setActiveTab('liked')}
+					disabled={!isOwnProfile}
 					class="flex items-center gap-2 border-b-2 pb-3 transition-colors {activeTab === 'liked'
 						? 'border-primary font-bold text-foreground'
-						: 'border-transparent text-muted-foreground hover:text-foreground'}"
+						: !isOwnProfile
+							? 'border-transparent text-muted-foreground/40'
+							: 'border-transparent text-muted-foreground hover:text-foreground'}"
 				>
 					<Heart class="h-5 w-5" />
 					<span class="hidden sm:inline">{m.tab_liked()}</span>
@@ -273,6 +261,12 @@
 				</button>
 			</div>
 		</div>
+
+		{#if tabError}
+			<p class="mb-4 rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+				{tabError}
+			</p>
+		{/if}
 
 		<div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 lg:gap-4 xl:grid-cols-5">
 			{#each currentVideos as video, index (video.id)}
@@ -317,7 +311,9 @@
 			{/each}
 		</div>
 
-		{#if currentVideos.length === 0}
+		{#if tabLoading}
+			<div class="py-16 text-center text-sm text-muted-foreground">Loading videos...</div>
+		{:else if currentVideos.length === 0}
 			<div class="py-16 text-center">
 				<div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
 					{#if activeTab === 'videos'}

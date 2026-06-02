@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { t } from '$lib/helpers/translate';
+	import type { Video } from '$lib/types/video.type';
 	import { TrendingUp, Play } from 'lucide-svelte';
 
 	type Clip = {
-		id: number;
+		id: string;
 		title: string;
 		creator: string;
 		game: string;
@@ -11,40 +12,26 @@
 		thumbnail: string;
 	};
 
-	const trendingClips: Clip[] = [
-		{
-			id: 1,
-			title: 'Epic 200 IQ Play',
-			creator: 'StratMaster',
-			game: 'CS:GO',
-			views: 890000,
-			thumbnail: 'https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?w=300&h=200&fit=crop'
-		},
-		{
-			id: 2,
-			title: 'Perfect No-Scope',
-			creator: 'SniperElite',
-			game: 'Warzone',
-			views: 654000,
-			thumbnail: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=200&fit=crop'
-		},
-		{
-			id: 3,
-			title: 'Insane Comeback',
-			creator: 'ClutchKing',
-			game: 'Rocket League',
-			views: 723000,
-			thumbnail: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=200&fit=crop'
-		},
-		{
-			id: 4,
-			title: 'Frame Perfect Tech',
-			creator: 'SpeedDemon',
-			game: 'Super Smash Bros',
-			views: 412000,
-			thumbnail: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=300&h=200&fit=crop'
-		}
-	];
+	let { videos = [] }: { videos?: Video[] } = $props();
+
+	const trendingClips = $derived.by(() => {
+		const ranked = [...videos]
+			.sort((a, b) => {
+				if (b.views !== a.views) return b.views - a.views;
+				if (b.likes !== a.likes) return b.likes - a.likes;
+				return Date.parse(b.created_at) - Date.parse(a.created_at);
+			})
+			.slice(0, 4);
+
+		return ranked.map((video) => ({
+			id: video.id,
+			title: video.title,
+			creator: video.creator,
+			game: video.game,
+			views: video.views,
+			thumbnail: video.thumbnail
+		} satisfies Clip));
+	});
 
 	function formatViews(num: number) {
 		if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1)}M`;
@@ -115,6 +102,12 @@
 				</div>
 			</div>
 		{/each}
+
+		{#if trendingClips.length === 0}
+			<div class="rounded-lg border border-border bg-card/60 p-3 text-xs text-muted-foreground">
+				No trending clips yet.
+			</div>
+		{/if}
 	</div>
 
 	<!-- CTA -->

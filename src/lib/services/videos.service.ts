@@ -6,6 +6,11 @@ type VideoFeedRow = {
 	user_id: string;
 	title: string;
 	video_url: string;
+	thumbnail_url: string;
+	game: string;
+	tags: string[];
+	views_count: number;
+	likes_count: number;
 	created_at: string;
 	username: string | null;
 	avatar_url: string | null;
@@ -16,6 +21,10 @@ type VideoRow = {
 	user_id: string;
 	title: string;
 	video_url: string;
+	thumbnail_url: string | null;
+	game: string;
+	tags: string[];
+	views_count: number;
 	created_at: string;
 };
 
@@ -25,11 +34,20 @@ type ProfileRow = {
 	avatar_url: string | null;
 };
 
+type LikeCountRow = {
+	video_id: string;
+};
+
 function mapVideoRowToUi(video: {
 	id: string;
 	user_id: string;
 	title: string;
 	video_url: string;
+	thumbnail_url?: string | null;
+	game?: string | null;
+	tags?: string[] | null;
+	views_count?: number | null;
+	likes_count?: number | null;
 	created_at: string;
 	creator?: string | null;
 	avatar?: string | null;
@@ -39,13 +57,13 @@ function mapVideoRowToUi(video: {
 		user_id: video.user_id,
 		title: video.title,
 		video_url: video.video_url,
-		thumbnail: video.video_url,
+		thumbnail: video.thumbnail_url ?? video.video_url,
 		creator: video.creator ?? 'creator',
 		avatar: video.avatar ?? 'https://placehold.co/100x100?text=GC',
-		game: 'Game Clip',
-		tags: ['#gameclip'],
-		views: 0,
-		likes: 0,
+		game: video.game ?? 'Game Clip',
+		tags: video.tags ?? [],
+		views: video.views_count ?? 0,
+		likes: video.likes_count ?? 0,
 		comments: 0,
 		shares: 0,
 		created_at: video.created_at
@@ -74,7 +92,7 @@ export async function getVideos(limit = 30): Promise<Video[]> {
 	// Fallback for environments where migration with RPC function has not been applied yet.
 	const { data: videosData, error: videosError } = await supabase
 		.from('videos')
-		.select('id, user_id, title, video_url, created_at')
+		.select('id, user_id, title, video_url, thumbnail_url, game, tags, views_count, created_at')
 		.order('created_at', { ascending: false })
 		.limit(limit);
 
@@ -96,11 +114,27 @@ export async function getVideos(limit = 30): Promise<Video[]> {
 		((profilesData as ProfileRow[] | null) ?? []).map((profile) => [profile.id, profile])
 	);
 
+	const videoIds = videos.map((video) => video.id);
+	const { data: likesData, error: likesError } = await supabase
+		.from('video_likes')
+		.select('video_id')
+		.in('video_id', videoIds);
+
+	if (likesError) throw new Error(likesError.message);
+
+	const likesMap = new Map<string, number>();
+	for (const row of (likesData as LikeCountRow[] | null) ?? []) {
+		likesMap.set(row.video_id, (likesMap.get(row.video_id) ?? 0) + 1);
+	}
+
 	return videos.map((video) => {
 		const profile = profilesMap.get(video.user_id);
 
+		const likesCount = likesMap.get(video.id) ?? 0;
+
 		return mapVideoRowToUi({
 			...video,
+			likes_count: likesCount,
 			creator: profile?.username,
 			avatar: profile?.avatar_url
 		});
