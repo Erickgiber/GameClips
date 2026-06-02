@@ -116,5 +116,14 @@
 	"settings": "Configuración",
 	"account": "Cuenta",
 	"help": "Ayuda y soporte",
-	"logout": "Cerrar sesión"
+	"logout": "Cerrar sesión",
+	"settings_title": "Configuración",
+	"settings_account": "Cuenta",
+	"settings_preferences": "Preferencias",
+	"settings_edit_profile": "Editar perfil",
+	"settings_security": "Seguridad",
+	"settings_language": "Idioma",
+	"settings_notifications": "Notificaciones",
+	"settings_logout": "Cerrar sesión",
+	"settings_language_description": "Elige tu idioma preferido"
 }

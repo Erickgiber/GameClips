@@ -3,7 +3,6 @@
 		ArrowLeft,
 		Settings,
 		Share2,
-		EllipsisVertical,
 		Grid3x3,
 		Bookmark,
 		Heart,
@@ -25,6 +24,7 @@
 	import { user as currentUser } from '$lib/stores/user.svelte';
 	import type { User } from '$lib/types/user.type';
 	import type { Video as AppVideo } from '$lib/types/video.type';
+	import TopNavProfile from './TopNavProfile.svelte';
 
 	let { user }: { user: User } = $props();
 	let profileVideos = $state<AppVideo[]>([]);
@@ -90,17 +90,7 @@
 </script>
 
 <div class="size-full overflow-y-auto bg-background text-foreground">
-	<div class="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-lg lg:hidden">
-		<div class="flex items-center justify-between px-4 py-3">
-			<a href={resolve('/')} class="-ml-2 rounded-lg p-2 transition-colors hover:bg-muted">
-				<ArrowLeft class="h-6 w-6" />
-			</a>
-			<h2 class="text-lg font-black">{user.username}</h2>
-			<button class="-mr-2 rounded-lg p-2 transition-colors hover:bg-muted">
-				<EllipsisVertical class="h-6 w-6" />
-			</button>
-		</div>
-	</div>
+	<TopNavProfile />
 
 	<div
 		class="sticky top-0 z-50 hidden h-nav-category border-b border-border bg-card/30 backdrop-blur-sm lg:flex"
@@ -115,9 +105,9 @@
 					<Share2 class="h-5 w-5" />
 				</button>
 				{#if isOwnProfile}
-					<button class="md:cursor-pointer rounded-lg p-2 transition-colors hover:bg-muted">
+					<a href={resolve('/settings')} class="md:cursor-pointer rounded-lg p-2 transition-colors hover:bg-muted">
 						<Settings class="h-5 w-5" />
-					</button>
+					</a>
 				{/if}
 			</div>
 		</div>

@@ -7,7 +7,7 @@ import {
 	initializeAuthRememberPreference,
 	setAuthRememberMe
 } from '$lib/supabase/capacitor-storage';
-import { offlineUserMock } from '$lib/mocks/offline-user';
+import { emptyUser } from '$lib/constants/empty-user';
 import type { User } from '$lib/types/user.type';
 
 type AuthStatus = {
@@ -17,7 +17,7 @@ type AuthStatus = {
 };
 
 const userInitial: User = {
-	...offlineUserMock,
+	...emptyUser,
 	authenticated: false
 };
 
@@ -33,7 +33,7 @@ export const authStatus: AuthStatus = $state({
 
 function resetUserState() {
 	Object.assign(user, {
-		...offlineUserMock,
+		...emptyUser,
 		authenticated: false,
 		id: undefined
 	});
@@ -146,13 +146,4 @@ export async function logoutUser() {
 	} finally {
 		authStatus.loading = false;
 	}
-}
-
-export function enableOfflineUserMock() {
-	Object.assign(user, {
-		...offlineUserMock,
-		authenticated: true
-	});
-	authStatus.initialized = true;
-	authStatus.error = null;
 }
