@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { m } from '$lib/paraglide/messages';
 	import { Play } from 'lucide-svelte';
-
-	type Video = (typeof import('$lib/mocks/videos').mockVideos)[number];
+	import type { Video } from '$lib/types/video.type';
 
 	let {
 		video,

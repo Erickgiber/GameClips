@@ -6,7 +6,7 @@ export type User = {
 	name: string;
 	description: string;
 	title: string;
-	role: 'customer' | 'admin' | 'moderator';
+	role: string;
 	dedication: string;
 	avatar_url: string;
 	followers_count: number;

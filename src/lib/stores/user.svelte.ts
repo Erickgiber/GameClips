@@ -1,22 +1,158 @@
+import { browser } from '$app/environment';
+import type { AuthChangeEvent, Session, User as SupabaseAuthUser } from '@supabase/supabase-js';
+import { registerWithEmail, signInWithEmail, signOut } from '$lib/services/auth.service';
+import { buildAppUserFromAuth } from '$lib/services/profile.service';
+import { supabase } from '$lib/supabase/client';
+import {
+	initializeAuthRememberPreference,
+	setAuthRememberMe
+} from '$lib/supabase/capacitor-storage';
+import { offlineUserMock } from '$lib/mocks/offline-user';
 import type { User } from '$lib/types/user.type';
 
-const userInitial: User = {
-	authenticated: true,
-	username: 'erickgiber',
-	email: 'erickgiber7@gmail.com',
-	name: 'Erick Ramirez',
-	description: '🎮 Radiant League of Legends Player | 🏆 Tournament Champion | 📺 Streaming Daily',
-	title: 'Professional Esports Player',
-	role: 'customer',
-	dedication: 'Content Creator',
-	avatar_url: 'https://i.ibb.co/MkfnJMF/c626c26ad861.jpg',
-	followers_count: 1200,
-	following_count: 300,
-	videos_count: 50,
-	likes_count: 5000,
-	saved_videos_count: 3,
-	liked_videos_count: 10,
-	sponsored_by: ['ESPN Esports', 'Red Bull', 'Logitech G']
+type AuthStatus = {
+	initialized: boolean;
+	loading: boolean;
+	error: string | null;
 };
 
+const userInitial: User = {
+	...offlineUserMock,
+	authenticated: false
+};
+
+let hasInitializedAuth = false;
+let authSubscription: { unsubscribe: () => void } | null = null;
+
 export const user: User = $state(userInitial);
+export const authStatus: AuthStatus = $state({
+	initialized: false,
+	loading: false,
+	error: null
+});
+
+function resetUserState() {
+	Object.assign(user, {
+		...offlineUserMock,
+		authenticated: false,
+		id: undefined
+	});
+}
+
+async function applyAuthUser(authUser: SupabaseAuthUser | null) {
+	if (!authUser) {
+		resetUserState();
+		return;
+	}
+
+	const mappedUser = await buildAppUserFromAuth(authUser);
+	Object.assign(user, mappedUser);
+}
+
+async function syncSession(session: Session | null) {
+	try {
+		authStatus.error = null;
+		await applyAuthUser(session?.user ?? null);
+	} catch (error) {
+		authStatus.error = error instanceof Error ? error.message : 'Unable to sync session';
+		resetUserState();
+	}
+}
+
+function ensureAuthListener() {
+	if (authSubscription) return;
+
+	authSubscription = supabase.auth.onAuthStateChange(
+		(_event: AuthChangeEvent, session: Session | null) => {
+			void syncSession(session);
+		}
+	).data.subscription;
+}
+
+export async function initializeAuthState() {
+	if (!browser || hasInitializedAuth) return;
+
+	hasInitializedAuth = true;
+	authStatus.loading = true;
+
+	try {
+		await initializeAuthRememberPreference();
+
+		const {
+			data: { session },
+			error
+		} = await supabase.auth.getSession();
+
+		if (error) throw error;
+
+		await syncSession(session);
+		ensureAuthListener();
+	} catch (error) {
+		authStatus.error = error instanceof Error ? error.message : 'Unable to initialize auth';
+		resetUserState();
+	} finally {
+		authStatus.loading = false;
+		authStatus.initialized = true;
+	}
+}
+
+export async function loginWithEmail(payload: {
+	email: string;
+	password: string;
+	rememberMe: boolean;
+}) {
+	authStatus.loading = true;
+	authStatus.error = null;
+
+	try {
+		await setAuthRememberMe(payload.rememberMe);
+
+		const data = await signInWithEmail(payload);
+		await syncSession(data.session ?? null);
+	} catch (error) {
+		authStatus.error = error instanceof Error ? error.message : 'Unable to sign in';
+		throw error;
+	} finally {
+		authStatus.loading = false;
+	}
+}
+
+export async function registerWithEmailPassword(payload: {
+	email: string;
+	password: string;
+	username: string;
+}) {
+	authStatus.loading = true;
+	authStatus.error = null;
+
+	try {
+		const data = await registerWithEmail(payload);
+		await syncSession(data.session ?? null);
+		return data;
+	} catch (error) {
+		authStatus.error = error instanceof Error ? error.message : 'Unable to register';
+		throw error;
+	} finally {
+		authStatus.loading = false;
+	}
+}
+
+export async function logoutUser() {
+	authStatus.loading = true;
+
+	try {
+		await signOut();
+		resetUserState();
+	} finally {
+		authStatus.loading = false;
+	}
+}
+
+export function enableOfflineUserMock() {
+	Object.assign(user, {
+		...offlineUserMock,
+		authenticated: true
+	});
+	authStatus.initialized = true;
+	authStatus.error = null;
+}

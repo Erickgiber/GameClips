@@ -3,7 +3,12 @@
 	import { resolve } from '$app/paths';
 	import { t } from '$lib/helpers/translate';
 	import NotificationsFeed from '$lib/components/notifications/NotificationsFeed.svelte';
-	import { mockNotifications } from '$lib/mocks/notifications';
+	import {
+		getHasNotifications,
+		getUnreadNotificationsCount,
+		loadNotifications,
+		notificationsState
+	} from '$lib/stores/notifications.svelte';
 	import { user } from '$lib/stores/user.svelte';
 	import { Bell, Search, User, X } from 'lucide-svelte';
 	import { fade, scale } from 'svelte/transition';
@@ -12,12 +17,8 @@
 
 	let isNotificationsOpen = $state(false);
 
-	const unreadNotifications = $derived(
-		mockNotifications.filter((notification) => notification.unread)
-	);
-
-	const unreadCount = $derived(unreadNotifications.length);
-	const hasNotifications = $derived(mockNotifications.length > 0);
+	const unreadCount = $derived(getUnreadNotificationsCount());
+	const hasNotifications = $derived(getHasNotifications());
 
 	function openNotifications() {
 		isNotificationsOpen = true;
@@ -53,6 +54,9 @@
 
 	$effect(() => {
 		if (!browser) return;
+		if (user.authenticated) {
+			void loadNotifications();
+		}
 
 		document.body.style.overflow = isNotificationsOpen ? 'hidden' : '';
 
@@ -168,7 +172,7 @@
 				</div>
 
 				<div class="max-h-[70vh] overflow-y-auto px-5 py-5">
-					<NotificationsFeed notifications={mockNotifications} compact />
+					<NotificationsFeed notifications={notificationsState.items} compact />
 				</div>
 
 				<div class="border-t border-white/10 px-5 py-4">

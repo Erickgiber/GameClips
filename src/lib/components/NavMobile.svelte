@@ -1,16 +1,24 @@
 <script>
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
-	import { mockNotifications } from '$lib/mocks/notifications';
 	import { m } from '$lib/paraglide/messages';
+	import { getHasNotifications, loadNotifications } from '$lib/stores/notifications.svelte';
 	import { user } from '$lib/stores/user.svelte';
 	import { House, Compass, SquarePlus, Bell, User } from 'lucide-svelte';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		if (user.authenticated) {
+			void loadNotifications();
+		}
+	});
 
 	const defaultItemClass =
 		'flex flex-col items-center gap-1 px-4 py-2 transition-transform active:scale-90';
 	const primaryItemClass =
 		'-mt-3 flex flex-col items-center gap-1 transition-transform active:scale-90';
 	const currentRouteId = $derived(page.route.id ?? '');
+	const hasNotifications = $derived(getHasNotifications());
 
 	const navItems = $derived([
 		{
@@ -45,7 +53,7 @@
 			href: resolve('/notifications'),
 			className: `${defaultItemClass} relative`,
 			isActive: currentRouteId === '/notifications',
-			hasNotification: mockNotifications.length > 0
+			hasNotification: hasNotifications
 		},
 		{
 			id: 'profile',

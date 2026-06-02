@@ -2,11 +2,20 @@
 	import { resolve } from '$app/paths';
 	import AuthGuard from '$lib/components/auth/AuthGuard.svelte';
 	import NotificationsFeed from '$lib/components/notifications/NotificationsFeed.svelte';
-	import { mockNotifications } from '$lib/mocks/notifications';
+	import {
+		getUnreadNotificationsCount,
+		loadNotifications,
+		notificationsState
+	} from '$lib/stores/notifications.svelte';
+	import { onMount } from 'svelte';
 	import { m } from '$lib/paraglide/messages';
 	import { ArrowLeft, Bell } from 'lucide-svelte';
 
-	const unreadCount = mockNotifications.filter((notification) => notification.unread).length;
+	const unreadCount = $derived(getUnreadNotificationsCount());
+
+	onMount(() => {
+		void loadNotifications();
+	});
 </script>
 
 <svelte:head>
@@ -65,7 +74,7 @@
 						</a>
 					</div>
 
-					<NotificationsFeed notifications={mockNotifications} />
+					<NotificationsFeed notifications={notificationsState.items} />
 				</div>
 			</section>
 		</div>

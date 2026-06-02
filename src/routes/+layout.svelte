@@ -5,6 +5,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import Header from '$lib/components/NavDesktop.svelte';
 	import { useAuthGuard } from '$lib/stores/authGuard.svelte';
+	import { initializeAuthState } from '$lib/stores/user.svelte';
 	import AuthGuard from '$lib/components/auth/AuthGuard.svelte';
 	import NavMobile from '$lib/components/NavMobile.svelte';
 
@@ -20,6 +21,10 @@
 	);
 
 	useAuthGuard();
+
+	$effect(() => {
+		void initializeAuthState();
+	});
 </script>
 
 <svelte:head>

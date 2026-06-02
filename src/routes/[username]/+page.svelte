@@ -8,6 +8,7 @@
 
 	import { client } from '$lib/stores/isClient.svelte';
 	import { user } from '$lib/stores/user.svelte';
+	import { getProfileByUsername } from '$lib/services/profile.service';
 	import type { User } from '$lib/types/user.type';
 
 	const username = page.params.username;
@@ -21,6 +22,10 @@
 
 	async function loadProfile() {
 		if (!browser) return;
+		if (!username) {
+			isLoaded = true;
+			return;
+		}
 
 		try {
 			if (isSelfProfile) {
@@ -28,13 +33,7 @@
 				return;
 			}
 
-			const response = await fetch(`/api/profile/${username}`);
-
-			if (!response.ok) {
-				throw new Error(`HTTP ${response.status}`);
-			}
-
-			fetchedProfile = await response.json();
+			fetchedProfile = await getProfileByUsername(username);
 		} catch (error) {
 			console.error('Error fetching profile:', error);
 		} finally {
@@ -48,7 +47,6 @@
 		loadProfile();
 	});
 
-	console.log('Username:', username);
 </script>
 
 {#if isLoaded && userProfile}

@@ -1,6 +1,6 @@
 import { page } from '$app/state';
 import { goto } from '$app/navigation';
-import { user } from '$lib/stores/user.svelte';
+import { authStatus, user } from '$lib/stores/user.svelte';
 import { resolve } from '$app/paths';
 
 // Rutas a las que SOLO pueden acceder usuarios NO autenticados
@@ -8,6 +8,8 @@ const authRoutes = ['/login', '/register'];
 
 export function useAuthGuard() {
 	$effect(() => {
+		if (!authStatus.initialized) return;
+
 		const currentPath = page.url.pathname;
 		const isAuthenticated = user.authenticated;
 

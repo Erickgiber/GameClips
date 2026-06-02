@@ -1,21 +1,27 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-
-	// import { goto } from '$app/navigation';
 	import { m } from '$lib/paraglide/messages';
 	import { Eye, EyeOff, Mail, Lock, Gamepad2 } from 'lucide-svelte';
 	import { resolve } from '$app/paths';
 	import { fly } from 'svelte/transition';
-	import { user } from '$lib/stores/user.svelte';
+	import { authStatus, loginWithEmail } from '$lib/stores/user.svelte';
 
 	let showPassword = $state(false);
 	let email = $state('');
 	let password = $state('');
+	let rememberMe = $state(false);
+	let formError = $state<string | null>(null);
 
-	function handleSubmit(e: Event) {
+	async function handleSubmit(e: Event) {
 		e.preventDefault();
-		user.authenticated = true;
-		goto(resolve('/'));
+		formError = null;
+
+		try {
+			await loginWithEmail({ email, password, rememberMe });
+			goto(resolve('/'));
+		} catch (error) {
+			formError = error instanceof Error ? error.message : 'Unable to sign in';
+		}
 	}
 </script>
 
@@ -44,6 +50,12 @@
 			<h2 class="mb-6 text-2xl font-black">{m.sign_in_title()}</h2>
 
 			<form onsubmit={handleSubmit} class="space-y-5">
+				{#if formError || authStatus.error}
+					<p class="rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+						{formError ?? authStatus.error}
+					</p>
+				{/if}
+
 				<div>
 					<label for="email" class="mb-2 block text-sm font-semibold">
 						{m.email_address()}
@@ -93,6 +105,7 @@
 					<label class="flex cursor-pointer items-center gap-2">
 						<input
 							type="checkbox"
+							bind:checked={rememberMe}
 							class="h-4 w-4 rounded border-border bg-muted/50 text-primary focus:ring-2 focus:ring-primary/50"
 						/>
 						<span class="text-muted-foreground">{m.remember_me()}</span>
@@ -107,9 +120,10 @@
 
 				<button
 					type="submit"
+					disabled={authStatus.loading}
 					class="w-full rounded-lg bg-primary py-3 font-bold text-white shadow-lg shadow-primary/30 transition-all hover:bg-primary/90 active:scale-95"
 				>
-					{m.sign_in_button()}
+					{authStatus.loading ? 'Signing in...' : m.sign_in_button()}
 				</button>
 			</form>
 

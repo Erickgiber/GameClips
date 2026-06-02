@@ -3,47 +3,7 @@
 	import { Heart, MessageCircle, Share2, Bookmark, Search } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-
-	const mockVideos = [
-		{
-			id: 1,
-			title: 'Insane 1v5 Clutch - Valorant Radiant Gameplay',
-			creator: 'ProGamer_TTV',
-			avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop',
-			thumbnail: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=900&fit=crop',
-			likes: 245000,
-			comments: 3420,
-			shares: 892,
-			game: 'Valorant',
-			tags: ['#clutch', '#valorant', '#fps']
-		},
-		{
-			id: 2,
-			title: 'Perfect Pentakill in Ranked - League of Legends',
-			creator: 'MidLaneKing',
-			avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&h=100&fit=crop',
-			thumbnail:
-				'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&h=900&fit=crop',
-			likes: 189000,
-			comments: 2105,
-			shares: 654,
-			game: 'League of Legends',
-			tags: ['#pentakill', '#lol', '#moba']
-		},
-		{
-			id: 3,
-			title: 'Last Squad Standing - Apex Legends',
-			creator: 'ApexPredator',
-			avatar: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=100&h=100&fit=crop',
-			thumbnail:
-				'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=400&h=900&fit=crop',
-			likes: 312000,
-			comments: 4890,
-			shares: 1203,
-			game: 'Apex Legends',
-			tags: ['#battleroyale', '#apex']
-		}
-	];
+	import { loadVideos, videosState } from '$lib/stores/videos.svelte';
 
 	let currentVideoIndex = $state(0);
 	let isLiked = $state(false);
@@ -52,6 +12,10 @@
 	let touchEnd = $state(0);
 
 	onMount(() => {
+		if (videosState.items.length === 0) {
+			void loadVideos();
+		}
+
 		if (typeof document === 'undefined') {
 			return;
 		}
@@ -65,7 +29,7 @@
 		};
 	});
 
-	let currentVideo = $derived(mockVideos[currentVideoIndex]);
+	let currentVideo = $derived(videosState.items[currentVideoIndex]);
 
 	function formatNumber(num: number): string {
 		if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
@@ -88,7 +52,7 @@
 		const isSwipeUp = distance > 50;
 		const isSwipeDown = distance < -50;
 
-		if (isSwipeUp && currentVideoIndex < mockVideos.length - 1) {
+		if (isSwipeUp && currentVideoIndex < videosState.items.length - 1) {
 			currentVideoIndex += 1;
 			isLiked = false;
 			isSaved = false;
@@ -127,7 +91,8 @@
 		<Search class="h-6 w-6" color="white" />
 	</div>
 
-	{#key currentVideo.id}
+	{#if currentVideo}
+		{#key currentVideo.id}
 		<div
 			tabindex="0"
 			role="button"
@@ -238,7 +203,12 @@
 				</div>
 			</div>
 		</div>
-	{/key}
+		{/key}
+	{:else}
+		<div class="absolute inset-0 flex items-center justify-center text-sm text-white/70">
+			Loading videos...
+		</div>
+	{/if}
 
 	<div class="pointer-events-none absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
 		<div class="animate-pulse text-center font-mono text-xs text-white/30">

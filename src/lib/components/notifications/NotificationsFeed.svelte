@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
 	import { m } from '$lib/paraglide/messages';
 	import type { Notification, NotificationType } from '$lib/types/notification.type';
 	import { BellOff, Heart, MessageSquareText, Sparkles, UserPlus } from 'lucide-svelte';
@@ -46,7 +45,7 @@
 			{@const meta = getNotificationMeta(notification.type)}
 			{@const Icon = meta.Icon}
 			<a
-				href={resolve(notification.href)}
+				href={notification.href}
 				class={`group flex items-start gap-3 overflow-hidden rounded-3xl border border-white/8 bg-background/75 p-3 text-left shadow-lg ring-1 shadow-black/10 ring-transparent transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:ring-primary/20 ${compact ? 'pr-4' : 'p-4 sm:gap-4'}`}
 			>
 				<div class="relative shrink-0">

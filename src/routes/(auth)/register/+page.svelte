@@ -4,6 +4,7 @@
 	import { fly } from 'svelte/transition';
 	import * as m from '$lib/paraglide/messages';
 	import { resolve } from '$app/paths';
+	import { authStatus, registerWithEmailPassword } from '$lib/stores/user.svelte';
 
 	let showPassword = $state(false);
 	let showConfirmPassword = $state(false);
@@ -14,14 +15,33 @@
 		password: '',
 		confirmPassword: ''
 	});
+	let formError = $state<string | null>(null);
 
-	function handleSubmit(e: Event) {
+	async function handleSubmit(e: Event) {
 		e.preventDefault();
+		formError = null;
+
 		if (formData.password !== formData.confirmPassword) {
-			alert(m.passwords_do_not_match());
+			formError = m.passwords_do_not_match();
 			return;
 		}
-		goto(resolve('/'));
+
+		try {
+			const result = await registerWithEmailPassword({
+				username: formData.username,
+				email: formData.email,
+				password: formData.password
+			});
+
+			if (!result.session) {
+				goto(resolve('/login'));
+				return;
+			}
+
+			goto(resolve('/'));
+		} catch (error) {
+			formError = error instanceof Error ? error.message : 'Unable to create account';
+		}
 	}
 </script>
 
@@ -50,6 +70,12 @@
 			<h2 class="mb-6 text-2xl font-black">{m.create_account_title()}</h2>
 
 			<form onsubmit={handleSubmit} class="space-y-4">
+				{#if formError || authStatus.error}
+					<p class="rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+						{formError ?? authStatus.error}
+					</p>
+				{/if}
+
 				<div>
 					<label for="username" class="mb-2 block text-sm font-semibold">
 						{m.username()}
@@ -162,9 +188,10 @@
 
 				<button
 					type="submit"
+					disabled={authStatus.loading}
 					class="w-full rounded-lg bg-primary py-3 font-bold text-white shadow-lg shadow-primary/30 transition-all hover:bg-primary/90 active:scale-95"
 				>
-					{m.create_account_button()}
+					{authStatus.loading ? 'Creating account...' : m.create_account_button()}
 				</button>
 			</form>
 
