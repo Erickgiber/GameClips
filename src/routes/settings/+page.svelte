@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { m } from '$lib/paraglide/messages';
 	import { resolve } from '$app/paths';
-	import { signOut } from '$lib/services/auth.service';
+	import { logoutUser } from '$lib/stores/user.svelte';
 
 	const sections = [
 		{
@@ -47,7 +47,7 @@
 <!-- LOGOUT -->
 <div class="mt-10">
 	<button
-		onclick={signOut}
+		onclick={logoutUser}
 		class="w-full rounded-xl border border-destructive/20 bg-destructive/10 py-3
 			text-destructive transition hover:bg-destructive/20"
 	>
