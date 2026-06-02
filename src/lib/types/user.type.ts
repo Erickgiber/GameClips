@@ -3,12 +3,12 @@ export type User = {
 	authenticated: boolean;
 	username: string;
 	email: string;
-	name: string;
-	description: string;
+	name: string | null;
+	description: string | null;
 	title: string;
 	role: string;
-	dedication: string;
-	avatar_url: string;
+	dedication: string | null;
+	avatar_url: string | null;
 	followers_count: number;
 	following_count: number;
 	videos_count: number;

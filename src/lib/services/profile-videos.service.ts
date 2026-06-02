@@ -30,7 +30,10 @@ type LikeCountRow = {
 async function getLikeCounts(videoIds: string[]) {
 	if (videoIds.length === 0) return new Map<string, number>();
 
-	const { data, error } = await supabase.from('video_likes').select('video_id').in('video_id', videoIds);
+	const { data, error } = await supabase
+		.from('video_likes')
+		.select('video_id')
+		.in('video_id', videoIds);
 
 	if (error) throw new Error(error.message);
 
@@ -82,7 +85,9 @@ async function enrichVideos(videos: VideoRow[]) {
 		getLikeCounts(videos.map((video) => video.id))
 	]);
 
-	return videos.map((video) => toVideoUi(video, profilesMap.get(video.user_id), likesMap.get(video.id) ?? 0));
+	return videos.map((video) =>
+		toVideoUi(video, profilesMap.get(video.user_id), likesMap.get(video.id) ?? 0)
+	);
 }
 
 export async function getVideosByProfile(userId: string, limit = 100): Promise<Video[]> {
@@ -117,7 +122,9 @@ export async function getSavedVideosByProfile(userId: string, limit = 100): Prom
 
 	if (videosError) throw new Error(videosError.message);
 
-	const videosById = new Map(((videosData as VideoRow[] | null) ?? []).map((video) => [video.id, video]));
+	const videosById = new Map(
+		((videosData as VideoRow[] | null) ?? []).map((video) => [video.id, video])
+	);
 	const orderedVideos = videoIds
 		.map((id) => videosById.get(id))
 		.filter((video): video is VideoRow => Boolean(video));
@@ -145,7 +152,9 @@ export async function getLikedVideosByProfile(userId: string, limit = 100): Prom
 
 	if (videosError) throw new Error(videosError.message);
 
-	const videosById = new Map(((videosData as VideoRow[] | null) ?? []).map((video) => [video.id, video]));
+	const videosById = new Map(
+		((videosData as VideoRow[] | null) ?? []).map((video) => [video.id, video])
+	);
 	const orderedVideos = videoIds
 		.map((id) => videosById.get(id))
 		.filter((video): video is VideoRow => Boolean(video));

@@ -7,7 +7,9 @@ const supabaseUrl = env.PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = env.PUBLIC_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-	console.warn('Supabase env vars are missing. Check PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_ANON_KEY.');
+	console.warn(
+		'Supabase env vars are missing. Check PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_ANON_KEY.'
+	);
 }
 
 export const supabase = createClient<Database>(

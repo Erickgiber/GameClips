@@ -71,7 +71,9 @@
 
 			<form onsubmit={handleSubmit} class="space-y-4">
 				{#if formError || authStatus.error}
-					<p class="rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+					<p
+						class="rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+					>
 						{formError ?? authStatus.error}
 					</p>
 				{/if}

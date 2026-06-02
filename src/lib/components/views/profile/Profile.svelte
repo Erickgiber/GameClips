@@ -167,9 +167,6 @@
 
 					<p class="mb-4 max-w-2xl text-sm lg:text-base">
 						{user.description}
-						<br class="hidden lg:block" />
-						<span class="text-accent">#MOBA</span> <span class="text-accent">#Competitive</span>
-						<span class="text-accent">#Gaming</span>
 					</p>
 
 					<div class="mb-6 grid grid-cols-4 gap-4 lg:gap-8">
@@ -263,7 +260,9 @@
 		</div>
 
 		{#if tabError}
-			<p class="mb-4 rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+			<p
+				class="mb-4 rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+			>
 				{tabError}
 			</p>
 		{/if}

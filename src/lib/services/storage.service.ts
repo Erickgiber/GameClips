@@ -26,7 +26,10 @@ function buildUploadBody(payload: UploadableVideo): Blob | File | ArrayBuffer {
 	return payload;
 }
 
-export async function uploadVideoToStorage(payload: UploadableVideo, params: UploadVideoParams = {}) {
+export async function uploadVideoToStorage(
+	payload: UploadableVideo,
+	params: UploadVideoParams = {}
+) {
 	const bucket = env.PUBLIC_SUPABASE_STORAGE_BUCKET || 'game-clips';
 
 	const {
@@ -46,13 +49,14 @@ export async function uploadVideoToStorage(payload: UploadableVideo, params: Upl
 	const storagePath = `${ownerId}/${fileName}`;
 	const uploadBody = buildUploadBody(payload);
 
-	const { error: uploadError } = await supabase.storage.from(bucket).upload(storagePath, uploadBody, {
-		cacheControl: '3600',
-		upsert: false,
-		contentType:
-			params.contentType ??
-			(payload instanceof Blob && payload.type ? payload.type : 'video/mp4')
-	});
+	const { error: uploadError } = await supabase.storage
+		.from(bucket)
+		.upload(storagePath, uploadBody, {
+			cacheControl: '3600',
+			upsert: false,
+			contentType:
+				params.contentType ?? (payload instanceof Blob && payload.type ? payload.type : 'video/mp4')
+		});
 
 	if (uploadError) throw new Error(uploadError.message);
 

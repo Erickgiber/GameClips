@@ -46,7 +46,6 @@
 
 		loadProfile();
 	});
-
 </script>
 
 {#if isLoaded && userProfile}

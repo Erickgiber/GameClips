@@ -5,7 +5,7 @@ import type { User } from '$lib/types/user.type';
 type ProfileRow = {
 	id: string;
 	username: string;
-	email: string | null;
+	email: string;
 	name: string | null;
 	description: string | null;
 	title: string | null;
@@ -32,13 +32,13 @@ function mapProfileToUser(profile: ProfileRow, authenticated: boolean): User {
 		id: profile.id,
 		authenticated,
 		username: profile.username,
-		email: profile.email ?? '',
+		email: profile.email,
 		name: profile.name ?? profile.username,
-		description: profile.description ?? 'Welcome to GameClips.',
+		description: profile.description,
 		title: profile.title ?? 'Creator',
 		role: profile.role ?? 'normal',
-		dedication: profile.dedication ?? 'Content Creator',
-		avatar_url: profile.avatar_url ?? 'https://placehold.co/256x256?text=Player',
+		dedication: profile.dedication,
+		avatar_url: profile.avatar_url ?? '/user.png',
 		followers_count: profile.followers_count ?? 0,
 		following_count: profile.following_count ?? 0,
 		videos_count: profile.videos_count ?? 0,
@@ -59,11 +59,11 @@ function toAppUser(profile: ProfileRow | null, authUser: SupabaseAuthUser): User
 			username: usernameFallback,
 			email: authUser.email ?? '',
 			name: usernameFallback,
-			description: 'Welcome to GameClips.',
+			description: '',
 			title: 'Creator',
 			role: 'normal',
-			dedication: 'Content Creator',
-			avatar_url: 'https://placehold.co/256x256?text=Player',
+			dedication: '',
+			avatar_url: '/user.png',
 			followers_count: 0,
 			following_count: 0,
 			videos_count: 0,

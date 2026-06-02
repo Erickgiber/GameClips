@@ -23,14 +23,17 @@
 			})
 			.slice(0, 4);
 
-		return ranked.map((video) => ({
-			id: video.id,
-			title: video.title,
-			creator: video.creator,
-			game: video.game,
-			views: video.views,
-			thumbnail: video.thumbnail
-		} satisfies Clip));
+		return ranked.map(
+			(video) =>
+				({
+					id: video.id,
+					title: video.title,
+					creator: video.creator,
+					game: video.game,
+					views: video.views,
+					thumbnail: video.thumbnail
+				}) satisfies Clip
+		);
 	});
 
 	function formatViews(num: number) {

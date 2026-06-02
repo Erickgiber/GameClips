@@ -96,10 +96,7 @@
 	<div class="flex items-center gap-3">
 		{#each navActions as action (action.id)}
 			{#if 'href' in action}
-				<a
-					href={action.href}
-					class="rounded-lg p-2 transition-colors hover:bg-muted"
-				>
+				<a href={action.href} class="rounded-lg p-2 transition-colors hover:bg-muted">
 					<action.component class="h-5 w-5" />
 				</a>
 			{:else if 'onClick' in action}
@@ -111,9 +108,7 @@
 					<action.component class="h-5 w-5" />
 
 					{#if action.showBadge && hasNotifications}
-						<div
-							class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-destructive"
-						></div>
+						<div class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-destructive"></div>
 					{/if}
 				</button>
 			{:else}

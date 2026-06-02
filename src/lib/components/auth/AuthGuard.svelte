@@ -8,7 +8,7 @@
 
 	const canRender = $derived(
 		authStatus.initialized &&
-		user.authenticated &&
+			user.authenticated &&
 			client.current &&
 			(!onlyDesktop || !screen.isMobile) &&
 			(!onlyMobile || screen.isMobile)
