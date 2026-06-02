@@ -109,5 +109,12 @@
 	"open_notifications": "Open notifications",
 	"notifications_empty_title": "No notifications yet",
 	"notifications_empty": "When someone reacts to your clips, follows your profile or mentions you, the updates will show up here.",
-	"explore_creators": "Explore creators"
+	"explore_creators": "Explore creators",
+	 "user_menu": "User menu",
+  "user_menu_subtitle": "Manage your account",
+  "view_profile": "View profile",
+  "settings": "Settings",
+  "account": "Account",
+  "help": "Help & support",
+  "logout": "Log out"
 }

@@ -2,16 +2,14 @@
 	import { browser } from '$app/environment';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
-
 	import ViewLoader from '$lib/components/ui/ViewLoader.svelte';
 	import Profile from '$lib/components/views/profile/Profile.svelte';
-
 	import { client } from '$lib/stores/isClient.svelte';
 	import { user } from '$lib/stores/user.svelte';
 	import { getProfileByUsername } from '$lib/services/profile.service';
 	import type { User } from '$lib/types/user.type';
 
-	const username = page.params.username;
+	let username = $derived(page.params.username);
 
 	const isSelfProfile = $derived(username === user.username);
 

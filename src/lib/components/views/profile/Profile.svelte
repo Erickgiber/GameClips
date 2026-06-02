@@ -111,12 +111,14 @@
 				<span class="font-semibold">{m.back_to_home()}</span>
 			</a>
 			<div class="flex items-center gap-3">
-				<button class="rounded-lg p-2 transition-colors hover:bg-muted">
+				<button class="md:cursor-pointer rounded-lg p-2 transition-colors hover:bg-muted">
 					<Share2 class="h-5 w-5" />
 				</button>
-				<button class="rounded-lg p-2 transition-colors hover:bg-muted">
-					<Settings class="h-5 w-5" />
-				</button>
+				{#if isOwnProfile}
+					<button class="md:cursor-pointer rounded-lg p-2 transition-colors hover:bg-muted">
+						<Settings class="h-5 w-5" />
+					</button>
+				{/if}
 			</div>
 		</div>
 	</div>
@@ -148,20 +150,16 @@
 							</p>
 						</div>
 						<div class="mt-4 flex items-center justify-center gap-3 lg:mt-0 lg:justify-start">
-							<button
-								onclick={() => (isFollowing = !isFollowing)}
-								class="rounded-lg px-6 py-2 text-sm font-bold shadow-lg transition-all active:scale-95 {isFollowing
-									? 'bg-muted text-foreground hover:bg-muted/80'
-									: 'bg-primary text-white shadow-primary/30 hover:bg-primary/90'}"
-							>
-								{isFollowing ? m.following() : m.follow_btn()}
-							</button>
-							<button class="rounded-lg bg-muted p-2 transition-colors hover:bg-muted/80">
-								<Share2 class="h-5 w-5" />
-							</button>
-							<button class="rounded-lg bg-muted p-2 transition-colors hover:bg-muted/80 lg:hidden">
-								<Settings class="h-5 w-5" />
-							</button>
+							{#if !isOwnProfile}
+								<button
+									onclick={() => (isFollowing = !isFollowing)}
+									class="md:cursor-pointer rounded-lg px-6 py-2 text-sm font-bold shadow-lg transition-all active:scale-95 {isFollowing
+										? 'bg-muted text-foreground hover:bg-muted/80'
+										: 'bg-primary text-white shadow-primary/30 hover:bg-primary/90'}"
+								>
+									{isFollowing ? m.following() : m.follow_btn()}
+								</button>
+							{/if}
 						</div>
 					</div>
 

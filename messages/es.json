@@ -109,5 +109,12 @@
 	"open_notifications": "Abrir notificaciones",
 	"notifications_empty_title": "Aún no hay notificaciones",
 	"notifications_empty": "Cuando alguien reacciona a tus clips, sigue tu perfil o te menciona, las actualizaciones aparecerán aquí.",
-	"explore_creators": "Explorar creadores"
+	"explore_creators": "Explorar creadores",
+	"user_menu": "Menú de usuario",
+	"user_menu_subtitle": "Administra tu cuenta",
+	"view_profile": "Ver perfil",
+	"settings": "Configuración",
+	"account": "Cuenta",
+	"help": "Ayuda y soporte",
+	"logout": "Cerrar sesión"
 }

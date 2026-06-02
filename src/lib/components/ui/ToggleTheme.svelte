@@ -14,7 +14,7 @@
 </script>
 
 <button
-	class="group relative flex h-8 w-14 items-center rounded-full bg-gray-200 p-1 shadow-lg transition-colors duration-300 focus:outline-none dark:bg-gray-700"
+	class="md:cursor-pointer group relative flex h-8 w-14 items-center rounded-full bg-gray-200 p-1 shadow-lg transition-colors duration-300 focus:outline-none dark:bg-gray-700"
 	aria-label="Toggle theme"
 	onclick={toggleTheme}
 	disabled={!mounted}
