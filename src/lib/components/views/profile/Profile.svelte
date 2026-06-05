@@ -101,11 +101,14 @@
 				<span class="font-semibold">{m.back_to_home()}</span>
 			</a>
 			<div class="flex items-center gap-3">
-				<button class="md:cursor-pointer rounded-lg p-2 transition-colors hover:bg-muted">
+				<button class="rounded-lg p-2 transition-colors hover:bg-muted md:cursor-pointer">
 					<Share2 class="h-5 w-5" />
 				</button>
 				{#if isOwnProfile}
-					<a href={resolve('/settings')} class="md:cursor-pointer rounded-lg p-2 transition-colors hover:bg-muted">
+					<a
+						href={resolve('/settings')}
+						class="rounded-lg p-2 transition-colors hover:bg-muted md:cursor-pointer"
+					>
 						<Settings class="h-5 w-5" />
 					</a>
 				{/if}
@@ -143,7 +146,7 @@
 							{#if !isOwnProfile}
 								<button
 									onclick={() => (isFollowing = !isFollowing)}
-									class="md:cursor-pointer rounded-lg px-6 py-2 text-sm font-bold shadow-lg transition-all active:scale-95 {isFollowing
+									class="rounded-lg px-6 py-2 text-sm font-bold shadow-lg transition-all active:scale-95 md:cursor-pointer {isFollowing
 										? 'bg-muted text-foreground hover:bg-muted/80'
 										: 'bg-primary text-white shadow-primary/30 hover:bg-primary/90'}"
 								>

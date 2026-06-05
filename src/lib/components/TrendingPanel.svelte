@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t } from '$lib/helpers/translate';
+	import { m } from '$lib/paraglide/messages';
 	import type { Video } from '$lib/types/video.type';
 	import { TrendingUp, Play } from 'lucide-svelte';
 
@@ -51,7 +51,7 @@
 	<div class="mb-4 flex items-center gap-2">
 		<TrendingUp class="h-5 w-5 text-primary" />
 		<h2 class="text-lg font-black">
-			{t['trending.title']}
+			{m.account('trending_title')}
 		</h2>
 	</div>
 
@@ -99,7 +99,7 @@
 						<span>{clip.creator}</span>
 						<span class="font-mono">
 							{formatViews(clip.views)}
-							{t['trending.views']}
+							{m.account('trending_views')}
 						</span>
 					</div>
 				</div>
@@ -118,17 +118,17 @@
 		class="mt-6 rounded-lg border border-primary/20 bg-linear-to-br from-primary/20 to-secondary/20 p-4"
 	>
 		<h3 class="mb-2 text-sm font-black">
-			{t['trending.cta.title']}
+			{m.account('trending_cta_title')}
 		</h3>
 
 		<p class="mb-3 text-xs text-muted-foreground">
-			{t['trending.cta.description']}
+			{m.account('trending_cta_description')}
 		</p>
 
 		<button
 			class="w-full rounded-lg bg-primary py-2 font-bold text-white shadow-lg shadow-primary/30 transition-all hover:bg-primary/90"
 		>
-			{t['trending.cta.button']}
+			{m.account('trending_cta_button')}
 		</button>
 	</div>
 </div>

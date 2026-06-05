@@ -1,5 +1,5 @@
 import { supabase } from '$lib/supabase/client';
-import { ensureProfileForUser } from '$lib/services/profile.service';
+// import { ensureProfileForUser } from '$lib/services/profile.service';
 
 export type AuthCredentials = {
 	email: string;
@@ -35,13 +35,12 @@ export async function registerWithEmail(payload: RegisterPayload) {
 
 	if (error) throw new Error(error.message);
 
-	if (data.user) {
-		await ensureProfileForUser({
-			id: data.user.id,
-			username,
-			avatar_url: null
-		});
-	}
+	// if (data.user) {
+	// 	await ensureProfileForUser({
+	// 		id: data.user.id,
+	// 		username
+	// 	});
+	// }
 
 	return data;
 }

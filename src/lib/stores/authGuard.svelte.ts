@@ -4,7 +4,7 @@ import { authStatus, user } from '$lib/stores/user.svelte';
 import { resolve } from '$app/paths';
 
 // Rutas a las que SOLO pueden acceder usuarios NO autenticados
-const authRoutes = ['/login', '/register'];
+const authRoutes = ['/login', '/register', '/verify-email', '/forgot-password'];
 
 export function useAuthGuard() {
 	$effect(() => {

@@ -84,7 +84,6 @@ function toPublicAppUser(profile: ProfileRow): User {
 export async function ensureProfileForUser(payload: {
 	id: string;
 	username: string;
-	avatar_url?: string | null;
 }) {
 	const { error } = await supabase.from('profiles').upsert(payload, { onConflict: 'id' });
 	if (error) throw new Error(error.message);
