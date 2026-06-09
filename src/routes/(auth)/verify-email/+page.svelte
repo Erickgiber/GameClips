@@ -79,7 +79,7 @@
 
 		<div
 			in:fly={{ y: 20, duration: 500, delay: 100 }}
-			class="relative min-h-max h-72 overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-2xl lg:p-10"
+			class="relative h-72 min-h-max overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-2xl lg:p-10"
 		>
 			{#if status === 'loading'}
 				<div

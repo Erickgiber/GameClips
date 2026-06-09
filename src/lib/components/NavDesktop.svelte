@@ -9,7 +9,7 @@
 		loadNotifications,
 		notificationsState
 	} from '$lib/stores/notifications.svelte';
-	import { user } from '$lib/stores/user.svelte';
+	import { logoutUser, user } from '$lib/stores/user.svelte';
 	import {
 		Bell,
 		Search,
@@ -75,10 +75,6 @@
 	`;
 	}
 
-	function handleLogout() {
-		console.log('Cerrar sesion');
-	}
-
 	const navActions = [
 		{
 			id: 'theme',
@@ -139,7 +135,7 @@
 <nav
 	class="z-50 flex h-nav-desktop items-center justify-between border-b border-border bg-card/50 px-4 backdrop-blur-md"
 >
-	<div class="flex items-center gap-2">
+	<a href={resolve('/')} class="flex items-center gap-2">
 		<div
 			class="flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-primary to-secondary"
 		>
@@ -147,7 +143,7 @@
 		</div>
 
 		<h1 class="text-xl font-black tracking-tight">GAMECLIP</h1>
-	</div>
+	</a>
 
 	<div class="mx-8 hidden max-w-md flex-1 md:block">
 		<div class="relative">
@@ -358,7 +354,7 @@
 					<button
 						type="button"
 						class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-red-500/10 px-4 py-3 text-sm font-semibold text-red-400 transition-colors hover:bg-red-500/20"
-						onclick={handleLogout}
+						onclick={logoutUser}
 					>
 						<LogOut class="h-5 w-5" />
 						{m.logout()}
@@ -440,7 +436,7 @@
 					<button
 						type="button"
 						class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-red-500/10 px-4 py-4 font-semibold text-red-400"
-						onclick={handleLogout}
+						onclick={logoutUser}
 					>
 						<LogOut class="h-5 w-5" />
 						{m.logout()}

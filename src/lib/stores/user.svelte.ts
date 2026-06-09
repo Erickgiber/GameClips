@@ -9,6 +9,7 @@ import {
 } from '$lib/supabase/capacitor-storage';
 import { emptyUser } from '$lib/constants/empty-user';
 import type { User } from '$lib/types/user.type';
+import { m } from '$lib/paraglide/messages';
 
 type AuthStatus = {
 	initialized: boolean;
@@ -110,7 +111,7 @@ export async function loginWithEmail(payload: {
 		const data = await signInWithEmail(payload);
 		await syncSession(data.session ?? null);
 	} catch (error) {
-		authStatus.error = error instanceof Error ? error.message : 'Unable to sign in';
+		authStatus.error = error instanceof Error ? error.message : m.signing_in();
 		throw error;
 	} finally {
 		authStatus.loading = false;

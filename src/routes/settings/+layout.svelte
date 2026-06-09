@@ -16,9 +16,19 @@
 
 		return `/${user.username}`;
 	});
+
+	let customTitle = $derived(() => {
+		const pathname = page.url.pathname;
+
+		if (pathname === '/settings/profile') {
+			return m.edit_profile();
+		}
+
+		return m.settings_title();
+	});
 </script>
 
-<TopNavProfile customGoBack={customBack()} customTitle={m.settings_title()} />
+<TopNavProfile customGoBack={customBack()} customTitle={customTitle()} />
 
 <div class="h-[calc(100dvh - var(--spacing-nav-category))] bg-background px-4 py-6 text-foreground">
 	{@render children()}

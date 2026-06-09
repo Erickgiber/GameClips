@@ -20,7 +20,7 @@
 			await loginWithEmail({ email, password, rememberMe });
 			goto(resolve('/'));
 		} catch (error) {
-			formError = error instanceof Error ? error.message : 'Unable to sign in';
+			formError = error instanceof Error ? error.message : m.signing_in();
 		}
 	}
 </script>
@@ -125,7 +125,7 @@
 					disabled={authStatus.loading}
 					class="w-full rounded-lg bg-primary py-3 font-bold text-white shadow-lg shadow-primary/30 transition-all hover:bg-primary/90 active:scale-95"
 				>
-					{authStatus.loading ? 'Signing in...' : m.sign_in_button()}
+					{authStatus.loading ? m.signing_in() : m.sign_in_button()}
 				</button>
 			</form>
 
