@@ -166,5 +166,13 @@
 	"sponsored_by_label": "Sponsored by",
 	"sponsor_placeholder": "BrandName1, BrandName2",
 	"save_profile": "Save Profile",
-	"profile_saved": "Profile Saved!"
+	"profile_saved": "Profile Saved!",
+	"profile_update_success": "Your profile has been updated successfully.",
+	"error_generic": "An unexpected error occurred. Please try again.",
+	"error_unique_violation": "This information is already in use by another user.",
+	"error_unauthorized": "You do not have permission to perform this action.",
+	"error_fk_violation": "The provided information is invalid.",
+	"error_missing_field": "Please complete all required fields.",
+	"error_profile_not_found": "Profile could not be found.",
+	"error_database": "Error processing request. Contact support if the problem persists."
 }

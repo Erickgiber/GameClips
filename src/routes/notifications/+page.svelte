@@ -55,13 +55,13 @@
 
 				<div class="relative space-y-6">
 					<div class="flex flex-wrap items-start justify-between gap-4">
-						<div class="max-w-2xl">
+						<div class="max-w-2xl flex items-center gap-3">
 							<div
-								class="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/15 text-primary ring-1 ring-primary/20"
+								class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/15 text-primary ring-1 ring-primary/20"
 							>
-								<Bell class="h-8 w-8" />
+								<Bell class="h-6 w-6" />
 							</div>
-							<h1 class="mt-2 text-3xl font-black tracking-tight sm:text-4xl">
+							<h1 class="text-3xl font-black tracking-tight sm:text-4xl">
 								{m.notifications()}
 							</h1>
 						</div>

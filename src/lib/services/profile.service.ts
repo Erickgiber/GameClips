@@ -1,6 +1,8 @@
 import type { User as SupabaseAuthUser } from '@supabase/supabase-js';
 import { supabase } from '$lib/supabase/client';
 import type { User } from '$lib/types/user.type';
+import { mapSupabaseError } from '$lib/utils/supabaseMapCode';
+import { m } from '$lib/paraglide/messages';
 
 type ProfileRow = {
 	id: string;
@@ -134,4 +136,43 @@ export async function buildAppUserFromAuth(authUser: SupabaseAuthUser): Promise<
 
 	if (error) throw new Error(error.message);
 	return toAppUser(data as ProfileRow | null, authUser);
+}
+
+export type UpdateProfileResult = {
+    success: boolean;
+    message?: string;
+};
+
+export async function updateProfile(
+    userId: string, 
+    updates: Partial<Omit<ProfileRow, 'id'>>
+): Promise<UpdateProfileResult> {
+    try {
+        const { error } = await supabase
+            .from('profiles')
+            .update(updates)
+            .eq('id', userId);
+
+        if (error) {
+            // Logueamos el error real para debugging interno, pero no lo exponemos al cliente
+            console.error('[updateProfile] Supabase error:', error);
+            return {
+                success: false,
+                message: mapSupabaseError(error.code)
+            };
+        }
+
+        return {
+            success: true,
+            // Opcional: Puedes devolver un mensaje de éxito traducido
+            message: m.profile_update_success() 
+        };
+    } catch (err) {
+        // Captura cualquier error de red o fallo catastrófico
+        console.error('[updateProfile] Unexpected error:', err);
+        return {
+            success: false,
+            message: m.error_generic()
+        };
+    }
 }

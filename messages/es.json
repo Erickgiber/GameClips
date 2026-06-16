@@ -166,5 +166,13 @@
 	"sponsored_by_label": "Patrocinado por",
 	"sponsor_placeholder": "Marca1, Marca2",
 	"save_profile": "Guardar Perfil",
-	"profile_saved": "¡Perfil Guardado!"
+	"profile_saved": "¡Perfil Guardado!",
+	"profile_update_success": "Tu perfil ha sido actualizado correctamente.",
+	"error_generic": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo.",
+	"error_unique_violation": "Este dato ya está registrado por otro usuario.",
+	"error_unauthorized": "No tienes permisos para realizar esta acción.",
+	"error_fk_violation": "La información proporcionada no es válida.",
+	"error_missing_field": "Por favor, completa todos los campos requeridos.",
+	"error_profile_not_found": "No se pudo encontrar el perfil.",
+	"error_database": "Error al procesar la solicitud. Contacta a soporte si el problema persiste."
 }

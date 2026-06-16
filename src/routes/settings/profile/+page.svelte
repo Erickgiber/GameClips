@@ -1,14 +1,16 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { fly } from 'svelte/transition';
-	import { Camera, Trophy, Save, Link2, User, FileText, AtSign } from 'lucide-svelte';
+	import { Camera, Trophy, Save, Link2, User, FileText, AtSign, LoaderCircle } from 'lucide-svelte';
 	import { user } from '$lib/stores/user.svelte';
 	import { resolve } from '$app/paths';
 	import { m } from '$lib/paraglide/messages';
 	import AuthGuard from '$lib/components/auth/AuthGuard.svelte';
+	import { updateProfile } from '$lib/services/profile.service';
 
 	let fileInputRef: HTMLInputElement | undefined = $state();
 	let saved = $state(false);
+	let saving = $state(false);
 
 	// Estado local para el formulario (evita mutar el store global hasta guardar)
 	let formData = $derived({
@@ -23,25 +25,50 @@
 	const maxDescription = 150;
 	let charCount = $derived(formData.description.length);
 
-	function handleSave() {
-		// 1. Aquí harías tu llamada a la API (ej. Supabase) para guardar los datos
-		// 2. Actualizamos el store global localmente
+	async function handleSave() {
+		if (!user.id) {
+			alert(m.error_unauthorized());
+			return;
+		}
+
+		const updatedProfile = {
+			username: formData.username,
+			name: formData.name,
+			title: formData.title,
+			description: formData.description,
+			avatar_url: formData.avatar_url,
+			sponsored_by: formData.sponsor
+				.split(',')
+				.map((s) => s.trim())
+				.filter(Boolean)
+		};
+
+		saving = true;
+		const req = await updateProfile(user.id, updatedProfile);
+		saving = false;
+
+		if (!req.success) {
+			console.error('Error updating profile:', req.message);
+			alert(req.message ?? m.error_generic());
+			return;
+		}
+
 		user.username = formData.username;
 		user.name = formData.name;
 		user.title = formData.title;
 		user.description = formData.description;
 		user.avatar_url = formData.avatar_url;
 
-		// Convertimos el string separado por comas de vuelta a un array limpio
 		user.sponsored_by = formData.sponsor
 			.split(',')
 			.map((s) => s.trim())
 			.filter(Boolean);
 
 		saved = true;
-		setTimeout(() => {
-			goto(resolve('/profile'));
-		}, 800);
+
+		setInterval(() => {
+			saved = false;
+		}, 3000);
 	}
 
 	function handleAvatarClick() {
@@ -198,13 +225,19 @@
 
 			<div class="flex gap-5" in:fly={{ y: 16, duration: 300, delay: 200 }}>
 				<button
+					disabled={saving}
 					onclick={handleSave}
 					class="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-base font-black text-white shadow-xl shadow-primary/30 transition-all hover:bg-primary/90 active:scale-97 lg:cursor-pointer"
 				>
-					<Save class="h-5 w-5" />
-					{saved ? m.profile_saved() : m.save_profile()}
+					{#if saving}
+						<LoaderCircle class="h-5 w-5 animate-spin" />
+					{:else}
+						<Save class="h-5 w-5" />
+						{saved ? m.profile_saved() : m.save_profile()}
+					{/if}
 				</button>
 				<button
+					disabled={saving}
 					onclick={() => goto(resolve('/profile'))}
 					class="flex w-full items-center justify-center gap-2 rounded-xl border border-border py-4 text-base font-black text-white shadow-xl shadow-border/30 transition-all hover:bg-border/90 active:scale-97 lg:cursor-pointer"
 				>
