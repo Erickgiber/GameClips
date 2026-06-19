@@ -7,6 +7,7 @@
 	import { m } from '$lib/paraglide/messages';
 	import AuthGuard from '$lib/components/auth/AuthGuard.svelte';
 	import { updateProfile } from '$lib/services/profile.service';
+	import { normalizeText } from '$lib/utils/normalizeText';
 
 	let fileInputRef: HTMLInputElement | undefined = $state();
 	let saved = $state(false);
@@ -32,7 +33,7 @@
 		}
 
 		const updatedProfile = {
-			username: formData.username,
+			username: normalizeText(formData.username),
 			name: formData.name,
 			title: formData.title,
 			description: formData.description,
@@ -53,7 +54,7 @@
 			return;
 		}
 
-		user.username = formData.username;
+		user.username = normalizeText(formData.username);
 		user.name = formData.name;
 		user.title = formData.title;
 		user.description = formData.description;

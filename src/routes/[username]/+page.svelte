@@ -8,10 +8,11 @@
 	import { user } from '$lib/stores/user.svelte';
 	import { getProfileByUsername } from '$lib/services/profile.service';
 	import type { User } from '$lib/types/user.type';
+	import { normalizeText } from '$lib/utils/normalizeText';
 
-	let username = $derived(page.params.username);
+	let username = $derived(normalizeText(page.params.username));
 
-	const isSelfProfile = $derived(username === user.username);
+	const isSelfProfile = $derived(username === normalizeText(user.username));
 
 	let isLoaded = $state(false);
 	let fetchedProfile: User | null = $state(null);
@@ -43,6 +44,10 @@
 		if (!client.current) return;
 
 		loadProfile();
+	});
+
+	$effect(() => {
+		console.log(fetchedProfile);
 	});
 </script>
 
