@@ -87,7 +87,7 @@
 </script>
 
 <div
-	class="flex size-full items-center justify-center overflow-auto bg-background p-4 text-foreground"
+	class="flex pt-16 size-full items-center justify-center overflow-auto bg-background p-4 text-foreground"
 >
 	<div class="w-full max-w-md">
 		<div in:fly={{ y: -20, duration: 400 }} class="mb-8 text-center">

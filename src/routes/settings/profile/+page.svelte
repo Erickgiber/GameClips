@@ -4,8 +4,7 @@
 	import { Camera, Trophy, Save, Link2, User, FileText, AtSign, LoaderCircle } from 'lucide-svelte';
 	import { user } from '$lib/stores/user.svelte';
 	import { resolve } from '$app/paths';
-	import { m } from '$lib/paraglide/messages';
-	import AuthGuard from '$lib/components/auth/AuthGuard.svelte';
+	import * as m from '$lib/paraglide/messages';
 	import { updateProfile } from '$lib/services/profile.service';
 	import { normalizeText } from '$lib/utils/normalizeText';
 	import Cropper from 'cropperjs';
@@ -160,13 +159,9 @@
 	}
 </script>
 
-<AuthGuard>
-	<div class="size-full overflow-y-auto bg-background text-foreground">
-		<div class="mx-auto max-w-4xl space-y-6 pb-16 lg:px-6">
-			<div
-				in:fly={{ y: 16, duration: 300 }}
-				class="flex flex-col items-center gap-6 rounded-xl border border-border bg-card p-6 sm:flex-row"
-			>
+<div class="size-full overflow-y-auto bg-background text-foreground">
+	<div class="mx-auto max-w-4xl space-y-6 pb-16 lg:px-6">
+		<div in:fly={{ y: 16, duration: 300 }} class="flex flex-col items-center gap-6 rounded-xl border border-border bg-card p-6 sm:flex-row">
 				<div class="relative shrink-0">
 					<img
 						src={formData.avatar_url}
@@ -336,7 +331,6 @@
 			</div>
 		</div>
 	</div>
-</AuthGuard>
 
 {#if cropModalOpen}
 	<!-- svelte-ignore a11y_click_events_have_key_events -->

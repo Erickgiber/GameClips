@@ -116,7 +116,7 @@
 		</div>
 	</div>
 
-	<div class="mx-auto max-w-7xl px-4 pb-8 lg:px-6">
+	<div class="mx-auto max-w-7xl px-4 pb-8 lg:px-6" in:fly={{ y: 16, duration: 300, delay: 100 }}>
 		<div class="pt-6 pb-8">
 			<div class="flex flex-col gap-6 lg:flex-row lg:items-start">
 				<div class="flex justify-center lg:justify-start">

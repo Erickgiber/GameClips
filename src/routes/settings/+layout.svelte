@@ -4,6 +4,7 @@
 	import { m } from '$lib/paraglide/messages';
 	import { page } from '$app/state';
 	import AuthGuard from '$lib/components/auth/AuthGuard.svelte';
+	import { fly } from 'svelte/transition';
 
 	let { children } = $props();
 
@@ -33,8 +34,16 @@
 
 <AuthGuard>
 	<div
-		class="h-[calc(100dvh - var(--spacing-nav-category))] bg-background px-4 py-6 text-foreground"
+		class="grid h-[calc(100dvh - var(--spacing-nav-category))] bg-background px-4 py-6 text-foreground overflow-hidden"
 	>
-		{@render children()}
+		{#key page.url.pathname}
+			<div 
+				in:fly|global={{ y: 16, duration: 300, delay: 150 }} 
+				out:fly|global={{ y: -16, duration: 150 }}
+				class="col-start-1 row-start-1 h-full w-full"
+			>
+				{@render children()}
+			</div>
+		{/key}
 	</div>
 </AuthGuard>
