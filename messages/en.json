@@ -206,7 +206,7 @@
 	"security_social_linked": "Linked",
 	"security_passkey_title": "Passkeys",
 	"security_passkey_desc": "Sign in securely with your fingerprint, face, or screen lock",
-	"security_passkey_add": "Add Passkey",
+	"security_passkey_add": "Add",
 	"security_passkey_delete": "Delete",
 	"security_passkey_added_success": "Passkey added successfully!",
 	"security_passkey_deleted_success": "Passkey deleted successfully!",

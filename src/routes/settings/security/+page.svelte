@@ -203,6 +203,27 @@
 
 <div class="size-full overflow-y-auto bg-background text-foreground">
 	<div class="mx-auto max-w-4xl space-y-6 pb-16 lg:px-6">
+
+		<!-- Change Password Section -->
+		<div
+			in:fly={{ y: 16, duration: 300 }}
+			class="space-y-5 rounded-xl border border-border bg-card p-6"
+		>
+			<div class="flex items-center justify-between">
+				<div class="flex items-center gap-2">
+					<Key class="h-5 w-5 text-primary" />
+					<h3 class="text-base font-black">{m.security_password_title?.() ?? 'Change Password'}</h3>
+				</div>
+				{#if !isChangingPassword}
+					<button
+						onclick={() => (isChangingPassword = true)}
+						class="rounded-xl bg-secondary px-3 py-2 text-sm font-bold text-secondary-foreground transition-colors hover:bg-secondary/80 active:scale-95 md:cursor-pointer"
+					>
+						{m.security_password_update_action?.() ?? 'Update'}
+					</button>
+				{/if}
+			</div>
+			
 		<!-- Passkeys Section -->
 		<div
 			in:fly={{ y: 16, duration: 300, delay: 150 }}
@@ -263,26 +284,6 @@
 				</p>
 			{/if}
 		</div>
-
-		<!-- Change Password Section -->
-		<div
-			in:fly={{ y: 16, duration: 300 }}
-			class="space-y-5 rounded-xl border border-border bg-card p-6"
-		>
-			<div class="flex items-center justify-between">
-				<div class="flex items-center gap-2">
-					<Key class="h-5 w-5 text-primary" />
-					<h3 class="text-base font-black">{m.security_password_title?.() ?? 'Change Password'}</h3>
-				</div>
-				{#if !isChangingPassword}
-					<button
-						onclick={() => (isChangingPassword = true)}
-						class="rounded-xl bg-secondary px-3 py-2 text-sm font-bold text-secondary-foreground transition-colors hover:bg-secondary/80 active:scale-95 md:cursor-pointer"
-					>
-						{m.security_password_update_action?.() ?? 'Update'}
-					</button>
-				{/if}
-			</div>
 
 			{#if isChangingPassword}
 				<div class="animate-in fade-in slide-in-from-top-4 duration-300">

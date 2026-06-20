@@ -206,7 +206,7 @@
 	"security_social_linked": "Vinculada",
 	"security_passkey_title": "Llaves de acceso (Passkeys)",
 	"security_passkey_desc": "Inicia sesión de forma segura con tu huella, rostro o bloqueo de pantalla",
-	"security_passkey_add": "Añadir Passkey",
+	"security_passkey_add": "Añadir",
 	"security_passkey_delete": "Eliminar",
 	"security_passkey_added_success": "¡Passkey añadido con éxito!",
 	"security_passkey_deleted_success": "¡Passkey eliminado con éxito!",
