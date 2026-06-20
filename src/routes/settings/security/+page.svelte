@@ -30,22 +30,22 @@
 	import type { Identity } from '@supabase/supabase-js';
 
 	// --- Password State ---
+	let isChangingPassword = $state(false);
 	let newPassword = $state('');
 	let confirmPassword = $state('');
 	let isSavingPassword = $state(false);
 	let passwordError = $state('');
 	let passwordSuccess = $state(false);
 
+	const isPasswordLengthValid = $derived(newPassword.length >= 6);
+	const doPasswordsMatch = $derived(newPassword && newPassword === confirmPassword);
+	const isPasswordFormValid = $derived(isPasswordLengthValid && doPasswordsMatch);
+
 	async function handlePasswordSave() {
 		passwordError = '';
 		passwordSuccess = false;
 
-		if (!newPassword || !confirmPassword) return;
-
-		if (newPassword !== confirmPassword) {
-			passwordError = m.security_password_mismatch?.() ?? 'Passwords do not match';
-			return;
-		}
+		if (!isPasswordFormValid) return;
 
 		isSavingPassword = true;
 		try {
@@ -53,6 +53,7 @@
 			passwordSuccess = true;
 			newPassword = '';
 			confirmPassword = '';
+			isChangingPassword = false;
 			setTimeout(() => (passwordSuccess = false), 3000);
 		} catch (error: any) {
 			passwordError = error.message;
@@ -207,55 +208,89 @@
 			in:fly={{ y: 16, duration: 300 }}
 			class="space-y-5 rounded-xl border border-border bg-card p-6"
 		>
-			<div class="mb-1 flex items-center gap-2">
-				<Key class="h-5 w-5 text-primary" />
-				<h3 class="text-base font-black">{m.security_password_title?.() ?? 'Change Password'}</h3>
+			<div class="flex items-center justify-between">
+				<div class="flex items-center gap-2">
+					<Key class="h-5 w-5 text-primary" />
+					<h3 class="text-base font-black">{m.security_password_title?.() ?? 'Change Password'}</h3>
+				</div>
+				{#if !isChangingPassword}
+					<button
+						onclick={() => (isChangingPassword = true)}
+						class="rounded-xl bg-secondary px-4 py-2 text-sm font-bold text-secondary-foreground transition-colors hover:bg-secondary/80 active:scale-95 md:cursor-pointer"
+					>
+						{m.security_password_update_action?.() ?? 'Update password'}
+					</button>
+				{/if}
 			</div>
 
-			<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
-				<div class="space-y-1.5">
-					<label class="text-xs font-bold tracking-wider text-muted-foreground uppercase">
-						{m.security_new_password?.() ?? 'New Password'}
-					</label>
-					<input
-						type="password"
-						bind:value={newPassword}
-						class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm transition-colors focus:border-primary focus:ring-1 focus:ring-primary/30 focus:outline-none"
-					/>
-				</div>
+			{#if isChangingPassword}
+				<div class="animate-in fade-in slide-in-from-top-4 duration-300">
+					<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+						<div class="space-y-1.5">
+							<label class="text-xs font-bold tracking-wider text-muted-foreground uppercase">
+								{m.security_new_password?.() ?? 'New Password'}
+							</label>
+							<input
+								type="password"
+								bind:value={newPassword}
+								class="w-full rounded-lg border bg-background px-4 py-2.5 text-sm transition-colors focus:ring-1 focus:outline-none {newPassword.length > 0 && !isPasswordLengthValid ? 'border-destructive focus:border-destructive focus:ring-destructive/30' : 'border-border focus:border-primary focus:ring-primary/30'}"
+							/>
+							{#if newPassword.length > 0 && !isPasswordLengthValid}
+								<p class="text-xs font-semibold text-destructive">{m.security_password_req_length?.() ?? 'Minimum 6 characters'}</p>
+							{/if}
+						</div>
 
-				<div class="space-y-1.5">
-					<label class="text-xs font-bold tracking-wider text-muted-foreground uppercase">
-						{m.security_confirm_password?.() ?? 'Confirm Password'}
-					</label>
-					<input
-						type="password"
-						bind:value={confirmPassword}
-						class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm transition-colors focus:border-primary focus:ring-1 focus:ring-primary/30 focus:outline-none"
-					/>
-				</div>
-			</div>
+						<div class="space-y-1.5">
+							<label class="text-xs font-bold tracking-wider text-muted-foreground uppercase">
+								{m.security_confirm_password?.() ?? 'Confirm Password'}
+							</label>
+							<input
+								type="password"
+								bind:value={confirmPassword}
+								class="w-full rounded-lg border bg-background px-4 py-2.5 text-sm transition-colors focus:ring-1 focus:outline-none {confirmPassword.length > 0 && !doPasswordsMatch ? 'border-destructive focus:border-destructive focus:ring-destructive/30' : 'border-border focus:border-primary focus:ring-primary/30'}"
+							/>
+							{#if confirmPassword.length > 0 && !doPasswordsMatch}
+								<p class="text-xs font-semibold text-destructive">{m.security_password_mismatch?.() ?? 'Passwords do not match'}</p>
+							{/if}
+						</div>
+					</div>
 
-			{#if passwordError}
-				<p class="text-sm font-semibold text-destructive">{passwordError}</p>
+					{#if passwordError}
+						<p class="text-sm font-semibold text-destructive mt-4">{passwordError}</p>
+					{/if}
+					
+					<div class="mt-5 flex items-center gap-3">
+						<button
+							disabled={isSavingPassword || !isPasswordFormValid}
+							onclick={handlePasswordSave}
+							class="flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-sm font-black text-white shadow-md shadow-primary/30 transition-all hover:bg-primary/90 active:scale-95 disabled:opacity-50 md:cursor-pointer"
+						>
+							{#if isSavingPassword}
+								<LoaderCircle class="h-4 w-4 animate-spin" />
+							{:else}
+								{m.security_save_password?.() ?? 'Save Password'}
+							{/if}
+						</button>
+						<button
+							onclick={() => {
+								isChangingPassword = false;
+								newPassword = '';
+								confirmPassword = '';
+								passwordError = '';
+							}}
+							class="text-sm font-bold text-muted-foreground hover:text-foreground transition-colors md:cursor-pointer"
+						>
+							{m.cancel?.() ?? 'Cancel'}
+						</button>
+					</div>
+				</div>
 			{/if}
+
 			{#if passwordSuccess}
 				<p class="text-sm font-semibold text-green-500">
 					{m.security_password_updated?.() ?? 'Password updated!'}
 				</p>
 			{/if}
-
-			<button
-				disabled={isSavingPassword || !newPassword || !confirmPassword}
-				onclick={handlePasswordSave}
-				class="mt-2 flex w-max items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-black text-white shadow-md shadow-primary/30 transition-all hover:bg-primary/90 active:scale-95 disabled:opacity-50 md:cursor-pointer"
-			>
-				{#if isSavingPassword}
-					<LoaderCircle class="h-4 w-4 animate-spin" />
-				{:else}
-					{m.security_save_password?.() ?? 'Save Password'}
-				{/if}
-			</button>
 		</div>
 
 		<!-- 2FA Section -->
@@ -473,8 +508,8 @@
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								fill="#000000"
-								width="800px"
-								height="800px"
+								width="35px"
+								height="35px"
 								viewBox="0 0 25 26"
 							>
 								<path
@@ -564,7 +599,7 @@
 					{/each}
 				</div>
 			{:else}
-				<p class="text-sm text-muted-foreground">No passkeys added yet.</p>
+				<p class="text-sm text-muted-foreground">{m.security_passkey_empty?.() ?? 'No passkeys added yet.'}</p>
 			{/if}
 		</div>
 	</div>
