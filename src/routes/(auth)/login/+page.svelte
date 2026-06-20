@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { m } from '$lib/paraglide/messages';
-	import { Eye, EyeOff, Mail, Lock, Gamepad2 } from 'lucide-svelte';
+	import { Eye, EyeOff, Mail, Lock, Gamepad2, Fingerprint } from 'lucide-svelte';
 	import { resolve } from '$app/paths';
 	import { fly } from 'svelte/transition';
-	import { authStatus, loginWithEmail } from '$lib/stores/user.svelte';
+	import { authStatus, loginWithEmail, loginWithPasskey } from '$lib/stores/user.svelte';
+	import { onMount } from 'svelte';
 
 	let showPassword = $state(false);
 	let email = $state('');
@@ -21,6 +22,24 @@
 			goto(resolve('/'));
 		} catch (error) {
 			formError = error instanceof Error ? error.message : m.signing_in();
+		}
+	}
+
+	let isPasskeySupported = $state(false);
+
+	onMount(() => {
+		if (window.PublicKeyCredential) {
+			isPasskeySupported = true;
+		}
+	});
+
+	async function handlePasskeyLogin() {
+		formError = null;
+		try {
+			await loginWithPasskey();
+			goto(resolve('/'));
+		} catch (error) {
+			formError = error instanceof Error ? error.message : 'Unable to sign in with passkey';
 		}
 	}
 </script>
@@ -127,6 +146,18 @@
 				>
 					{authStatus.loading ? m.signing_in() : m.sign_in_button()}
 				</button>
+				
+				{#if isPasskeySupported}
+					<button
+						type="button"
+						onclick={handlePasskeyLogin}
+						disabled={authStatus.loading}
+						class="w-full mt-3 flex items-center justify-center gap-2 rounded-lg border border-border bg-card py-3 font-bold text-foreground shadow-sm transition-all hover:bg-muted active:scale-95 md:cursor-pointer"
+					>
+						<Fingerprint class="h-5 w-5" />
+						{m.login_with_passkey?.() ?? 'Sign in with Passkey'}
+					</button>
+				{/if}
 			</form>
 
 			<div class="relative my-6">

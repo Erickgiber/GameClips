@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
 import type { AuthChangeEvent, Session, User as SupabaseAuthUser } from '@supabase/supabase-js';
-import { registerWithEmail, signInWithEmail, signOut } from '$lib/services/auth.service';
+import { registerWithEmail, signInWithEmail, signOut, signInWithPasskeyService } from '$lib/services/auth.service';
 import { buildAppUserFromAuth } from '$lib/services/profile.service';
 import { supabase } from '$lib/supabase/client';
 import {
@@ -144,6 +144,21 @@ export async function logoutUser() {
 	try {
 		await signOut();
 		resetUserState();
+	} finally {
+		authStatus.loading = false;
+	}
+}
+
+export async function loginWithPasskey() {
+	authStatus.loading = true;
+	authStatus.error = null;
+
+	try {
+		const data = await signInWithPasskeyService();
+		await syncSession(data.session ?? null);
+	} catch (error) {
+		authStatus.error = error instanceof Error ? error.message : m.signing_in();
+		throw error;
 	} finally {
 		authStatus.loading = false;
 	}

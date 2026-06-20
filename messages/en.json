@@ -215,5 +215,6 @@
 	"security_passkey_empty": "No passkeys added yet.",
 	"settings_profile_title": "Settings / Profile",
 	"settings_security_title": "Settings / Security",
-	"settings_language_title": "Settings / Language"
+	"settings_language_title": "Settings / Language",
+	"login_with_passkey": "Sign in with Passkey"
 }

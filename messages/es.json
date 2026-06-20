@@ -215,5 +215,6 @@
 	"security_passkey_empty": "Aún no se han añadido llaves de acceso.",
 	"settings_profile_title": "Ajustes / Perfil",
 	"settings_security_title": "Ajustes / Seguridad",
-	"settings_language_title": "Ajustes / Idioma"
+	"settings_language_title": "Ajustes / Idioma",
+	"login_with_passkey": "Iniciar sesión con Passkey"
 }

@@ -131,3 +131,9 @@ export async function deletePasskey(passkeyId: string) {
 	const { error } = await supabase.auth.passkey.delete({ passkeyId });
 	if (error) throw new Error(error.message);
 }
+
+export async function signInWithPasskeyService() {
+	const { data, error } = await supabase.auth.signInWithPasskey();
+	if (error) throw new Error(error.message);
+	return data;
+}
