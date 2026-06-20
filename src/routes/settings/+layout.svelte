@@ -8,7 +8,7 @@
 
 	let { children } = $props();
 
-	let customBack = $derived(() => {
+	let customBack = $derived.by(() => {
 		const pathname = page.url.pathname;
 
 		// si está dentro de settings (incluye subrutas)
@@ -19,18 +19,24 @@
 		return `/${user.username}`;
 	});
 
-	let customTitle = $derived(() => {
+	let customTitle = $derived.by(() => {
 		const pathname = page.url.pathname;
 
 		if (pathname === '/settings/profile') {
-			return m.edit_profile();
+			return m.settings_profile_title?.() ?? 'Settings / Profile';
+		}
+		if (pathname === '/settings/security') {
+			return m.settings_security_title?.() ?? 'Settings / Security';
+		}
+		if (pathname === '/settings/language') {
+			return m.settings_language_title?.() ?? 'Settings / Language';
 		}
 
-		return m.settings_title();
+		return m.settings_title?.() ?? 'Settings';
 	});
 </script>
 
-<TopNavProfile customGoBack={customBack()} customTitle={customTitle()} />
+<TopNavProfile customGoBack={customBack} customTitle={customTitle} />
 
 <AuthGuard>
 	<div

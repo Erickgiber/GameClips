@@ -212,5 +212,8 @@
 	"security_passkey_deleted_success": "Passkey deleted successfully!",
 	"security_password_req_length": "Minimum 6 characters",
 	"security_password_update_action": "Update password",
-	"security_passkey_empty": "No passkeys added yet."
+	"security_passkey_empty": "No passkeys added yet.",
+	"settings_profile_title": "Settings / Profile",
+	"settings_security_title": "Settings / Security",
+	"settings_language_title": "Settings / Language"
 }
