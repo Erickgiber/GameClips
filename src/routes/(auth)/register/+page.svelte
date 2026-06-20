@@ -5,9 +5,14 @@
 	import * as m from '$lib/paraglide/messages';
 	import { resolve } from '$app/paths';
 	import { authStatus, registerWithEmailPassword } from '$lib/stores/user.svelte';
+	import { getProfileByUsername } from '$lib/services/profile.service';
+	import { normalizeText } from '$lib/utils/normalizeText';
 
 	let showPassword = $state(false);
 	let showConfirmPassword = $state(false);
+	
+	let usernameStatus = $state<'idle' | 'checking' | 'available' | 'taken'>('idle');
+	let usernameDebounceTimer: ReturnType<typeof setTimeout>;
 
 	let formData = $state({
 		username: '',
@@ -16,6 +21,37 @@
 		confirmPassword: ''
 	});
 	let formError = $state<string | null>(null);
+
+	$effect(() => {
+		const rawUsername = formData.username;
+		
+		clearTimeout(usernameDebounceTimer);
+		
+		if (!rawUsername) {
+			usernameStatus = 'idle';
+			return;
+		}
+		
+		usernameStatus = 'checking';
+		
+		usernameDebounceTimer = setTimeout(async () => {
+			const normalized = normalizeText(rawUsername);
+			if (!normalized) {
+				usernameStatus = 'idle';
+				return;
+			}
+			try {
+				const profile = await getProfileByUsername(normalized);
+				if (profile) {
+					usernameStatus = 'taken';
+				} else {
+					usernameStatus = 'available';
+				}
+			} catch (e) {
+				usernameStatus = 'idle';
+			}
+		}, 500);
+	});
 
 	async function handleSubmit(e: Event) {
 		e.preventDefault();
@@ -26,9 +62,14 @@
 			return;
 		}
 
+		if (usernameStatus === 'taken' || usernameStatus === 'checking') {
+			formError = m.username_taken();
+			return;
+		}
+
 		try {
 			const result = await registerWithEmailPassword({
-				username: formData.username,
+				username: normalizeText(formData.username),
 				email: formData.email,
 				password: formData.password
 			});
@@ -89,10 +130,21 @@
 							type="text"
 							bind:value={formData.username}
 							placeholder={m.choose_username()}
-							class="w-full rounded-lg border border-border bg-muted/50 py-3 pr-4 pl-11 text-sm transition-all focus:border-primary focus:ring-2 focus:ring-primary/50 focus:outline-none"
+							class="w-full rounded-lg border border-border bg-muted/50 py-3 pr-4 pl-11 text-sm transition-all focus:border-primary focus:ring-2 focus:ring-primary/50 focus:outline-none {usernameStatus === 'taken' ? 'border-destructive/50 focus:border-destructive focus:ring-destructive/50' : usernameStatus === 'available' ? 'border-green-500/50 focus:border-green-500 focus:ring-green-500/50' : ''}"
 							required
 						/>
 					</div>
+					{#if usernameStatus !== 'idle'}
+						<p class={`mt-1.5 text-xs font-medium ${usernameStatus === 'available' ? 'text-green-500' : usernameStatus === 'taken' ? 'text-destructive' : 'text-muted-foreground'}`}>
+							{#if usernameStatus === 'checking'}
+								{m.checking_username()}
+							{:else if usernameStatus === 'available'}
+								{m.username_available()}
+							{:else if usernameStatus === 'taken'}
+								{m.username_taken()}
+							{/if}
+						</p>
+					{/if}
 				</div>
 
 				<div>

@@ -178,5 +178,8 @@
 	"crop_image_title": "Crop Avatar",
 	"crop_cancel": "Cancel",
 	"crop_confirm": "Crop & Upload",
-	"uploading": "Uploading..."
+	"uploading": "Uploading...",
+	"checking_username": "Checking username...",
+	"username_available": "Username is available!",
+	"username_taken": "Username is already taken"
 }

@@ -178,5 +178,8 @@
 	"crop_image_title": "Recortar Avatar",
 	"crop_cancel": "Cancelar",
 	"crop_confirm": "Recortar y Subir",
-	"uploading": "Subiendo..."
+	"uploading": "Subiendo...",
+	"checking_username": "Verificando usuario...",
+	"username_available": "¡Usuario disponible!",
+	"username_taken": "Este usuario ya está en uso"
 }
