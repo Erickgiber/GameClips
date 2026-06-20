@@ -45,7 +45,6 @@
 		{#key page.url.pathname}
 			<div
 				in:fly|global={{ y: 16, duration: 300, delay: 150 }}
-				out:fly|global={{ y: -16, duration: 150 }}
 				class="col-start-1 row-start-1 h-full w-full"
 			>
 				{@render children()}
