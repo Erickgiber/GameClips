@@ -161,176 +161,179 @@
 
 <div class="size-full overflow-y-auto bg-background text-foreground">
 	<div class="mx-auto max-w-4xl space-y-6 pb-16 lg:px-6">
-		<div in:fly={{ y: 16, duration: 300 }} class="flex flex-col items-center gap-6 rounded-xl border border-border bg-card p-6 sm:flex-row">
-				<div class="relative shrink-0">
-					<img
-						src={formData.avatar_url}
-						alt="Avatar"
-						class="h-24 w-24 rounded-full border-4 border-primary/20 object-cover shadow-lg shadow-primary/20 lg:h-28 lg:w-28"
-					/>
-					<button
-						onclick={handleAvatarClick}
-						class="absolute inset-0 z-10 flex cursor-pointer items-center justify-center rounded-full bg-black/50 opacity-0 transition-opacity hover:opacity-100"
-					>
-						<Camera class="h-7 w-7 text-white" />
-					</button>
-					<div
-						class="absolute -right-1 -bottom-1 z-20 flex h-8 w-8 items-center justify-center rounded-full border-4 border-background bg-linear-to-br from-primary to-secondary"
-					>
-						<Trophy class="h-4 w-4 text-white" />
-					</div>
-					<input
-						bind:this={fileInputRef}
-						type="file"
-						accept="image/*"
-						class="hidden"
-						onchange={handleFileChange}
-					/>
+		<div
+			in:fly={{ y: 16, duration: 300 }}
+			class="flex flex-col items-center gap-6 rounded-xl border border-border bg-card p-6 sm:flex-row"
+		>
+			<div class="relative shrink-0">
+				<img
+					src={formData.avatar_url}
+					alt="Avatar"
+					class="h-24 w-24 rounded-full border-4 border-primary/20 object-cover shadow-lg shadow-primary/20 lg:h-28 lg:w-28"
+				/>
+				<button
+					onclick={handleAvatarClick}
+					class="absolute inset-0 z-10 flex cursor-pointer items-center justify-center rounded-full bg-black/50 opacity-0 transition-opacity hover:opacity-100"
+				>
+					<Camera class="h-7 w-7 text-white" />
+				</button>
+				<div
+					class="absolute -right-1 -bottom-1 z-20 flex h-8 w-8 items-center justify-center rounded-full border-4 border-background bg-linear-to-br from-primary to-secondary"
+				>
+					<Trophy class="h-4 w-4 text-white" />
 				</div>
-				<div class="text-center sm:text-left">
-					<h3 class="mb-1 text-lg font-black">{formData.username}</h3>
-					<p class="mb-3 text-sm text-muted-foreground">{m.avatar_hint()}</p>
-					<button
-						onclick={handleAvatarClick}
-						class="flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/20"
-					>
-						<Camera class="h-4 w-4" />
-						{m.change_photo()}
-					</button>
-				</div>
+				<input
+					bind:this={fileInputRef}
+					type="file"
+					accept="image/*"
+					class="hidden"
+					onchange={handleFileChange}
+				/>
+			</div>
+			<div class="text-center sm:text-left">
+				<h3 class="mb-1 text-lg font-black">{formData.username}</h3>
+				<p class="mb-3 text-sm text-muted-foreground">{m.avatar_hint()}</p>
+				<button
+					onclick={handleAvatarClick}
+					class="flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/20"
+				>
+					<Camera class="h-4 w-4" />
+					{m.change_photo()}
+				</button>
+			</div>
+		</div>
+
+		<div
+			in:fly={{ y: 16, duration: 300, delay: 50 }}
+			class="space-y-5 rounded-xl border border-border bg-card p-6"
+		>
+			<div class="mb-1 flex items-center gap-2">
+				<User class="h-5 w-5 text-primary" />
+				<h3 class="text-base font-black">{m.basic_info()}</h3>
 			</div>
 
-			<div
-				in:fly={{ y: 16, duration: 300, delay: 50 }}
-				class="space-y-5 rounded-xl border border-border bg-card p-6"
-			>
-				<div class="mb-1 flex items-center gap-2">
-					<User class="h-5 w-5 text-primary" />
-					<h3 class="text-base font-black">{m.basic_info()}</h3>
-				</div>
-
-				<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
-					<div class="space-y-1.5">
-						<label
-							class="flex items-center gap-1.5 text-xs font-bold tracking-wider text-muted-foreground uppercase"
-						>
-							<AtSign class="h-3.5 w-3.5" />
-							{m.username_label()}
-						</label>
-						<input
-							type="text"
-							bind:value={formData.username}
-							class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm transition-colors focus:border-primary focus:ring-1 focus:ring-primary/30 focus:outline-none"
-							placeholder={m.username_placeholder()}
-						/>
-					</div>
-
-					<div class="space-y-1.5">
-						<label
-							class="flex items-center gap-1.5 text-xs font-bold tracking-wider text-muted-foreground uppercase"
-						>
-							<User class="h-3.5 w-3.5" />
-							{m.name_label()}
-						</label>
-						<input
-							type="text"
-							bind:value={formData.name}
-							class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm transition-colors focus:border-primary focus:ring-1 focus:ring-primary/30 focus:outline-none"
-							placeholder={m.name_placeholder()}
-						/>
-					</div>
+			<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+				<div class="space-y-1.5">
+					<label
+						class="flex items-center gap-1.5 text-xs font-bold tracking-wider text-muted-foreground uppercase"
+					>
+						<AtSign class="h-3.5 w-3.5" />
+						{m.username_label()}
+					</label>
+					<input
+						type="text"
+						bind:value={formData.username}
+						class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm transition-colors focus:border-primary focus:ring-1 focus:ring-primary/30 focus:outline-none"
+						placeholder={m.username_placeholder()}
+					/>
 				</div>
 
 				<div class="space-y-1.5">
 					<label
 						class="flex items-center gap-1.5 text-xs font-bold tracking-wider text-muted-foreground uppercase"
 					>
-						<Trophy class="h-3.5 w-3.5" />
-						{m.title_role_label()}
+						<User class="h-3.5 w-3.5" />
+						{m.name_label()}
 					</label>
 					<input
 						type="text"
-						bind:value={formData.title}
+						bind:value={formData.name}
 						class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm transition-colors focus:border-primary focus:ring-1 focus:ring-primary/30 focus:outline-none"
-						placeholder={m.title_role_placeholder()}
+						placeholder={m.name_placeholder()}
 					/>
 				</div>
 			</div>
 
-			<div
-				in:fly={{ y: 16, duration: 300, delay: 100 }}
-				class="space-y-3 rounded-xl border border-border bg-card p-6"
-			>
-				<div class="flex items-center gap-2">
-					<FileText class="h-5 w-5 text-primary" />
-					<h3 class="text-base font-black">{m.description_label()}</h3>
-				</div>
-				<div class="relative">
-					<textarea
-						bind:value={formData.description}
-						maxlength={maxDescription}
-						rows="3"
-						class="w-full resize-none rounded-lg border border-border bg-background px-4 py-3 text-sm transition-colors focus:border-primary focus:ring-1 focus:ring-primary/30 focus:outline-none"
-						placeholder={m.description_placeholder()}
-					></textarea>
-					<span
-						class={`absolute right-3 bottom-2.5 font-mono text-xs ${charCount >= maxDescription ? 'text-red-400' : 'text-muted-foreground'}`}
-					>
-						{charCount}/{maxDescription}
-					</span>
-				</div>
-				<p class="text-xs text-muted-foreground">{m.description_tip()}</p>
-			</div>
-
-			<div
-				in:fly={{ y: 16, duration: 300, delay: 150 }}
-				class="space-y-5 rounded-xl border border-border bg-card p-6"
-			>
-				<div class="flex items-center gap-2">
-					<Link2 class="h-5 w-5 text-primary" />
-					<h3 class="text-base font-black">{m.sponsorship_links_label()}</h3>
-				</div>
-
-				<div class="space-y-1.5">
-					<label
-						for="sponsor"
-						class="text-xs font-bold tracking-wider text-muted-foreground uppercase"
-					>
-						{m.sponsored_by_label()}
-					</label>
-					<input
-						type="text"
-						id="sponsor"
-						bind:value={formData.sponsor}
-						class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm transition-colors focus:border-primary focus:ring-1 focus:ring-primary/30 focus:outline-none"
-						placeholder={m.sponsor_placeholder()}
-					/>
-				</div>
-			</div>
-
-			<div class="flex gap-5" in:fly={{ y: 16, duration: 300, delay: 200 }}>
-				<button
-					disabled={saving}
-					onclick={() => goto(resolve('/profile'))}
-					class="flex w-full items-center justify-center gap-2 rounded-xl border border-border py-4 text-base font-black text-white shadow-xl shadow-border/30 transition-all hover:bg-border/90 active:scale-97 lg:cursor-pointer"
+			<div class="space-y-1.5">
+				<label
+					class="flex items-center gap-1.5 text-xs font-bold tracking-wider text-muted-foreground uppercase"
 				>
-					{m.cancel()}
-				</button>
-				<button
-					disabled={saving}
-					onclick={handleSave}
-					class="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-base font-black text-white shadow-xl shadow-primary/30 transition-all hover:bg-primary/90 active:scale-97 lg:cursor-pointer"
-				>
-					{#if saving}
-						<LoaderCircle class="h-5 w-5 animate-spin" />
-					{:else}
-						<Save class="h-5 w-5" />
-						{saved ? m.profile_saved() : m.save_profile()}
-					{/if}
-				</button>
+					<Trophy class="h-3.5 w-3.5" />
+					{m.title_role_label()}
+				</label>
+				<input
+					type="text"
+					bind:value={formData.title}
+					class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm transition-colors focus:border-primary focus:ring-1 focus:ring-primary/30 focus:outline-none"
+					placeholder={m.title_role_placeholder()}
+				/>
 			</div>
 		</div>
+
+		<div
+			in:fly={{ y: 16, duration: 300, delay: 100 }}
+			class="space-y-3 rounded-xl border border-border bg-card p-6"
+		>
+			<div class="flex items-center gap-2">
+				<FileText class="h-5 w-5 text-primary" />
+				<h3 class="text-base font-black">{m.description_label()}</h3>
+			</div>
+			<div class="relative">
+				<textarea
+					bind:value={formData.description}
+					maxlength={maxDescription}
+					rows="3"
+					class="w-full resize-none rounded-lg border border-border bg-background px-4 py-3 text-sm transition-colors focus:border-primary focus:ring-1 focus:ring-primary/30 focus:outline-none"
+					placeholder={m.description_placeholder()}
+				></textarea>
+				<span
+					class={`absolute right-3 bottom-2.5 font-mono text-xs ${charCount >= maxDescription ? 'text-red-400' : 'text-muted-foreground'}`}
+				>
+					{charCount}/{maxDescription}
+				</span>
+			</div>
+			<p class="text-xs text-muted-foreground">{m.description_tip()}</p>
+		</div>
+
+		<div
+			in:fly={{ y: 16, duration: 300, delay: 150 }}
+			class="space-y-5 rounded-xl border border-border bg-card p-6"
+		>
+			<div class="flex items-center gap-2">
+				<Link2 class="h-5 w-5 text-primary" />
+				<h3 class="text-base font-black">{m.sponsorship_links_label()}</h3>
+			</div>
+
+			<div class="space-y-1.5">
+				<label
+					for="sponsor"
+					class="text-xs font-bold tracking-wider text-muted-foreground uppercase"
+				>
+					{m.sponsored_by_label()}
+				</label>
+				<input
+					type="text"
+					id="sponsor"
+					bind:value={formData.sponsor}
+					class="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm transition-colors focus:border-primary focus:ring-1 focus:ring-primary/30 focus:outline-none"
+					placeholder={m.sponsor_placeholder()}
+				/>
+			</div>
+		</div>
+
+		<div class="flex gap-5" in:fly={{ y: 16, duration: 300, delay: 200 }}>
+			<button
+				disabled={saving}
+				onclick={() => goto(resolve('/profile'))}
+				class="flex w-full items-center justify-center gap-2 rounded-xl border border-border py-4 text-base font-black text-white shadow-xl shadow-border/30 transition-all hover:bg-border/90 active:scale-97 lg:cursor-pointer"
+			>
+				{m.cancel()}
+			</button>
+			<button
+				disabled={saving}
+				onclick={handleSave}
+				class="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-base font-black text-white shadow-xl shadow-primary/30 transition-all hover:bg-primary/90 active:scale-97 lg:cursor-pointer"
+			>
+				{#if saving}
+					<LoaderCircle class="h-5 w-5 animate-spin" />
+				{:else}
+					<Save class="h-5 w-5" />
+					{saved ? m.profile_saved() : m.save_profile()}
+				{/if}
+			</button>
+		</div>
 	</div>
+</div>
 
 {#if cropModalOpen}
 	<!-- svelte-ignore a11y_click_events_have_key_events -->

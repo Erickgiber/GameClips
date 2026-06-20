@@ -203,7 +203,6 @@
 
 <div class="size-full overflow-y-auto bg-background text-foreground">
 	<div class="mx-auto max-w-4xl space-y-6 pb-16 lg:px-6">
-
 		<!-- Change Password Section -->
 		<div
 			in:fly={{ y: 16, duration: 300 }}
@@ -223,67 +222,69 @@
 					</button>
 				{/if}
 			</div>
-			
-		<!-- Passkeys Section -->
-		<div
-			in:fly={{ y: 16, duration: 300, delay: 150 }}
-			class="space-y-5 rounded-xl border border-border bg-card p-6"
-		>
-			<div class="flex items-center justify-between">
-				<div class="flex items-center gap-2">
-					<Fingerprint class="h-5 w-5 text-primary" />
-					<div>
-						<h3 class="text-base font-black">{m.security_passkey_title?.() ?? 'Passkeys'}</h3>
-						<p class="text-xs text-muted-foreground">
-							{m.security_passkey_desc?.() ?? 'Sign in securely with your fingerprint or face'}
-						</p>
-					</div>
-				</div>
-				<button
-					onclick={handleAddPasskey}
-					class="rounded-xl bg-secondary px-4 py-2 text-sm font-bold text-secondary-foreground transition-colors hover:bg-secondary/80 active:scale-95 md:cursor-pointer"
-				>
-					{m.security_passkey_add?.() ?? 'Add'}
-				</button>
-			</div>
 
-			{#if isLoadingPasskeys}
-				<div class="flex justify-center p-4">
-					<LoaderCircle class="h-5 w-5 animate-spin text-muted-foreground" />
-				</div>
-			{:else if passkeys.length > 0}
-				<div class="space-y-3">
-					{#each passkeys as pk, i (i)}
-						<div
-							class="flex items-center justify-between rounded-lg border border-border bg-background p-3 transition hover:bg-muted/50"
-						>
-							<div class="flex items-center gap-3">
-								<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-									<Fingerprint class="h-5 w-5 text-primary" />
-								</div>
-								<div>
-									<p class="text-sm font-bold">{pk.friendly_name || 'Passkey'}</p>
-									<p class="text-xs text-muted-foreground">
-										Added: {new Date(pk.created_at).toLocaleDateString()}
-									</p>
-								</div>
-							</div>
-							<button
-								onclick={() => handleDeletePasskey(pk.id)}
-								class="rounded-lg p-2 text-destructive transition-colors hover:bg-destructive/10 active:scale-95 md:cursor-pointer"
-								title={m.security_passkey_delete?.() ?? 'Delete'}
-							>
-								<Trash2 class="h-4 w-4" />
-							</button>
+			<!-- Passkeys Section -->
+			<div
+				in:fly={{ y: 16, duration: 300, delay: 150 }}
+				class="space-y-5 rounded-xl border border-border bg-card p-6"
+			>
+				<div class="flex items-center justify-between">
+					<div class="flex items-center gap-2">
+						<Fingerprint class="h-5 w-5 text-primary" />
+						<div>
+							<h3 class="text-base font-black">{m.security_passkey_title?.() ?? 'Passkeys'}</h3>
+							<p class="text-xs text-muted-foreground">
+								{m.security_passkey_desc?.() ?? 'Sign in securely with your fingerprint or face'}
+							</p>
 						</div>
-					{/each}
+					</div>
+					<button
+						onclick={handleAddPasskey}
+						class="rounded-xl bg-secondary px-4 py-2 text-sm font-bold text-secondary-foreground transition-colors hover:bg-secondary/80 active:scale-95 md:cursor-pointer"
+					>
+						{m.security_passkey_add?.() ?? 'Add'}
+					</button>
 				</div>
-			{:else}
-				<p class="text-sm text-muted-foreground">
-					{m.security_passkey_empty?.() ?? 'No passkeys added yet.'}
-				</p>
-			{/if}
-		</div>
+
+				{#if isLoadingPasskeys}
+					<div class="flex justify-center p-4">
+						<LoaderCircle class="h-5 w-5 animate-spin text-muted-foreground" />
+					</div>
+				{:else if passkeys.length > 0}
+					<div class="space-y-3">
+						{#each passkeys as pk, i (i)}
+							<div
+								class="flex items-center justify-between rounded-lg border border-border bg-background p-3 transition hover:bg-muted/50"
+							>
+								<div class="flex items-center gap-3">
+									<div
+										class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10"
+									>
+										<Fingerprint class="h-5 w-5 text-primary" />
+									</div>
+									<div>
+										<p class="text-sm font-bold">{pk.friendly_name || 'Passkey'}</p>
+										<p class="text-xs text-muted-foreground">
+											Added: {new Date(pk.created_at).toLocaleDateString()}
+										</p>
+									</div>
+								</div>
+								<button
+									onclick={() => handleDeletePasskey(pk.id)}
+									class="rounded-lg p-2 text-destructive transition-colors hover:bg-destructive/10 active:scale-95 md:cursor-pointer"
+									title={m.security_passkey_delete?.() ?? 'Delete'}
+								>
+									<Trash2 class="h-4 w-4" />
+								</button>
+							</div>
+						{/each}
+					</div>
+				{:else}
+					<p class="text-sm text-muted-foreground">
+						{m.security_passkey_empty?.() ?? 'No passkeys added yet.'}
+					</p>
+				{/if}
+			</div>
 
 			{#if isChangingPassword}
 				<div class="animate-in fade-in slide-in-from-top-4 duration-300">

@@ -45,7 +45,7 @@
 </script>
 
 <div
-	class="flex pt-16 size-full items-center justify-center overflow-auto bg-background p-4 text-foreground"
+	class="flex size-full items-center justify-center overflow-auto bg-background p-4 pt-16 text-foreground"
 >
 	<div class="w-full max-w-md">
 		<div in:fly={{ y: -20, duration: 400 }} class="mb-8 text-center">
@@ -146,13 +146,13 @@
 				>
 					{authStatus.loading ? m.signing_in() : m.sign_in_button()}
 				</button>
-				
+
 				{#if isPasskeySupported}
 					<button
 						type="button"
 						onclick={handlePasskeyLogin}
 						disabled={authStatus.loading}
-						class="w-full mt-3 flex items-center justify-center gap-2 rounded-lg border border-border bg-card py-3 font-bold text-foreground shadow-sm transition-all hover:bg-muted active:scale-95 md:cursor-pointer"
+						class="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card py-3 font-bold text-foreground shadow-sm transition-all hover:bg-muted active:scale-95 md:cursor-pointer"
 					>
 						<Fingerprint class="h-5 w-5" />
 						{m.login_with_passkey?.() ?? 'Sign in with Passkey'}

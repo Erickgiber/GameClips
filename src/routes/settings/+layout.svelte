@@ -36,15 +36,15 @@
 	});
 </script>
 
-<TopNavProfile customGoBack={customBack} customTitle={customTitle} />
+<TopNavProfile customGoBack={customBack} {customTitle} />
 
 <AuthGuard>
 	<div
-		class="grid h-[calc(100dvh - var(--spacing-nav-category))] bg-background px-4 py-6 text-foreground overflow-hidden"
+		class="h-[calc(100dvh - var(--spacing-nav-category))] grid overflow-hidden bg-background px-4 py-6 text-foreground"
 	>
 		{#key page.url.pathname}
-			<div 
-				in:fly|global={{ y: 16, duration: 300, delay: 150 }} 
+			<div
+				in:fly|global={{ y: 16, duration: 300, delay: 150 }}
 				out:fly|global={{ y: -16, duration: 150 }}
 				class="col-start-1 row-start-1 h-full w-full"
 			>

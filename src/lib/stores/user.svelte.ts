@@ -1,6 +1,11 @@
 import { browser } from '$app/environment';
 import type { AuthChangeEvent, Session, User as SupabaseAuthUser } from '@supabase/supabase-js';
-import { registerWithEmail, signInWithEmail, signOut, signInWithPasskeyService } from '$lib/services/auth.service';
+import {
+	registerWithEmail,
+	signInWithEmail,
+	signOut,
+	signInWithPasskeyService
+} from '$lib/services/auth.service';
 import { buildAppUserFromAuth } from '$lib/services/profile.service';
 import { supabase } from '$lib/supabase/client';
 import {

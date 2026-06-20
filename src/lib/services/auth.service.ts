@@ -59,13 +59,13 @@ export async function updatePassword(password: string) {
 export async function getMfaStatus() {
 	const { data, error } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
 	if (error) throw new Error(error.message);
-	
+
 	const { data: factorsData, error: factorsError } = await supabase.auth.mfa.listFactors();
 	if (factorsError) throw new Error(factorsError.message);
-	
+
 	// find the verified totp factor
 	const totpFactor = factorsData.totp.find((f) => f.status === 'verified');
-	
+
 	return {
 		aal: data,
 		isEnrolled: !!totpFactor,
@@ -101,7 +101,7 @@ export async function getLinkedIdentities() {
 	const { data, error } = await supabase.auth.getUserIdentities();
 	if (error) throw new Error(error.message);
 	// Handle object vs array response depending on Supabase version
-	return Array.isArray(data) ? data : (data?.identities || []);
+	return Array.isArray(data) ? data : data?.identities || [];
 }
 
 export async function linkIdentity(provider: Provider) {

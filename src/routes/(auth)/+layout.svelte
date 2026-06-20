@@ -29,7 +29,7 @@
 		<button
 			onclick={toggleLanguage}
 			title="Cambiar idioma / Change language"
-			class="flex h-8 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-200 text-xs font-black uppercase text-foreground shadow-lg transition-colors duration-300 hover:opacity-80 dark:bg-gray-700"
+			class="flex h-8 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-200 text-xs font-black text-foreground uppercase shadow-lg transition-colors duration-300 hover:opacity-80 dark:bg-gray-700"
 		>
 			{currentLanguage}
 		</button>

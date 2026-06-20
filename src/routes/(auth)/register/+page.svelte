@@ -10,7 +10,7 @@
 
 	let showPassword = $state(false);
 	let showConfirmPassword = $state(false);
-	
+
 	let usernameStatus = $state<'idle' | 'checking' | 'available' | 'taken'>('idle');
 	let usernameDebounceTimer: ReturnType<typeof setTimeout>;
 
@@ -24,16 +24,16 @@
 
 	$effect(() => {
 		const rawUsername = formData.username;
-		
+
 		clearTimeout(usernameDebounceTimer);
-		
+
 		if (!rawUsername) {
 			usernameStatus = 'idle';
 			return;
 		}
-		
+
 		usernameStatus = 'checking';
-		
+
 		usernameDebounceTimer = setTimeout(async () => {
 			const normalized = normalizeText(rawUsername);
 			if (!normalized) {
@@ -87,7 +87,7 @@
 </script>
 
 <div
-	class="flex pt-16 size-full items-center justify-center overflow-auto bg-background p-4 text-foreground"
+	class="flex size-full items-center justify-center overflow-auto bg-background p-4 pt-16 text-foreground"
 >
 	<div class="w-full max-w-md">
 		<div in:fly={{ y: -20, duration: 400 }} class="mb-8 text-center">
@@ -130,12 +130,19 @@
 							type="text"
 							bind:value={formData.username}
 							placeholder={m.choose_username()}
-							class="w-full rounded-lg border border-border bg-muted/50 py-3 pr-4 pl-11 text-sm transition-all focus:border-primary focus:ring-2 focus:ring-primary/50 focus:outline-none {usernameStatus === 'taken' ? 'border-destructive/50 focus:border-destructive focus:ring-destructive/50' : usernameStatus === 'available' ? 'border-green-500/50 focus:border-green-500 focus:ring-green-500/50' : ''}"
+							class="w-full rounded-lg border border-border bg-muted/50 py-3 pr-4 pl-11 text-sm transition-all focus:border-primary focus:ring-2 focus:ring-primary/50 focus:outline-none {usernameStatus ===
+							'taken'
+								? 'border-destructive/50 focus:border-destructive focus:ring-destructive/50'
+								: usernameStatus === 'available'
+									? 'border-green-500/50 focus:border-green-500 focus:ring-green-500/50'
+									: ''}"
 							required
 						/>
 					</div>
 					{#if usernameStatus !== 'idle'}
-						<p class={`mt-1.5 text-xs font-medium ${usernameStatus === 'available' ? 'text-green-500' : usernameStatus === 'taken' ? 'text-destructive' : 'text-muted-foreground'}`}>
+						<p
+							class={`mt-1.5 text-xs font-medium ${usernameStatus === 'available' ? 'text-green-500' : usernameStatus === 'taken' ? 'text-destructive' : 'text-muted-foreground'}`}
+						>
 							{#if usernameStatus === 'checking'}
 								{m.checking_username()}
 							{:else if usernameStatus === 'available'}

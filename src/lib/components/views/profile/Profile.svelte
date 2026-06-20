@@ -44,7 +44,9 @@
 	async function handleShare() {
 		const url = window.location.href;
 		const title = m.share_profile?.() ?? 'Compartir Perfil';
-		const text = m.share_profile_text?.({ username: user.username }) ?? `Echa un vistazo al perfil de ${user.username} en GameClips!`;
+		const text =
+			m.share_profile_text?.({ username: user.username }) ??
+			`Echa un vistazo al perfil de ${user.username} en GameClips!`;
 
 		let isNativeShareAvailable = false;
 		try {
@@ -79,7 +81,10 @@
 
 	function shareSocial(platform: string) {
 		const url = encodeURIComponent(window.location.href);
-		const text = encodeURIComponent(m.share_profile_text?.({ username: user.username }) ?? `Echa un vistazo al perfil de ${user.username} en GameClips!`);
+		const text = encodeURIComponent(
+			m.share_profile_text?.({ username: user.username }) ??
+				`Echa un vistazo al perfil de ${user.username} en GameClips!`
+		);
 		let shareUrl = '';
 
 		switch (platform) {
@@ -97,7 +102,10 @@
 				break;
 			case 'instagram':
 				copyUrl();
-				alert(m.instagram_share_tip?.() ?? 'Link copiado. Pégalo en tu historia o biografía de Instagram.');
+				alert(
+					m.instagram_share_tip?.() ??
+						'Link copiado. Pégalo en tu historia o biografía de Instagram.'
+				);
 				shareUrl = `https://instagram.com`;
 				break;
 		}
@@ -163,7 +171,6 @@
 
 <div class="size-full overflow-y-auto bg-background text-foreground">
 	<TopNavProfile showShare={true} onShare={handleShare} />
-
 
 	<div class="mx-auto max-w-7xl px-4 pb-8 lg:px-6" in:fly={{ y: 16, duration: 300, delay: 100 }}>
 		<div class="pt-6 pb-8">
@@ -400,52 +407,125 @@
 			class="relative flex w-full max-w-sm flex-col overflow-hidden rounded-2xl bg-card shadow-2xl"
 			onclick={(e) => e.stopPropagation()}
 		>
-			<div class="border-b border-border p-5 text-center relative">
-				<h3 class="text-lg font-black text-foreground">{m.share_profile?.() ?? 'Compartir Perfil'}</h3>
-				<button 
-					class="absolute top-5 right-5 text-muted-foreground hover:text-foreground transition-colors md:cursor-pointer"
+			<div class="relative border-b border-border p-5 text-center">
+				<h3 class="text-lg font-black text-foreground">
+					{m.share_profile?.() ?? 'Compartir Perfil'}
+				</h3>
+				<button
+					class="absolute top-5 right-5 text-muted-foreground transition-colors hover:text-foreground md:cursor-pointer"
 					onclick={() => (isShareModalOpen = false)}
 				>
 					<X class="h-5 w-5" />
 				</button>
 			</div>
-			
-			<div class="p-6 grid grid-cols-3 gap-y-6 gap-x-4">
-				<button onclick={() => shareSocial('whatsapp')} class="flex flex-col items-center gap-2 hover:opacity-80 transition-opacity md:cursor-pointer group">
-					<div class="bg-green-500 rounded-full p-3.5 text-white shadow-md group-hover:scale-105 transition-transform">
+
+			<div class="grid grid-cols-3 gap-x-4 gap-y-6 p-6">
+				<button
+					onclick={() => shareSocial('whatsapp')}
+					class="group flex flex-col items-center gap-2 transition-opacity hover:opacity-80 md:cursor-pointer"
+				>
+					<div
+						class="rounded-full bg-green-500 p-3.5 text-white shadow-md transition-transform group-hover:scale-105"
+					>
 						<MessageCircle class="h-6 w-6" />
 					</div>
-					<span class="text-xs font-bold text-muted-foreground group-hover:text-foreground transition-colors">WhatsApp</span>
+					<span
+						class="text-xs font-bold text-muted-foreground transition-colors group-hover:text-foreground"
+						>WhatsApp</span
+					>
 				</button>
-				<button onclick={() => shareSocial('twitter')} class="flex flex-col items-center gap-2 hover:opacity-80 transition-opacity md:cursor-pointer group">
-					<div class="bg-black dark:bg-white rounded-full p-3.5 text-white dark:text-black shadow-md group-hover:scale-105 transition-transform">
-						<svg class="h-6 w-6 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.008 3.824H5.053z"/></svg>
+				<button
+					onclick={() => shareSocial('twitter')}
+					class="group flex flex-col items-center gap-2 transition-opacity hover:opacity-80 md:cursor-pointer"
+				>
+					<div
+						class="rounded-full bg-black p-3.5 text-white shadow-md transition-transform group-hover:scale-105 dark:bg-white dark:text-black"
+					>
+						<svg class="h-6 w-6 fill-current" viewBox="0 0 24 24"
+							><path
+								d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.008 3.824H5.053z"
+							/></svg
+						>
 					</div>
-					<span class="text-xs font-bold text-muted-foreground group-hover:text-foreground transition-colors">X</span>
+					<span
+						class="text-xs font-bold text-muted-foreground transition-colors group-hover:text-foreground"
+						>X</span
+					>
 				</button>
-				<button onclick={() => shareSocial('instagram')} class="flex flex-col items-center gap-2 hover:opacity-80 transition-opacity md:cursor-pointer group">
-					<div class="bg-linear-to-tr from-yellow-400 via-pink-500 to-purple-500 rounded-full p-3.5 text-white shadow-md group-hover:scale-105 transition-transform">
-						<svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+				<button
+					onclick={() => shareSocial('instagram')}
+					class="group flex flex-col items-center gap-2 transition-opacity hover:opacity-80 md:cursor-pointer"
+				>
+					<div
+						class="rounded-full bg-linear-to-tr from-yellow-400 via-pink-500 to-purple-500 p-3.5 text-white shadow-md transition-transform group-hover:scale-105"
+					>
+						<svg
+							class="h-6 w-6"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							viewBox="0 0 24 24"
+							><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path
+								d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+							></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg
+						>
 					</div>
-					<span class="text-xs font-bold text-muted-foreground group-hover:text-foreground transition-colors">Instagram</span>
+					<span
+						class="text-xs font-bold text-muted-foreground transition-colors group-hover:text-foreground"
+						>Instagram</span
+					>
 				</button>
-				<button onclick={() => shareSocial('linkedin')} class="flex flex-col items-center gap-2 hover:opacity-80 transition-opacity md:cursor-pointer group">
-					<div class="bg-blue-600 rounded-full p-3.5 text-white shadow-md group-hover:scale-105 transition-transform">
-						<svg class="h-6 w-6 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+				<button
+					onclick={() => shareSocial('linkedin')}
+					class="group flex flex-col items-center gap-2 transition-opacity hover:opacity-80 md:cursor-pointer"
+				>
+					<div
+						class="rounded-full bg-blue-600 p-3.5 text-white shadow-md transition-transform group-hover:scale-105"
+					>
+						<svg class="h-6 w-6 fill-current" viewBox="0 0 24 24"
+							><path
+								d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+							/></svg
+						>
 					</div>
-					<span class="text-xs font-bold text-muted-foreground group-hover:text-foreground transition-colors">LinkedIn</span>
+					<span
+						class="text-xs font-bold text-muted-foreground transition-colors group-hover:text-foreground"
+						>LinkedIn</span
+					>
 				</button>
-				<button onclick={() => shareSocial('facebook')} class="flex flex-col items-center gap-2 hover:opacity-80 transition-opacity md:cursor-pointer group">
-					<div class="bg-blue-500 rounded-full p-3.5 text-white shadow-md group-hover:scale-105 transition-transform">
-						<svg class="h-6 w-6 fill-current" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+				<button
+					onclick={() => shareSocial('facebook')}
+					class="group flex flex-col items-center gap-2 transition-opacity hover:opacity-80 md:cursor-pointer"
+				>
+					<div
+						class="rounded-full bg-blue-500 p-3.5 text-white shadow-md transition-transform group-hover:scale-105"
+					>
+						<svg class="h-6 w-6 fill-current" viewBox="0 0 24 24"
+							><path
+								d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"
+							/></svg
+						>
 					</div>
-					<span class="text-xs font-bold text-muted-foreground group-hover:text-foreground transition-colors">Facebook</span>
+					<span
+						class="text-xs font-bold text-muted-foreground transition-colors group-hover:text-foreground"
+						>Facebook</span
+					>
 				</button>
-				<button onclick={copyUrl} class="flex flex-col items-center gap-2 hover:opacity-80 transition-opacity md:cursor-pointer group">
-					<div class="bg-muted rounded-full p-3.5 text-foreground shadow-md group-hover:scale-105 transition-transform border border-border">
+				<button
+					onclick={copyUrl}
+					class="group flex flex-col items-center gap-2 transition-opacity hover:opacity-80 md:cursor-pointer"
+				>
+					<div
+						class="rounded-full border border-border bg-muted p-3.5 text-foreground shadow-md transition-transform group-hover:scale-105"
+					>
 						<Copy class="h-6 w-6" />
 					</div>
-					<span class="text-xs font-bold text-muted-foreground group-hover:text-foreground transition-colors">{copied ? 'Copiado!' : 'Copiar URL'}</span>
+					<span
+						class="text-xs font-bold text-muted-foreground transition-colors group-hover:text-foreground"
+						>{copied ? 'Copiado!' : 'Copiar URL'}</span
+					>
 				</button>
 			</div>
 		</div>
