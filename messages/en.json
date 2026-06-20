@@ -174,5 +174,9 @@
 	"error_fk_violation": "The provided information is invalid.",
 	"error_missing_field": "Please complete all required fields.",
 	"error_profile_not_found": "Profile could not be found.",
-	"error_database": "Error processing request. Contact support if the problem persists."
+	"error_database": "Error processing request. Contact support if the problem persists.",
+	"crop_image_title": "Crop Avatar",
+	"crop_cancel": "Cancel",
+	"crop_confirm": "Crop & Upload",
+	"uploading": "Uploading..."
 }

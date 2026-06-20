@@ -174,5 +174,9 @@
 	"error_fk_violation": "La información proporcionada no es válida.",
 	"error_missing_field": "Por favor, completa todos los campos requeridos.",
 	"error_profile_not_found": "No se pudo encontrar el perfil.",
-	"error_database": "Error al procesar la solicitud. Contacta a soporte si el problema persiste."
+	"error_database": "Error al procesar la solicitud. Contacta a soporte si el problema persiste.",
+	"crop_image_title": "Recortar Avatar",
+	"crop_cancel": "Cancelar",
+	"crop_confirm": "Recortar y Subir",
+	"uploading": "Subiendo..."
 }

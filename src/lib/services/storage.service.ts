@@ -69,3 +69,29 @@ export async function uploadVideoToStorage(
 		publicUrl
 	};
 }
+
+export async function uploadAvatarToStorage(payload: Blob | File, userId: string) {
+	const bucket = 'avatars';
+	const storagePath = `${userId}/profile.png`;
+
+	// Intentamos eliminar por si la política de UPDATE falla
+	await supabase.storage.from(bucket).remove([storagePath]);
+
+	const { error: uploadError } = await supabase.storage.from(bucket).upload(storagePath, payload, {
+		cacheControl: '3600',
+		upsert: true,
+		contentType: payload.type || 'image/png'
+	});
+
+	if (uploadError) throw new Error(uploadError.message);
+
+	const {
+		data: { publicUrl }
+	} = supabase.storage.from(bucket).getPublicUrl(storagePath);
+
+	// Add a cache buster to the URL so the UI updates immediately after uploading
+	return {
+		path: storagePath,
+		publicUrl: `${publicUrl}?t=${Date.now()}`
+	};
+}

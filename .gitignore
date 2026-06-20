@@ -24,3 +24,8 @@ vite.config.ts.timestamp-*
 # Paraglide
 src/lib/paraglide
 project.inlang/cache/
+
+# Custom
+src/routes/hacking
+
+

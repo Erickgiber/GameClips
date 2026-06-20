@@ -8,10 +8,18 @@
 	import AuthGuard from '$lib/components/auth/AuthGuard.svelte';
 	import { updateProfile } from '$lib/services/profile.service';
 	import { normalizeText } from '$lib/utils/normalizeText';
+	import Cropper from 'cropperjs';
+	import 'cropperjs/dist/cropper.css';
+	import { uploadAvatarToStorage } from '$lib/services/storage.service';
 
 	let fileInputRef: HTMLInputElement | undefined = $state();
 	let saved = $state(false);
 	let saving = $state(false);
+	let cropModalOpen = $state(false);
+	let cropImageSrc = $state('');
+	let cropper: Cropper | null = null;
+	let cropImgRef: HTMLImageElement | undefined = $state();
+	let uploadingAvatar = $state(false);
 
 	// Estado local para el formulario (evita mutar el store global hasta guardar)
 	let formData = $derived({
@@ -75,6 +83,81 @@
 	function handleAvatarClick() {
 		fileInputRef?.click();
 	}
+
+	function handleFileChange(event: Event) {
+		const target = event.target as HTMLInputElement;
+		const file = target.files?.[0];
+		if (file) {
+			const reader = new FileReader();
+			reader.onload = (e) => {
+				cropImageSrc = e.target?.result as string;
+				cropModalOpen = true;
+				setTimeout(() => initCropper(), 10);
+			};
+			reader.readAsDataURL(file);
+		}
+		if (fileInputRef) fileInputRef.value = '';
+	}
+
+	function initCropper() {
+		if (cropper) {
+			cropper.destroy();
+		}
+		if (cropImgRef) {
+			cropper = new Cropper(cropImgRef, {
+				aspectRatio: 1,
+				viewMode: 1,
+				dragMode: 'move',
+				autoCropArea: 1,
+				restore: false,
+				guides: false,
+				center: false,
+				highlight: false,
+				cropBoxMovable: true,
+				cropBoxResizable: true,
+				toggleDragModeOnDblclick: false,
+				background: false
+			});
+		}
+	}
+
+	function closeCropper() {
+		cropModalOpen = false;
+		if (cropper) {
+			cropper.destroy();
+			cropper = null;
+		}
+		cropImageSrc = '';
+	}
+
+	async function confirmCrop() {
+		if (!cropper || !user.username) return;
+
+		uploadingAvatar = true;
+		cropper
+			.getCroppedCanvas({
+				width: 500,
+				height: 500
+			})
+			.toBlob(async (blob: Blob | null) => {
+				if (blob) {
+					try {
+						const result = await uploadAvatarToStorage(blob, user.id!);
+
+						// Guardamos la nueva URL en la tabla profiles
+						await updateProfile(user.id!, { avatar_url: result.publicUrl });
+
+						// Actualizamos el store en tiempo real
+						user.avatar_url = result.publicUrl;
+					} catch (e) {
+						console.error('Error uploading avatar:', e);
+						alert(m.error_generic());
+					}
+				}
+				uploadingAvatar = false;
+				closeCropper();
+			}, 'image/png');
+	}
 </script>
 
 <AuthGuard>
@@ -90,18 +173,24 @@
 						alt="Avatar"
 						class="h-24 w-24 rounded-full border-4 border-primary/20 object-cover shadow-lg shadow-primary/20 lg:h-28 lg:w-28"
 					/>
-					<div
-						class="absolute -right-1 -bottom-1 flex h-8 w-8 items-center justify-center rounded-full border-4 border-background bg-linear-to-br from-primary to-secondary"
-					>
-						<Trophy class="h-4 w-4 text-white" />
-					</div>
 					<button
 						onclick={handleAvatarClick}
-						class="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 transition-opacity hover:opacity-100"
+						class="absolute inset-0 z-10 flex cursor-pointer items-center justify-center rounded-full bg-black/50 opacity-0 transition-opacity hover:opacity-100"
 					>
 						<Camera class="h-7 w-7 text-white" />
 					</button>
-					<input bind:this={fileInputRef} type="file" accept="image/*" class="hidden" />
+					<div
+						class="absolute -right-1 -bottom-1 z-20 flex h-8 w-8 items-center justify-center rounded-full border-4 border-background bg-linear-to-br from-primary to-secondary"
+					>
+						<Trophy class="h-4 w-4 text-white" />
+					</div>
+					<input
+						bind:this={fileInputRef}
+						type="file"
+						accept="image/*"
+						class="hidden"
+						onchange={handleFileChange}
+					/>
 				</div>
 				<div class="text-center sm:text-left">
 					<h3 class="mb-1 text-lg font-black">{formData.username}</h3>
@@ -227,6 +316,13 @@
 			<div class="flex gap-5" in:fly={{ y: 16, duration: 300, delay: 200 }}>
 				<button
 					disabled={saving}
+					onclick={() => goto(resolve('/profile'))}
+					class="flex w-full items-center justify-center gap-2 rounded-xl border border-border py-4 text-base font-black text-white shadow-xl shadow-border/30 transition-all hover:bg-border/90 active:scale-97 lg:cursor-pointer"
+				>
+					{m.cancel()}
+				</button>
+				<button
+					disabled={saving}
 					onclick={handleSave}
 					class="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 text-base font-black text-white shadow-xl shadow-primary/30 transition-all hover:bg-primary/90 active:scale-97 lg:cursor-pointer"
 				>
@@ -237,14 +333,67 @@
 						{saved ? m.profile_saved() : m.save_profile()}
 					{/if}
 				</button>
-				<button
-					disabled={saving}
-					onclick={() => goto(resolve('/profile'))}
-					class="flex w-full items-center justify-center gap-2 rounded-xl border border-border py-4 text-base font-black text-white shadow-xl shadow-border/30 transition-all hover:bg-border/90 active:scale-97 lg:cursor-pointer"
-				>
-					{m.cancel()}
-				</button>
 			</div>
 		</div>
 	</div>
 </AuthGuard>
+
+{#if cropModalOpen}
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div
+		class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+		onclick={closeCropper}
+		transition:fly={{ duration: 200, y: 10 }}
+	>
+		<div
+			class="relative flex w-full max-w-md flex-col overflow-hidden rounded-2xl bg-card shadow-2xl"
+			onclick={(e) => e.stopPropagation()}
+		>
+			<div class="border-b border-border p-4 text-center">
+				<h3 class="text-lg font-black text-foreground">{m.crop_image_title()}</h3>
+			</div>
+			<div class="relative h-[400px] w-full overflow-hidden bg-black/5">
+				<img
+					bind:this={cropImgRef}
+					src={cropImageSrc}
+					alt="Crop target"
+					class="block h-auto max-w-full"
+				/>
+			</div>
+			<div class="relative z-10 flex gap-4 bg-card p-6 pt-4">
+				<button
+					onclick={closeCropper}
+					disabled={uploadingAvatar}
+					class="flex-1 cursor-pointer rounded-xl border border-border/40 bg-secondary/30 py-3.5 text-base font-bold text-secondary-foreground shadow-sm transition-colors hover:bg-secondary/50 disabled:opacity-50"
+				>
+					{m.crop_cancel()}
+				</button>
+				<button
+					onclick={confirmCrop}
+					disabled={uploadingAvatar}
+					class="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-base font-black text-white shadow-lg shadow-primary/30 transition-all hover:bg-primary/90 disabled:opacity-50"
+				>
+					{#if uploadingAvatar}
+						<LoaderCircle class="h-4 w-4 animate-spin" />
+						{m.uploading()}
+					{:else}
+						{m.crop_confirm()}
+					{/if}
+				</button>
+			</div>
+		</div>
+	</div>
+{/if}
+
+<style>
+	/* Make the cropper mask circular */
+	:global(.cropper-view-box),
+	:global(.cropper-face) {
+		border-radius: 50%;
+	}
+	:global(.cropper-view-box) {
+		outline: 0;
+		box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.6);
+	}
+</style>
