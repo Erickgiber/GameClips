@@ -211,7 +211,7 @@
 	"security_passkey_added_success": "¡Passkey añadido con éxito!",
 	"security_passkey_deleted_success": "¡Passkey eliminado con éxito!",
 	"security_password_req_length": "Mínimo 6 caracteres",
-	"security_password_update_action": "Actualizar contraseña",
+	"security_password_update_action": "Actualizar",
 	"security_passkey_empty": "Aún no se han añadido llaves de acceso.",
 	"settings_profile_title": "Ajustes / Perfil",
 	"settings_security_title": "Ajustes / Seguridad",
