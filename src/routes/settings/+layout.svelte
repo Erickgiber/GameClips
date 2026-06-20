@@ -3,6 +3,7 @@
 	import TopNavProfile from '$lib/components/views/profile/TopNavProfile.svelte';
 	import { m } from '$lib/paraglide/messages';
 	import { page } from '$app/state';
+	import AuthGuard from '$lib/components/auth/AuthGuard.svelte';
 
 	let { children } = $props();
 
@@ -30,6 +31,10 @@
 
 <TopNavProfile customGoBack={customBack()} customTitle={customTitle()} />
 
-<div class="h-[calc(100dvh - var(--spacing-nav-category))] bg-background px-4 py-6 text-foreground">
-	{@render children()}
-</div>
+<AuthGuard>
+	<div
+		class="h-[calc(100dvh - var(--spacing-nav-category))] bg-background px-4 py-6 text-foreground"
+	>
+		{@render children()}
+	</div>
+</AuthGuard>
