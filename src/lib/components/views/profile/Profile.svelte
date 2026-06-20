@@ -164,29 +164,6 @@
 <div class="size-full overflow-y-auto bg-background text-foreground">
 	<TopNavProfile showShare={true} onShare={handleShare} />
 
-	<div
-		class="sticky top-0 z-50 hidden h-nav-category border-b border-border bg-card/30 backdrop-blur-sm lg:flex"
-	>
-		<div class="flex w-full items-center justify-between px-6">
-			<a href={resolve('/')} class="flex items-center gap-2 transition-colors hover:text-primary">
-				<ArrowLeft class="h-5 w-5" />
-				<span class="font-semibold">{m.back_to_home()}</span>
-			</a>
-			<div class="flex items-center gap-3">
-				<button onclick={handleShare} class="rounded-lg p-2 transition-colors hover:bg-muted md:cursor-pointer text-foreground">
-					<Share2 class="h-5 w-5" />
-				</button>
-				{#if isOwnProfile}
-					<a
-						href={resolve('/settings')}
-						class="rounded-lg p-2 transition-colors hover:bg-muted md:cursor-pointer"
-					>
-						<Settings class="h-5 w-5" />
-					</a>
-				{/if}
-			</div>
-		</div>
-	</div>
 
 	<div class="mx-auto max-w-7xl px-4 pb-8 lg:px-6" in:fly={{ y: 16, duration: 300, delay: 100 }}>
 		<div class="pt-6 pb-8">

@@ -23,7 +23,7 @@ export const supabase = createClient<Database>(
 			detectSessionInUrl: true,
 			flowType: 'pkce',
 			experimental: {
-				passkeys: true
+				passkey: true
 			}
 		}
 	}
