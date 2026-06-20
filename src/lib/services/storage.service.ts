@@ -72,7 +72,7 @@ export async function uploadVideoToStorage(
 
 export async function uploadAvatarToStorage(payload: Blob | File, userId: string) {
 	const bucket = 'avatars';
-	const storagePath = `${userId}/profile.png`;
+	const storagePath = `${userId}/avatar.png`;
 
 	// Intentamos eliminar por si la política de UPDATE falla
 	await supabase.storage.from(bucket).remove([storagePath]);

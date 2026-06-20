@@ -154,11 +154,15 @@ export async function logoutUser() {
 	}
 }
 
-export async function loginWithPasskey() {
+export async function loginWithPasskey(payload?: { rememberMe?: boolean }) {
 	authStatus.loading = true;
 	authStatus.error = null;
 
 	try {
+		if (payload?.rememberMe !== undefined) {
+			await setAuthRememberMe(payload.rememberMe);
+		}
+
 		const data = await signInWithPasskeyService();
 		await syncSession(data.session ?? null);
 	} catch (error) {

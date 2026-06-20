@@ -36,7 +36,7 @@
 	async function handlePasskeyLogin() {
 		formError = null;
 		try {
-			await loginWithPasskey();
+			await loginWithPasskey({ rememberMe });
 			goto(resolve('/'));
 		} catch (error) {
 			formError = error instanceof Error ? error.message : 'Unable to sign in with passkey';
