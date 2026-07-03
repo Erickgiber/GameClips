@@ -5,8 +5,9 @@ node_modules
 .vercel
 .netlify
 .wrangler
-/.svelte-kit
-/build
+frontend/.svelte-kit
+frontend/build
+backend/dist
 
 # OS
 .DS_Store
@@ -21,11 +22,10 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
 # Paraglide
-src/lib/paraglide
-project.inlang/cache/
+frontend/src/lib/paraglide
+frontend/project.inlang/cache/
 
 # Custom
-src/routes/hacking
-
-
+frontend/src/routes/hacking

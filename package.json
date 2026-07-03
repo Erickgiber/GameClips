@@ -1,52 +1,22 @@
 {
-	"name": "gameclips",
+	"name": "gameclips-monorepo",
 	"private": true,
 	"version": "0.0.1",
-	"type": "module",
 	"scripts": {
-		"dev": "vite dev --host",
-		"build": "vite build",
-		"preview": "vite preview",
-		"prepare": "svelte-kit sync || echo ''",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "prettier --check . --ignore-path .eslintignore --ignore-unknown && eslint . --ignore-pattern .eslintignore",
-		"format": "prettier --write . --ignore-path .eslintignore --ignore-unknown",
-		"lint:fix": "eslint . --fix --ignore-pattern .eslintignore"
+		"dev": "concurrently -n FE,BE -c cyan,magenta \"npm run dev:frontend\" \"npm run dev:backend\"",
+		"dev:frontend": "npm -w frontend run dev",
+		"dev:backend": "npm -w backend run dev",
+		"build": "npm -w frontend run build",
+		"build:backend": "npm -w backend run build",
+		"install:all": "npm install",
+		"lint": "npm -w frontend run lint",
+		"format": "npm -w frontend run format"
 	},
+	"workspaces": [
+		"frontend",
+		"backend"
+	],
 	"devDependencies": {
-		"@eslint/compat": "^2.0.4",
-		"@eslint/js": "^10.0.1",
-		"@inlang/paraglide-js": "^2.15.2",
-		"@sveltejs/adapter-static": "^3.0.10",
-		"@sveltejs/kit": "^2.57.0",
-		"@sveltejs/vite-plugin-svelte": "^7.0.0",
-		"@tailwindcss/forms": "^0.5.11",
-		"@tailwindcss/typography": "^0.5.19",
-		"@tailwindcss/vite": "^4.2.2",
-		"@types/cropperjs": "^1.1.5",
-		"@types/node": "^24",
-		"eslint": "^10.2.0",
-		"eslint-config-prettier": "^10.1.8",
-		"eslint-plugin-svelte": "^3.17.0",
-		"globals": "^17.4.0",
-		"prettier": "^3.8.1",
-		"prettier-plugin-svelte": "^3.5.1",
-		"prettier-plugin-tailwindcss": "^0.7.2",
-		"svelte": "^5.55.2",
-		"svelte-check": "^4.4.6",
-		"tailwindcss": "^4.2.2",
-		"typescript": "^6.0.2",
-		"typescript-eslint": "^8.58.1",
-		"vite": "^8.0.7"
-	},
-	"dependencies": {
-		"@capacitor/core": "^8.3.4",
-		"@capacitor/preferences": "^8.0.1",
-		"@capacitor/share": "^8.0.1",
-		"@supabase/supabase-js": "^2.106.2",
-		"cropperjs": "^1.6.2",
-		"lucide-svelte": "^1.0.1",
-		"tailwind-merge": "^3.6.0"
+		"concurrently": "^9.1.2"
 	}
 }
