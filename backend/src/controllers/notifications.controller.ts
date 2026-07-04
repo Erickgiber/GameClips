@@ -1,6 +1,6 @@
 import type { Response } from 'express';
 import type { AuthenticatedRequest } from '../middleware/auth.js';
-import { supabase } from '../lib/supabase.js';
+import { getSupabaseUserClient } from '../lib/supabase-user.js';
 
 type NotificationRow = {
 	id: string;
@@ -30,9 +30,11 @@ function relativeTimeLabel(dateIso: string): string {
  */
 export async function getNotifications(req: AuthenticatedRequest, res: Response): Promise<void> {
 	const { user } = req;
+	const token = req.headers.authorization!.slice(7);
 
 	try {
-		const { data, error } = await supabase
+		const userClient = getSupabaseUserClient(token);
+		const { data, error } = await userClient
 			.from('notifications')
 			.select('id, message, read, created_at')
 			.eq('user_id', user.id)
