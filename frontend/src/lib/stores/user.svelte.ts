@@ -64,7 +64,8 @@ async function syncSession(session: Session | null) {
 		authStatus.error = null;
 		await applyAuthUser(session?.user ?? null);
 	} catch (error) {
-		authStatus.error = error instanceof Error ? mapSupabaseError(error.message) : 'Unable to sync session';
+		authStatus.error =
+			error instanceof Error ? mapSupabaseError(error.message) : 'Unable to sync session';
 		resetUserState();
 	}
 }
@@ -98,7 +99,8 @@ export async function initializeAuthState() {
 		await syncSession(session);
 		ensureAuthListener();
 	} catch (error) {
-		authStatus.error = error instanceof Error ? mapSupabaseError(error.message) : 'Unable to initialize auth';
+		authStatus.error =
+			error instanceof Error ? mapSupabaseError(error.message) : 'Unable to initialize auth';
 		resetUserState();
 	} finally {
 		authStatus.loading = false;
@@ -126,7 +128,7 @@ export async function loginWithEmail(payload: {
 	} catch (error) {
 		const mapped = error instanceof Error ? mapSupabaseError(error.message) : m.signing_in();
 		authStatus.error = mapped;
-		throw new Error(mapped);
+		throw new Error(mapped, { cause: error });
 	} finally {
 		authStatus.loading = false;
 	}
@@ -151,7 +153,7 @@ export async function registerWithEmailPassword(payload: {
 	} catch (error) {
 		const mapped = error instanceof Error ? mapSupabaseError(error.message) : 'Unable to register';
 		authStatus.error = mapped;
-		throw new Error(mapped);
+		throw new Error(mapped, { cause: error });
 	} finally {
 		authStatus.loading = false;
 	}
@@ -185,7 +187,7 @@ export async function loginWithPasskey(payload?: { rememberMe?: boolean }) {
 	} catch (error) {
 		const mapped = error instanceof Error ? mapSupabaseError(error.message) : m.signing_in();
 		authStatus.error = mapped;
-		throw new Error(mapped);
+		throw new Error(mapped, { cause: error });
 	} finally {
 		authStatus.loading = false;
 	}

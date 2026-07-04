@@ -15,7 +15,9 @@ export async function uploadFile(req: AuthenticatedRequest, res: Response): Prom
 	const rawFileName = req.headers['x-file-name'];
 	const fileName = (Array.isArray(rawFileName) ? rawFileName[0] : rawFileName) as string;
 	const rawContentType = req.headers['x-content-type'];
-	const contentType = (Array.isArray(rawContentType) ? rawContentType[0] : rawContentType) as string;
+	const contentType = (
+		Array.isArray(rawContentType) ? rawContentType[0] : rawContentType
+	) as string;
 
 	if (!bucket) {
 		res.status(400).json({ error: 'Bucket parameter is required' });
@@ -64,8 +66,8 @@ export async function uploadFile(req: AuthenticatedRequest, res: Response): Prom
 			path: fileName,
 			publicUrl: data.publicUrl
 		});
-	} catch (error: any) {
+	} catch (error: unknown) {
 		console.error(`[uploadFile] Error uploading to storage:`, error);
-		res.status(500).json({ error: error.message || 'Failed to upload file to storage' });
+		res.status(500).json({ error: (error as Error).message || 'Failed to upload file to storage' });
 	}
 }

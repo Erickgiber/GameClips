@@ -53,8 +53,8 @@ export async function getNotifications(req: AuthenticatedRequest, res: Response)
 		}));
 
 		res.json(mapped);
-	} catch (error: any) {
+	} catch (error: unknown) {
 		console.error('[getNotifications] Error:', error);
-		res.status(500).json({ error: error.message || 'Failed to fetch notifications' });
+		res.status(500).json({ error: (error as Error).message || 'Failed to fetch notifications' });
 	}
 }

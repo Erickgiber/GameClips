@@ -47,7 +47,7 @@
 				} else {
 					usernameStatus = 'available';
 				}
-			} catch (e) {
+			} catch {
 				usernameStatus = 'idle';
 			}
 		}, 500);

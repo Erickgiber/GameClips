@@ -1,8 +1,6 @@
 import type { Request, Response } from 'express';
-import type { AuthenticatedRequest } from '../middleware/auth.js';
 import { supabase } from '../lib/supabase.js';
 import { getSupabaseUserClient } from '../lib/supabase-user.js';
-import type { Provider } from '@supabase/supabase-js';
 
 /**
  * POST /api/auth/login
@@ -24,8 +22,8 @@ export async function login(req: Request, res: Response): Promise<void> {
 		}
 
 		res.json(data);
-	} catch (err: any) {
-		res.status(500).json({ error: err.message || 'Login failed' });
+	} catch (err: unknown) {
+		res.status(500).json({ error: (err as Error).message || 'Login failed' });
 	}
 }
 
@@ -55,8 +53,8 @@ export async function register(req: Request, res: Response): Promise<void> {
 		}
 
 		res.json(data);
-	} catch (err: any) {
-		res.status(500).json({ error: err.message || 'Registration failed' });
+	} catch (err: unknown) {
+		res.status(500).json({ error: (err as Error).message || 'Registration failed' });
 	}
 }
 
@@ -80,8 +78,8 @@ export async function refresh(req: Request, res: Response): Promise<void> {
 		}
 
 		res.json(data);
-	} catch (err: any) {
-		res.status(500).json({ error: err.message || 'Token refresh failed' });
+	} catch (err: unknown) {
+		res.status(500).json({ error: (err as Error).message || 'Token refresh failed' });
 	}
 }
 
@@ -96,7 +94,7 @@ export async function logout(req: Request, res: Response): Promise<void> {
 			// Sign out the user globally using their token
 			const userClient = getSupabaseUserClient(token);
 			await userClient.auth.signOut();
-		} catch (err) {
+		} catch {
 			// Ignore sign out errors on server, client will discard token anyway
 		}
 	}
@@ -107,7 +105,6 @@ export async function logout(req: Request, res: Response): Promise<void> {
  * POST /api/auth/update-password
  */
 export async function updatePassword(req: Request, res: Response): Promise<void> {
-	const { user } = req as AuthenticatedRequest;
 	const { password } = req.body;
 	const token = req.headers.authorization!.slice(7);
 
@@ -126,8 +123,8 @@ export async function updatePassword(req: Request, res: Response): Promise<void>
 		}
 
 		res.json({ success: true });
-	} catch (err: any) {
-		res.status(500).json({ error: err.message || 'Failed to update password' });
+	} catch (err: unknown) {
+		res.status(500).json({ error: (err as Error).message || 'Failed to update password' });
 	}
 }
 
@@ -154,8 +151,8 @@ export async function getMfaStatus(req: Request, res: Response): Promise<void> {
 			isEnrolled: !!totpFactor,
 			factorId: totpFactor?.id
 		});
-	} catch (err: any) {
-		res.status(500).json({ error: err.message || 'Failed to get MFA status' });
+	} catch (err: unknown) {
+		res.status(500).json({ error: (err as Error).message || 'Failed to get MFA status' });
 	}
 }
 
@@ -175,8 +172,8 @@ export async function enrollMfa(req: Request, res: Response): Promise<void> {
 		}
 
 		res.json(data);
-	} catch (err: any) {
-		res.status(500).json({ error: err.message || 'Failed to enroll MFA' });
+	} catch (err: unknown) {
+		res.status(500).json({ error: (err as Error).message || 'Failed to enroll MFA' });
 	}
 }
 
@@ -213,8 +210,8 @@ export async function verifyMfa(req: Request, res: Response): Promise<void> {
 		}
 
 		res.json(verify.data);
-	} catch (err: any) {
-		res.status(500).json({ error: err.message || 'Failed to verify MFA' });
+	} catch (err: unknown) {
+		res.status(500).json({ error: (err as Error).message || 'Failed to verify MFA' });
 	}
 }
 
@@ -240,8 +237,8 @@ export async function unenrollMfa(req: Request, res: Response): Promise<void> {
 		}
 
 		res.json({ success: true });
-	} catch (err: any) {
-		res.status(500).json({ error: err.message || 'Failed to unenroll MFA' });
+	} catch (err: unknown) {
+		res.status(500).json({ error: (err as Error).message || 'Failed to unenroll MFA' });
 	}
 }
 
@@ -262,8 +259,8 @@ export async function getLinkedIdentities(req: Request, res: Response): Promise<
 
 		const identities = Array.isArray(data) ? data : data?.identities || [];
 		res.json(identities);
-	} catch (err: any) {
-		res.status(500).json({ error: err.message || 'Failed to fetch identities' });
+	} catch (err: unknown) {
+		res.status(500).json({ error: (err as Error).message || 'Failed to fetch identities' });
 	}
 }
 
@@ -289,8 +286,8 @@ export async function unlinkIdentity(req: Request, res: Response): Promise<void>
 		}
 
 		res.json({ success: true });
-	} catch (err: any) {
-		res.status(500).json({ error: err.message || 'Failed to unlink identity' });
+	} catch (err: unknown) {
+		res.status(500).json({ error: (err as Error).message || 'Failed to unlink identity' });
 	}
 }
 
@@ -310,8 +307,8 @@ export async function getPasskeys(req: Request, res: Response): Promise<void> {
 		}
 
 		res.json(data || []);
-	} catch (err: any) {
-		res.status(500).json({ error: err.message || 'Failed to list passkeys' });
+	} catch (err: unknown) {
+		res.status(500).json({ error: (err as Error).message || 'Failed to list passkeys' });
 	}
 }
 
@@ -337,7 +334,7 @@ export async function deletePasskey(req: Request, res: Response): Promise<void> 
 		}
 
 		res.json({ success: true });
-	} catch (err: any) {
-		res.status(500).json({ error: err.message || 'Failed to delete passkey' });
+	} catch (err: unknown) {
+		res.status(500).json({ error: (err as Error).message || 'Failed to delete passkey' });
 	}
 }

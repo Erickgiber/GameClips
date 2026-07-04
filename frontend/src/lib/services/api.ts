@@ -3,16 +3,23 @@ import { supabase } from '$lib/supabase/client';
 
 const API_BASE = (env.PUBLIC_API_URL || 'http://localhost:3000') + '/api';
 
-export async function request(path: string, options: RequestInit = {}): Promise<any> {
+export async function request<T = unknown>(path: string, options: RequestInit = {}): Promise<T> {
 	const headers = new Headers(options.headers);
 
 	// Get current active session from frontend Supabase SDK (handles auto-refresh natively)
-	const { data: { session } } = await supabase.auth.getSession();
+	const {
+		data: { session }
+	} = await supabase.auth.getSession();
 	if (session?.access_token) {
 		headers.set('Authorization', `Bearer ${session.access_token}`);
 	}
 
-	if (!headers.has('Content-Type') && !(options.body instanceof FormData) && !(options.body instanceof ArrayBuffer) && !(options.body instanceof Blob)) {
+	if (
+		!headers.has('Content-Type') &&
+		!(options.body instanceof FormData) &&
+		!(options.body instanceof ArrayBuffer) &&
+		!(options.body instanceof Blob)
+	) {
 		headers.set('Content-Type', 'application/json');
 	}
 
@@ -33,28 +40,30 @@ export async function request(path: string, options: RequestInit = {}): Promise<
 		throw new Error(errMsg);
 	}
 
-	if (response.status === 204) return null;
+	if (response.status === 204) return null as T;
 	const text = await response.text();
-	return text ? JSON.parse(text) : null;
+	return (text ? JSON.parse(text) : null) as T;
 }
 
 export const api = {
-	get: (path: string, options?: RequestInit) => request(path, { ...options, method: 'GET' }),
-	post: (path: string, body?: any, options?: RequestInit) => {
+	get: <T = unknown>(path: string, options?: RequestInit) =>
+		request<T>(path, { ...options, method: 'GET' }),
+	post: <T = unknown>(path: string, body?: unknown, options?: RequestInit) => {
 		const isBinary = body instanceof ArrayBuffer || body instanceof Blob;
-		return request(path, {
+		return request<T>(path, {
 			...options,
 			method: 'POST',
-			body: isBinary ? body : JSON.stringify(body)
+			body: isBinary ? (body as BodyInit) : JSON.stringify(body)
 		});
 	},
-	patch: (path: string, body?: any, options?: RequestInit) => {
+	patch: <T = unknown>(path: string, body?: unknown, options?: RequestInit) => {
 		const isBinary = body instanceof ArrayBuffer || body instanceof Blob;
-		return request(path, {
+		return request<T>(path, {
 			...options,
 			method: 'PATCH',
-			body: isBinary ? body : JSON.stringify(body)
+			body: isBinary ? (body as BodyInit) : JSON.stringify(body)
 		});
 	},
-	delete: (path: string, options?: RequestInit) => request(path, { ...options, method: 'DELETE' })
+	delete: <T = unknown>(path: string, options?: RequestInit) =>
+		request<T>(path, { ...options, method: 'DELETE' })
 };

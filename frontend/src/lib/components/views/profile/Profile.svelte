@@ -1,8 +1,5 @@
 <script lang="ts">
 	import {
-		ArrowLeft,
-		Settings,
-		Share2,
 		Grid3x3,
 		Bookmark,
 		Heart,
@@ -18,7 +15,6 @@
 	import { Share } from '@capacitor/share';
 	import { fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
-	import { resolve } from '$app/paths';
 	import { m } from '$lib/paraglide/messages';
 	import {
 		getLikedVideosByProfile,
@@ -48,11 +44,11 @@
 			m.share_profile_text?.({ username: user.username }) ??
 			`Echa un vistazo al perfil de ${user.username} en GameClips!`;
 
-		let isNativeShareAvailable = false;
+		let isNativeShareAvailable: boolean;
 		try {
 			const canShare = await Share.canShare();
 			isNativeShareAvailable = canShare.value;
-		} catch (e) {
+		} catch {
 			isNativeShareAvailable = false;
 		}
 

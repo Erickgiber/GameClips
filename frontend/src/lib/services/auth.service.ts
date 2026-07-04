@@ -60,7 +60,7 @@ export async function linkIdentity(provider: string) {
 	return data;
 }
 
-export async function unlinkIdentity(identity: any) {
+export async function unlinkIdentity(identity: unknown) {
 	return await api.post('/auth/identities/unlink', { identity });
 }
 

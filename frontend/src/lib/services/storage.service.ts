@@ -42,7 +42,8 @@ export async function uploadVideoToStorage(
 	const fileName = params.fileName ?? `${Date.now()}-${crypto.randomUUID()}.${extension}`;
 	const storagePath = `${ownerId}/${fileName}`;
 	const uploadBody = buildUploadBody(payload);
-	const contentType = params.contentType ?? (payload instanceof Blob && payload.type ? payload.type : 'video/mp4');
+	const contentType =
+		params.contentType ?? (payload instanceof Blob && payload.type ? payload.type : 'video/mp4');
 
 	const data = await api.post(`/storage/upload/${bucket}`, uploadBody, {
 		headers: {

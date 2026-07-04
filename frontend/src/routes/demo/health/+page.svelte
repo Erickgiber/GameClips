@@ -30,8 +30,8 @@
 <div class="mx-auto max-w-md space-y-6 p-8">
 	<h1 class="text-2xl font-bold">Backend Health Check</h1>
 	<p class="text-sm text-gray-500">
-		Fetches <code class="rounded bg-gray-100 px-1 dark:bg-gray-800">GET /api/health</code> from the
-		backend on port 3000.
+		Fetches <code class="rounded bg-gray-100 px-1 dark:bg-gray-800">GET /api/health</code> from the backend
+		on port 3000.
 	</p>
 
 	<button
@@ -43,7 +43,9 @@
 	</button>
 
 	{#if status === 'success' && data}
-		<div class="rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950">
+		<div
+			class="rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950"
+		>
 			<p class="font-semibold text-green-700 dark:text-green-300">✅ Backend is online</p>
 			<ul class="mt-2 space-y-1 text-sm text-green-600 dark:text-green-400">
 				<li><strong>Status:</strong> {data.status}</li>

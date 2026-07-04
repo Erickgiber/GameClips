@@ -24,7 +24,10 @@ type ProfileRow = {
 	sponsored_by: string[];
 };
 
-export async function ensureProfileForUser(payload: { id: string; username: string }): Promise<void> {
+export async function ensureProfileForUser(payload: {
+	id: string;
+	username: string;
+}): Promise<void> {
 	await api.post('/profile', payload);
 }
 
@@ -48,11 +51,14 @@ export async function getProfileByUsername(username: string): Promise<User | nul
 	}
 }
 
-export async function buildAppUserFromAuth(_authUser: SupabaseAuthUser): Promise<User> {
+export async function buildAppUserFromAuth(authUser: SupabaseAuthUser): Promise<User> {
 	// The auth token is retrieved from getSession() in the api request.
 	// Since we are authenticated, we just fetch /profile.
 	const profile = await api.get('/profile');
-	return profile;
+	return {
+		...profile,
+		email: authUser.email || profile.email
+	};
 }
 
 export type UpdateProfileResult = {
@@ -70,11 +76,12 @@ export async function updateProfile(
 			success: true,
 			message: m.profile_update_success()
 		};
-	} catch (err: any) {
+	} catch (err: unknown) {
 		console.error('[updateProfile] failed:', err);
+		const errMsg = err instanceof Error ? err.message : String(err);
 		return {
 			success: false,
-			message: mapSupabaseError(err.message)
+			message: mapSupabaseError(errMsg)
 		};
 	}
 }

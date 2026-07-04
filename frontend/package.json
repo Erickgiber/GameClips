@@ -10,9 +10,9 @@
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "prettier --check . --ignore-path .eslintignore --ignore-unknown && eslint . --ignore-pattern .eslintignore",
-		"format": "prettier --write . --ignore-path .eslintignore --ignore-unknown",
-		"lint:fix": "eslint . --fix --ignore-pattern .eslintignore"
+		"lint": "prettier --check . --ignore-path .prettierignore --ignore-unknown && eslint .",
+		"format": "prettier --write . --ignore-path .prettierignore --ignore-unknown",
+		"lint:fix": "eslint . --fix"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^2.0.4",

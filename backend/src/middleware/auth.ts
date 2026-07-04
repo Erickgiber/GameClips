@@ -13,11 +13,7 @@ export type AuthenticatedRequest = Request & {
  * On success, attaches `req.user` with the authenticated user's id and email.
  * On failure, responds with 401 Unauthorized.
  */
-export async function requireAuth(
-	req: Request,
-	res: Response,
-	next: NextFunction
-): Promise<void> {
+export async function requireAuth(req: Request, res: Response, next: NextFunction): Promise<void> {
 	const authHeader = req.headers.authorization;
 
 	if (!authHeader?.startsWith('Bearer ')) {

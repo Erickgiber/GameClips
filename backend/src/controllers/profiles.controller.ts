@@ -139,8 +139,13 @@ export async function updateMyProfile(req: Request, res: Response): Promise<void
 
 	// Whitelist allowed fields to prevent mass assignment
 	const allowedFields = [
-		'username', 'name', 'description', 'title', 'dedication',
-		'avatar_url', 'sponsored_by'
+		'username',
+		'name',
+		'description',
+		'title',
+		'dedication',
+		'avatar_url',
+		'sponsored_by'
 	];
 
 	const sanitized: Record<string, unknown> = {};
@@ -157,10 +162,7 @@ export async function updateMyProfile(req: Request, res: Response): Promise<void
 
 	const token = req.headers.authorization!.slice(7);
 	const userClient = getSupabaseUserClient(token);
-	const { error } = await userClient
-		.from('profiles')
-		.update(sanitized)
-		.eq('id', user.id);
+	const { error } = await userClient.from('profiles').update(sanitized).eq('id', user.id);
 
 	if (error) {
 		console.error('[updateMyProfile] Supabase error:', error);

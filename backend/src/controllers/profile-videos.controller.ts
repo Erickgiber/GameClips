@@ -109,9 +109,9 @@ export async function getVideosByProfile(req: Request, res: Response): Promise<v
 
 		const enriched = await enrichVideos((data as VideoRow[] | null) ?? []);
 		res.json(enriched);
-	} catch (error: any) {
+	} catch (error: unknown) {
 		console.error('[getVideosByProfile] Error:', error);
-		res.status(500).json({ error: error.message || 'Failed to fetch profile videos' });
+		res.status(500).json({ error: (error as Error).message || 'Failed to fetch profile videos' });
 	}
 }
 
@@ -154,9 +154,9 @@ export async function getSavedVideosByProfile(req: Request, res: Response): Prom
 
 		const enriched = await enrichVideos(orderedVideos);
 		res.json(enriched);
-	} catch (error: any) {
+	} catch (error: unknown) {
 		console.error('[getSavedVideosByProfile] Error:', error);
-		res.status(500).json({ error: error.message || 'Failed to fetch saved videos' });
+		res.status(500).json({ error: (error as Error).message || 'Failed to fetch saved videos' });
 	}
 }
 
@@ -199,8 +199,8 @@ export async function getLikedVideosByProfile(req: Request, res: Response): Prom
 
 		const enriched = await enrichVideos(orderedVideos);
 		res.json(enriched);
-	} catch (error: any) {
+	} catch (error: unknown) {
 		console.error('[getLikedVideosByProfile] Error:', error);
-		res.status(500).json({ error: error.message || 'Failed to fetch liked videos' });
+		res.status(500).json({ error: (error as Error).message || 'Failed to fetch liked videos' });
 	}
 }
