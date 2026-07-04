@@ -3,6 +3,7 @@ node_modules
 # Output
 .output
 .vercel
+.vercel.json
 .netlify
 .wrangler
 frontend/.svelte-kit
