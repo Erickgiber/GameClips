@@ -1,18 +1,9 @@
-import adapter from '@sveltejs/adapter-static';
+import adapter from '@sveltejs/adapter-vercel';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	kit: {
-		adapter: adapter({
-			pages: 'dist',
-			assets: 'dist',
-			fallback: 'index.html'
-		}),
-
-		prerender: {
-			entries: ['*'],
-			handleUnseenRoutes: 'ignore'
-		}
+		adapter: adapter()
 	}
 };
 
