@@ -2,6 +2,7 @@ import type { Response } from 'express';
 import type { AuthenticatedRequest } from '../middleware/auth.js';
 import type { Request } from 'express';
 import { supabase } from '../lib/supabase.js';
+import { getSupabaseUserClient } from '../lib/supabase-user.js';
 
 const PROFILE_SELECT =
 	'id, username, email, name, description, title, role, role_id, dedication, avatar_url, followers_count, following_count, videos_count, likes_count, saved_videos_count, liked_videos_count, sponsored_by';
@@ -52,8 +53,10 @@ function mapProfile(profile: ProfileRow) {
  */
 export async function getMyProfile(req: Request, res: Response): Promise<void> {
 	const { user } = req as AuthenticatedRequest;
+	const token = req.headers.authorization!.slice(7);
 
-	const { data, error } = await supabase
+	const userClient = getSupabaseUserClient(token);
+	const { data, error } = await userClient
 		.from('profiles')
 		.select(PROFILE_SELECT)
 		.eq('id', user.id)
@@ -152,7 +155,9 @@ export async function updateMyProfile(req: Request, res: Response): Promise<void
 		return;
 	}
 
-	const { error } = await supabase
+	const token = req.headers.authorization!.slice(7);
+	const userClient = getSupabaseUserClient(token);
+	const { error } = await userClient
 		.from('profiles')
 		.update(sanitized)
 		.eq('id', user.id);
@@ -184,7 +189,9 @@ export async function ensureProfile(req: Request, res: Response): Promise<void> 
 		return;
 	}
 
-	const { error } = await supabase
+	const token = req.headers.authorization!.slice(7);
+	const userClient = getSupabaseUserClient(token);
+	const { error } = await userClient
 		.from('profiles')
 		.upsert({ id: user.id, username }, { onConflict: 'id' });
 

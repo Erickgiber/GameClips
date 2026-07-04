@@ -1,6 +1,6 @@
 import type { CorsOptions } from 'cors';
 
-const allowedOrigins = ['http://localhost:5173'];
+const allowedOrigins = ['http://localhost:5173', 'https://game-clips-iota.vercel.app'];
 
 export const corsOptions: CorsOptions = {
 	origin: (origin, callback) => {

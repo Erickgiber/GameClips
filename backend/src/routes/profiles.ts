@@ -9,12 +9,12 @@ import {
 
 const router = Router();
 
-// Authenticated routes
-router.get('/me', requireAuth, getMyProfile);
-router.patch('/me', requireAuth, updateMyProfile);
+// Authenticated profile actions
+router.get('/', requireAuth, getMyProfile);
+router.patch('/', requireAuth, updateMyProfile);
 router.post('/', requireAuth, ensureProfile);
 
-// Public routes
+// Public profile retrieval by username
 router.get('/:username', getProfileByUsername);
 
 export default router;

@@ -11,7 +11,7 @@ const router = Router();
 
 // Mount route modules
 router.use(healthRouter);
-router.use('/profiles', profilesRouter);
+router.use('/profile', profilesRouter);
 router.use('/videos', videosRouter);
 router.use('/users', profileVideosRouter);
 router.use('/notifications', notificationsRouter);

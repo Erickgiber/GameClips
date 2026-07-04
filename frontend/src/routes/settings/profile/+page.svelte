@@ -20,6 +20,21 @@
 	let cropImgRef: HTMLImageElement | undefined = $state();
 	let uploadingAvatar = $state(false);
 
+	let toast = $state<{ show: boolean; message: string; type: 'success' | 'error' }>({
+		show: false,
+		message: '',
+		type: 'success'
+	});
+
+	function displayToast(message: string, type: 'success' | 'error' = 'success') {
+		toast.message = message;
+		toast.type = type;
+		toast.show = true;
+		setTimeout(() => {
+			toast.show = false;
+		}, 4000);
+	}
+
 	// Estado local para el formulario (evita mutar el store global hasta guardar)
 	let formData = $derived({
 		username: user.username || '',
@@ -35,7 +50,7 @@
 
 	async function handleSave() {
 		if (!user.id) {
-			alert(m.error_unauthorized());
+			displayToast(m.error_unauthorized(), 'error');
 			return;
 		}
 
@@ -57,7 +72,7 @@
 
 		if (!req.success) {
 			console.error('Error updating profile:', req.message);
-			alert(req.message ?? m.error_generic());
+			displayToast(req.message ?? m.error_generic(), 'error');
 			return;
 		}
 
@@ -73,8 +88,9 @@
 			.filter(Boolean);
 
 		saved = true;
+		displayToast(m.profile_saved());
 
-		setInterval(() => {
+		setTimeout(() => {
 			saved = false;
 		}, 3000);
 	}
@@ -148,9 +164,10 @@
 
 						// Actualizamos el store en tiempo real
 						user.avatar_url = result.publicUrl;
+						displayToast(m.profile_saved());
 					} catch (e) {
 						console.error('Error uploading avatar:', e);
-						alert(m.error_generic());
+						displayToast(m.error_generic(), 'error');
 					}
 				}
 				uploadingAvatar = false;
@@ -380,6 +397,28 @@
 				</button>
 			</div>
 		</div>
+	</div>
+{/if}
+
+{#if toast.show}
+	<div
+		transition:fly={{ y: -20, duration: 300 }}
+		class={`fixed top-4 right-4 z-50 flex items-center gap-3 rounded-xl border px-4 py-3 shadow-xl backdrop-blur-md transition-all duration-300 ${
+			toast.type === 'success'
+				? 'border-green-500/20 bg-green-500/10 text-green-500 shadow-green-500/5'
+				: 'border-red-500/20 bg-red-500/10 text-red-500 shadow-red-500/5'
+		}`}
+	>
+		{#if toast.type === 'success'}
+			<svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+			</svg>
+		{:else}
+			<svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+			</svg>
+		{/if}
+		<span class="text-sm font-bold">{toast.message}</span>
 	</div>
 {/if}
 

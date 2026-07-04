@@ -25,12 +25,12 @@ type ProfileRow = {
 };
 
 export async function ensureProfileForUser(payload: { id: string; username: string }): Promise<void> {
-	await api.post('/profiles', payload);
+	await api.post('/profile', payload);
 }
 
 export async function getCurrentProfile(): Promise<User | null> {
 	try {
-		const profile = await api.get('/profiles/me');
+		const profile = await api.get('/profile');
 		return profile;
 	} catch (error) {
 		console.error('[getCurrentProfile] failed:', error);
@@ -40,7 +40,7 @@ export async function getCurrentProfile(): Promise<User | null> {
 
 export async function getProfileByUsername(username: string): Promise<User | null> {
 	try {
-		const profile = await api.get(`/profiles/${username}`);
+		const profile = await api.get(`/profile/${username}`);
 		return profile;
 	} catch (error) {
 		console.error(`[getProfileByUsername] failed for ${username}:`, error);
@@ -50,8 +50,8 @@ export async function getProfileByUsername(username: string): Promise<User | nul
 
 export async function buildAppUserFromAuth(_authUser: SupabaseAuthUser): Promise<User> {
 	// The auth token is retrieved from getSession() in the api request.
-	// Since we are authenticated, we just fetch /profiles/me.
-	const profile = await api.get('/profiles/me');
+	// Since we are authenticated, we just fetch /profile.
+	const profile = await api.get('/profile');
 	return profile;
 }
 
@@ -65,7 +65,7 @@ export async function updateProfile(
 	updates: Partial<Omit<ProfileRow, 'id'>>
 ): Promise<UpdateProfileResult> {
 	try {
-		await api.patch('/profiles/me', updates);
+		await api.patch('/profile', updates);
 		return {
 			success: true,
 			message: m.profile_update_success()

@@ -1,6 +1,6 @@
 import type { Response } from 'express';
 import type { AuthenticatedRequest } from '../middleware/auth.js';
-import { supabase } from '../lib/supabase.js';
+import { getSupabaseUserClient } from '../lib/supabase-user.js';
 
 /**
  * POST /api/storage/upload/:bucket
@@ -33,6 +33,9 @@ export async function uploadFile(req: AuthenticatedRequest, res: Response): Prom
 	}
 
 	try {
+		const token = req.headers.authorization!.slice(7);
+		const userClient = getSupabaseUserClient(token);
+
 		// Validations: prevent directory traversal or uploading to other users' directories
 		const userPrefix = `${user.id}/`;
 		if (!fileName.startsWith(userPrefix)) {
@@ -42,10 +45,10 @@ export async function uploadFile(req: AuthenticatedRequest, res: Response): Prom
 
 		// For avatar uploads, we try to remove the old avatar first (similar to frontend service)
 		if (bucket === 'avatars') {
-			await supabase.storage.from(bucket).remove([fileName]);
+			await userClient.storage.from(bucket).remove([fileName]);
 		}
 
-		const { error: uploadError } = await supabase.storage
+		const { error: uploadError } = await userClient.storage
 			.from(bucket)
 			.upload(fileName, req.body, {
 				cacheControl: '3600',
@@ -55,7 +58,7 @@ export async function uploadFile(req: AuthenticatedRequest, res: Response): Prom
 
 		if (uploadError) throw uploadError;
 
-		const { data } = supabase.storage.from(bucket).getPublicUrl(fileName);
+		const { data } = userClient.storage.from(bucket).getPublicUrl(fileName);
 
 		res.status(200).json({
 			path: fileName,
