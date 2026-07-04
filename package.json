@@ -9,8 +9,8 @@
 		"build": "npm -w frontend run build",
 		"build:backend": "npm -w backend run build",
 		"install:all": "npm install",
-		"lint": "npm -w frontend run lint",
-		"format": "npm -w frontend run format"
+		"lint": "npm -w frontend run lint && npm -w backend run lint",
+		"format": "npm -w frontend run format && npm -w backend run format"
 	},
 	"workspaces": [
 		"frontend",

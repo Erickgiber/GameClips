@@ -1,5 +1,6 @@
 import { env } from '$env/dynamic/public';
-import { supabase } from '$lib/supabase/client';
+import { user } from '$lib/stores/user.svelte';
+import { api } from './api.js';
 
 export type UploadableVideo = Blob | File | ArrayBuffer;
 
@@ -32,14 +33,7 @@ export async function uploadVideoToStorage(
 ) {
 	const bucket = env.PUBLIC_SUPABASE_STORAGE_BUCKET || 'game-clips';
 
-	const {
-		data: { user },
-		error: authError
-	} = await supabase.auth.getUser();
-
-	if (authError) throw new Error(authError.message);
-
-	const ownerId = params.userId ?? user?.id;
+	const ownerId = params.userId ?? user.id;
 	if (!ownerId) {
 		throw new Error('A signed-in user is required to upload videos.');
 	}
@@ -48,50 +42,36 @@ export async function uploadVideoToStorage(
 	const fileName = params.fileName ?? `${Date.now()}-${crypto.randomUUID()}.${extension}`;
 	const storagePath = `${ownerId}/${fileName}`;
 	const uploadBody = buildUploadBody(payload);
+	const contentType =
+		params.contentType ?? (payload instanceof Blob && payload.type ? payload.type : 'video/mp4');
 
-	const { error: uploadError } = await supabase.storage
-		.from(bucket)
-		.upload(storagePath, uploadBody, {
-			cacheControl: '3600',
-			upsert: false,
-			contentType:
-				params.contentType ?? (payload instanceof Blob && payload.type ? payload.type : 'video/mp4')
-		});
-
-	if (uploadError) throw new Error(uploadError.message);
-
-	const {
-		data: { publicUrl }
-	} = supabase.storage.from(bucket).getPublicUrl(storagePath);
+	const data = await api.post(`/storage/upload/${bucket}`, uploadBody, {
+		headers: {
+			'x-file-name': storagePath,
+			'x-content-type': contentType
+		}
+	});
 
 	return {
-		path: storagePath,
-		publicUrl
+		path: data.path,
+		publicUrl: data.publicUrl
 	};
 }
 
 export async function uploadAvatarToStorage(payload: Blob | File, userId: string) {
 	const bucket = 'avatars';
 	const storagePath = `${userId}/avatar.png`;
+	const contentType = payload.type || 'image/png';
 
-	// Intentamos eliminar por si la política de UPDATE falla
-	await supabase.storage.from(bucket).remove([storagePath]);
-
-	const { error: uploadError } = await supabase.storage.from(bucket).upload(storagePath, payload, {
-		cacheControl: '3600',
-		upsert: true,
-		contentType: payload.type || 'image/png'
+	const data = await api.post(`/storage/upload/${bucket}`, payload, {
+		headers: {
+			'x-file-name': storagePath,
+			'x-content-type': contentType
+		}
 	});
 
-	if (uploadError) throw new Error(uploadError.message);
-
-	const {
-		data: { publicUrl }
-	} = supabase.storage.from(bucket).getPublicUrl(storagePath);
-
-	// Add a cache buster to the URL so the UI updates immediately after uploading
 	return {
-		path: storagePath,
-		publicUrl: `${publicUrl}?t=${Date.now()}`
+		path: data.path,
+		publicUrl: `${data.publicUrl}?t=${Date.now()}`
 	};
 }

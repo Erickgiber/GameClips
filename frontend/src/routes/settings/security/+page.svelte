@@ -55,8 +55,8 @@
 			confirmPassword = '';
 			isChangingPassword = false;
 			setTimeout(() => (passwordSuccess = false), 3000);
-		} catch (error: any) {
-			passwordError = error.message;
+		} catch (error: unknown) {
+			passwordError = (error as Error).message;
 		} finally {
 			isSavingPassword = false;
 		}
@@ -92,8 +92,8 @@
 			mfaFactorId = data.id;
 			qrCodeSvg = data.totp.qr_code;
 			isEnrollingMfa = true;
-		} catch (error: any) {
-			mfaError = error.message;
+		} catch (error: unknown) {
+			mfaError = (error as Error).message;
 		}
 	}
 
@@ -107,8 +107,8 @@
 			isEnrollingMfa = false;
 			verificationCode = '';
 			alert(m.security_2fa_enabled_success?.() ?? '2FA enabled!');
-		} catch (error: any) {
-			mfaError = error.message;
+		} catch (error: unknown) {
+			mfaError = (error as Error).message;
 		}
 	}
 
@@ -119,8 +119,8 @@
 			isMfaEnrolled = false;
 			mfaFactorId = null;
 			alert(m.security_2fa_disabled_success?.() ?? '2FA disabled!');
-		} catch (error: any) {
-			alert(error.message);
+		} catch (error: unknown) {
+			alert((error as Error).message);
 		}
 	}
 
@@ -152,15 +152,15 @@
 			} else {
 				// linking initiates an OAuth flow, which redirects the page.
 				// user will need to sign in again via the provider.
-				await linkIdentity(provider as any);
+				await linkIdentity(provider);
 			}
-		} catch (error: any) {
-			alert(error.message);
+		} catch (error: unknown) {
+			alert((error as Error).message);
 		}
 	}
 
 	// --- Passkeys State ---
-	let passkeys = $state<any[]>([]);
+	let passkeys = $state<unknown[]>([]);
 	let isLoadingPasskeys = $state(true);
 
 	async function loadPasskeys() {
@@ -179,8 +179,8 @@
 			await enrollPasskey();
 			await loadPasskeys();
 			alert(m.security_passkey_added_success?.() ?? 'Passkey added!');
-		} catch (error: any) {
-			alert(error.message);
+		} catch (error: unknown) {
+			alert((error as Error).message);
 		}
 	}
 
@@ -189,8 +189,8 @@
 			await deletePasskey(id);
 			await loadPasskeys();
 			alert(m.security_passkey_deleted_success?.() ?? 'Passkey deleted!');
-		} catch (error: any) {
-			alert(error.message);
+		} catch (error: unknown) {
+			alert((error as Error).message);
 		}
 	}
 
@@ -433,7 +433,7 @@
 						<div
 							class="mx-auto mb-4 flex max-w-max justify-center rounded-lg bg-white p-4 shadow-sm"
 						>
-							<!-- Supabase totp.qr_code returns raw SVG string -->
+							<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 							{@html qrCodeSvg}
 						</div>
 

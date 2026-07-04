@@ -16,7 +16,7 @@ export const corsOptions: CorsOptions = {
 			callback(new Error(`Origin ${origin} not allowed by CORS`));
 		}
 	},
-	methods: ['GET', 'POST', 'OPTIONS'],
+	methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
 	credentials: true,
 	optionsSuccessStatus: 204
 };
