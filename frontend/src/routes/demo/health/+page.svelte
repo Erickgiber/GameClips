@@ -1,5 +1,6 @@
 <script lang="ts">
-	const API_BASE = 'http://localhost:3000';
+	import { env } from '$env/dynamic/public';
+	const API_BASE = env.PUBLIC_API_URL || 'http://localhost:3000';
 
 	let status = $state<string>('idle');
 	let data = $state<{ status: string; timestamp: string; uptime: number } | null>(null);

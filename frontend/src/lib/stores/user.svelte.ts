@@ -15,6 +15,7 @@ import {
 import { emptyUser } from '$lib/constants/empty-user';
 import type { User } from '$lib/types/user.type';
 import { m } from '$lib/paraglide/messages';
+import { mapSupabaseError } from '$lib/utils/supabaseMapCode';
 
 type AuthStatus = {
 	initialized: boolean;
@@ -52,7 +53,10 @@ async function applyAuthUser(authUser: SupabaseAuthUser | null) {
 	}
 
 	const mappedUser = await buildAppUserFromAuth(authUser);
-	Object.assign(user, mappedUser);
+	Object.assign(user, {
+		...mappedUser,
+		authenticated: true
+	});
 }
 
 async function syncSession(session: Session | null) {
@@ -60,7 +64,7 @@ async function syncSession(session: Session | null) {
 		authStatus.error = null;
 		await applyAuthUser(session?.user ?? null);
 	} catch (error) {
-		authStatus.error = error instanceof Error ? error.message : 'Unable to sync session';
+		authStatus.error = error instanceof Error ? mapSupabaseError(error.message) : 'Unable to sync session';
 		resetUserState();
 	}
 }
@@ -94,7 +98,7 @@ export async function initializeAuthState() {
 		await syncSession(session);
 		ensureAuthListener();
 	} catch (error) {
-		authStatus.error = error instanceof Error ? error.message : 'Unable to initialize auth';
+		authStatus.error = error instanceof Error ? mapSupabaseError(error.message) : 'Unable to initialize auth';
 		resetUserState();
 	} finally {
 		authStatus.loading = false;
@@ -113,11 +117,16 @@ export async function loginWithEmail(payload: {
 	try {
 		await setAuthRememberMe(payload.rememberMe);
 
+		// Perform login via backend, then set session in frontend SDK
 		const data = await signInWithEmail(payload);
-		await syncSession(data.session ?? null);
+		if (data.session) {
+			const { error } = await supabase.auth.setSession(data.session);
+			if (error) throw error;
+		}
 	} catch (error) {
-		authStatus.error = error instanceof Error ? error.message : m.signing_in();
-		throw error;
+		const mapped = error instanceof Error ? mapSupabaseError(error.message) : m.signing_in();
+		authStatus.error = mapped;
+		throw new Error(mapped);
 	} finally {
 		authStatus.loading = false;
 	}
@@ -132,12 +141,17 @@ export async function registerWithEmailPassword(payload: {
 	authStatus.error = null;
 
 	try {
+		// Perform signup via backend, then set session in frontend SDK
 		const data = await registerWithEmail(payload);
-		await syncSession(data.session ?? null);
+		if (data.session) {
+			const { error } = await supabase.auth.setSession(data.session);
+			if (error) throw error;
+		}
 		return data;
 	} catch (error) {
-		authStatus.error = error instanceof Error ? error.message : 'Unable to register';
-		throw error;
+		const mapped = error instanceof Error ? mapSupabaseError(error.message) : 'Unable to register';
+		authStatus.error = mapped;
+		throw new Error(mapped);
 	} finally {
 		authStatus.loading = false;
 	}
@@ -164,10 +178,14 @@ export async function loginWithPasskey(payload?: { rememberMe?: boolean }) {
 		}
 
 		const data = await signInWithPasskeyService();
-		await syncSession(data.session ?? null);
+		if (data.session) {
+			const { error } = await supabase.auth.setSession(data.session);
+			if (error) throw error;
+		}
 	} catch (error) {
-		authStatus.error = error instanceof Error ? error.message : m.signing_in();
-		throw error;
+		const mapped = error instanceof Error ? mapSupabaseError(error.message) : m.signing_in();
+		authStatus.error = mapped;
+		throw new Error(mapped);
 	} finally {
 		authStatus.loading = false;
 	}

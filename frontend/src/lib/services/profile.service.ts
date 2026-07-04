@@ -1,8 +1,8 @@
 import type { User as SupabaseAuthUser } from '@supabase/supabase-js';
-import { supabase } from '$lib/supabase/client';
 import type { User } from '$lib/types/user.type';
-import { mapSupabaseError } from '$lib/utils/supabaseMapCode';
 import { m } from '$lib/paraglide/messages';
+import { api } from './api.js';
+import { mapSupabaseError } from '$lib/utils/supabaseMapCode';
 
 type ProfileRow = {
 	id: string;
@@ -24,118 +24,35 @@ type ProfileRow = {
 	sponsored_by: string[];
 };
 
-function defaultUsernameFromEmail(email: string | null | undefined): string {
-	if (!email) return 'player';
-	return email.split('@')[0] || 'player';
+export async function ensureProfileForUser(payload: { id: string; username: string }): Promise<void> {
+	await api.post('/profiles', payload);
 }
 
-function mapProfileToUser(profile: ProfileRow, authenticated: boolean): User {
-	return {
-		id: profile.id,
-		authenticated,
-		username: profile.username,
-		email: profile.email,
-		name: profile.name ?? profile.username,
-		description: profile.description,
-		title: profile.title ?? 'Creator',
-		role: profile.role ?? 'normal',
-		dedication: profile.dedication,
-		avatar_url: profile.avatar_url ?? '/user.png',
-		followers_count: profile.followers_count ?? 0,
-		following_count: profile.following_count ?? 0,
-		videos_count: profile.videos_count ?? 0,
-		likes_count: profile.likes_count ?? 0,
-		saved_videos_count: profile.saved_videos_count ?? 0,
-		liked_videos_count: profile.liked_videos_count ?? 0,
-		sponsored_by: profile.sponsored_by ?? []
-	};
-}
-
-function toAppUser(profile: ProfileRow | null, authUser: SupabaseAuthUser): User {
-	const usernameFallback = defaultUsernameFromEmail(authUser.email);
-
-	if (!profile) {
-		return {
-			id: authUser.id,
-			authenticated: true,
-			username: usernameFallback,
-			email: authUser.email ?? '',
-			name: usernameFallback,
-			description: '',
-			title: 'Creator',
-			role: 'normal',
-			dedication: '',
-			avatar_url: '/user.png',
-			followers_count: 0,
-			following_count: 0,
-			videos_count: 0,
-			likes_count: 0,
-			saved_videos_count: 0,
-			liked_videos_count: 0,
-			sponsored_by: []
-		};
+export async function getCurrentProfile(): Promise<User | null> {
+	try {
+		const profile = await api.get('/profiles/me');
+		return profile;
+	} catch (error) {
+		console.error('[getCurrentProfile] failed:', error);
+		return null;
 	}
-
-	return mapProfileToUser(profile, true);
-}
-
-function toPublicAppUser(profile: ProfileRow): User {
-	return mapProfileToUser(profile, false);
-}
-
-export async function ensureProfileForUser(payload: { id: string; username: string }) {
-	const { error } = await supabase.from('profiles').upsert(payload, { onConflict: 'id' });
-	if (error) throw new Error(error.message);
-}
-
-export async function getCurrentProfile() {
-	const {
-		data: { user },
-		error: authError
-	} = await supabase.auth.getUser();
-
-	if (authError) throw new Error(authError.message);
-	if (!user) return null;
-
-	const { data, error } = await supabase
-		.from('profiles')
-		.select(
-			'id, username, email, name, description, title, role, role_id, dedication, avatar_url, followers_count, following_count, videos_count, likes_count, saved_videos_count, liked_videos_count, sponsored_by'
-		)
-		.eq('id', user.id)
-		.maybeSingle();
-
-	if (error) throw new Error(error.message);
-
-	return toAppUser(data as ProfileRow | null, user);
 }
 
 export async function getProfileByUsername(username: string): Promise<User | null> {
-	const { data, error } = await supabase
-		.from('profiles')
-		.select(
-			'id, username, email, name, description, title, role, role_id, dedication, avatar_url, followers_count, following_count, videos_count, likes_count, saved_videos_count, liked_videos_count, sponsored_by'
-		)
-		.eq('username', username)
-		.maybeSingle();
-
-	if (error) throw new Error(error.message);
-	if (!data) return null;
-
-	return toPublicAppUser(data as ProfileRow);
+	try {
+		const profile = await api.get(`/profiles/${username}`);
+		return profile;
+	} catch (error) {
+		console.error(`[getProfileByUsername] failed for ${username}:`, error);
+		return null;
+	}
 }
 
-export async function buildAppUserFromAuth(authUser: SupabaseAuthUser): Promise<User> {
-	const { data, error } = await supabase
-		.from('profiles')
-		.select(
-			'id, username, email, name, description, title, role, role_id, dedication, avatar_url, followers_count, following_count, videos_count, likes_count, saved_videos_count, liked_videos_count, sponsored_by'
-		)
-		.eq('id', authUser.id)
-		.maybeSingle();
-
-	if (error) throw new Error(error.message);
-	return toAppUser(data as ProfileRow | null, authUser);
+export async function buildAppUserFromAuth(_authUser: SupabaseAuthUser): Promise<User> {
+	// The auth token is retrieved from getSession() in the api request.
+	// Since we are authenticated, we just fetch /profiles/me.
+	const profile = await api.get('/profiles/me');
+	return profile;
 }
 
 export type UpdateProfileResult = {
@@ -144,32 +61,20 @@ export type UpdateProfileResult = {
 };
 
 export async function updateProfile(
-	userId: string,
+	_userId: string, // Kept for signature compatibility
 	updates: Partial<Omit<ProfileRow, 'id'>>
 ): Promise<UpdateProfileResult> {
 	try {
-		const { error } = await supabase.from('profiles').update(updates).eq('id', userId);
-
-		if (error) {
-			// Logueamos el error real para debugging interno, pero no lo exponemos al cliente
-			console.error('[updateProfile] Supabase error:', error);
-			return {
-				success: false,
-				message: mapSupabaseError(error.code)
-			};
-		}
-
+		await api.patch('/profiles/me', updates);
 		return {
 			success: true,
-			// Opcional: Puedes devolver un mensaje de éxito traducido
 			message: m.profile_update_success()
 		};
-	} catch (err) {
-		// Captura cualquier error de red o fallo catastrófico
-		console.error('[updateProfile] Unexpected error:', err);
+	} catch (err: any) {
+		console.error('[updateProfile] failed:', err);
 		return {
 			success: false,
-			message: m.error_generic()
+			message: mapSupabaseError(err.message)
 		};
 	}
 }

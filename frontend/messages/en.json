@@ -171,6 +171,7 @@
 	"error_generic": "An unexpected error occurred. Please try again.",
 	"error_unique_violation": "This information is already in use by another user.",
 	"error_unauthorized": "You do not have permission to perform this action.",
+	"error_invalid_credentials": "Invalid email or password.",
 	"error_fk_violation": "The provided information is invalid.",
 	"error_missing_field": "Please complete all required fields.",
 	"error_profile_not_found": "Profile could not be found.",
