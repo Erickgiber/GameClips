@@ -8,7 +8,14 @@
 		customGoBack = '/',
 		customTitle = user.username,
 		showShare = false,
+		showSettings = false,
 		onShare = () => {}
+	}: {
+		customGoBack?: string;
+		customTitle?: string | null;
+		showShare?: boolean;
+		showSettings?: boolean;
+		onShare?: () => void;
 	} = $props();
 
 	// eslint-disable-next-line
@@ -44,7 +51,7 @@
 					>
 				</button>
 			{/if}
-			{#if !page.url.pathname.includes('/settings')}
+			{#if showSettings && !page.url.pathname.includes('/settings')}
 				<a href={resolve('/settings')} class="rounded-lg p-2 transition-colors hover:bg-muted">
 					<Settings class="h-6 w-6" />
 				</a>

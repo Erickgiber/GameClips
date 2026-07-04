@@ -1,5 +1,6 @@
 import { supabase } from '$lib/supabase/client';
 import { api } from './api.js';
+import type { AuthResponse, UserIdentity } from '@supabase/supabase-js';
 
 export type AuthCredentials = {
 	email: string;
@@ -11,11 +12,11 @@ export type RegisterPayload = AuthCredentials & {
 };
 
 export async function signInWithEmail(credentials: AuthCredentials) {
-	return await api.post('/auth/login', credentials);
+	return await api.post<AuthResponse['data']>('/auth/login', credentials);
 }
 
 export async function registerWithEmail(payload: RegisterPayload) {
-	return await api.post('/auth/register', payload);
+	return await api.post<AuthResponse['data']>('/auth/register', payload);
 }
 
 export async function signOut() {
@@ -29,31 +30,39 @@ export async function signOut() {
 }
 
 export async function updatePassword(password: string) {
-	return await api.post('/auth/update-password', { password });
+	return await api.post<{ success: boolean }>('/auth/update-password', { password });
 }
 
 export async function getMfaStatus() {
-	return await api.get('/auth/mfa/status');
+	return await api.get<{
+		aal: unknown;
+		isEnrolled: boolean;
+		factorId?: string;
+	}>('/auth/mfa/status');
 }
 
 export async function enrollMfa() {
-	return await api.post('/auth/mfa/enroll');
+	return await api.post<{
+		id: string;
+		type: string;
+		totp: { qr_code: string };
+	}>('/auth/mfa/enroll');
 }
 
 export async function verifyMfa(factorId: string, code: string) {
-	return await api.post('/auth/mfa/verify', { factorId, code });
+	return await api.post<unknown>('/auth/mfa/verify', { factorId, code });
 }
 
 export async function unenrollMfa(factorId: string) {
-	return await api.post('/auth/mfa/unenroll', { factorId });
+	return await api.post<{ success: boolean }>('/auth/mfa/unenroll', { factorId });
 }
 
 export async function getLinkedIdentities() {
-	return await api.get('/auth/identities');
+	return await api.get<UserIdentity[]>('/auth/identities');
 }
 
 export async function linkIdentity(provider: string) {
-	const data = await api.post('/auth/identities/link', { provider });
+	const data = await api.post<{ url?: string }>('/auth/identities/link', { provider });
 	if (data?.url) {
 		window.location.href = data.url;
 	}
@@ -61,11 +70,17 @@ export async function linkIdentity(provider: string) {
 }
 
 export async function unlinkIdentity(identity: unknown) {
-	return await api.post('/auth/identities/unlink', { identity });
+	return await api.post<{ success: boolean }>('/auth/identities/unlink', { identity });
 }
 
 export async function getPasskeys() {
-	return await api.get('/auth/passkeys');
+	return await api.get<
+		{
+			id: string;
+			friendly_name?: string;
+			created_at: string;
+		}[]
+	>('/auth/passkeys');
 }
 
 export async function enrollPasskey() {

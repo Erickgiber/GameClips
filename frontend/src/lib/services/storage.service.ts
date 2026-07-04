@@ -45,12 +45,16 @@ export async function uploadVideoToStorage(
 	const contentType =
 		params.contentType ?? (payload instanceof Blob && payload.type ? payload.type : 'video/mp4');
 
-	const data = await api.post(`/storage/upload/${bucket}`, uploadBody, {
-		headers: {
-			'x-file-name': storagePath,
-			'x-content-type': contentType
+	const data = await api.post<{ path: string; publicUrl: string }>(
+		`/storage/upload/${bucket}`,
+		uploadBody,
+		{
+			headers: {
+				'x-file-name': storagePath,
+				'x-content-type': contentType
+			}
 		}
-	});
+	);
 
 	return {
 		path: data.path,
@@ -63,12 +67,16 @@ export async function uploadAvatarToStorage(payload: Blob | File, userId: string
 	const storagePath = `${userId}/avatar.png`;
 	const contentType = payload.type || 'image/png';
 
-	const data = await api.post(`/storage/upload/${bucket}`, payload, {
-		headers: {
-			'x-file-name': storagePath,
-			'x-content-type': contentType
+	const data = await api.post<{ path: string; publicUrl: string }>(
+		`/storage/upload/${bucket}`,
+		payload,
+		{
+			headers: {
+				'x-file-name': storagePath,
+				'x-content-type': contentType
+			}
 		}
-	});
+	);
 
 	return {
 		path: data.path,

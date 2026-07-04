@@ -27,7 +27,7 @@
 		enrollPasskey,
 		deletePasskey
 	} from '$lib/services/auth.service';
-	import type { Identity } from '@supabase/supabase-js';
+	import type { UserIdentity } from '@supabase/supabase-js';
 
 	// --- Password State ---
 	let isChangingPassword = $state(false);
@@ -125,7 +125,7 @@
 	}
 
 	// --- Social Linking State ---
-	let linkedIdentities = $state<Identity[]>([]);
+	let linkedIdentities = $state<UserIdentity[]>([]);
 	let isLoadingIdentities = $state(true);
 
 	async function loadIdentities() {
@@ -160,7 +160,13 @@
 	}
 
 	// --- Passkeys State ---
-	let passkeys = $state<unknown[]>([]);
+	let passkeys = $state<
+		{
+			id: string;
+			friendly_name?: string;
+			created_at: string;
+		}[]
+	>([]);
 	let isLoadingPasskeys = $state(true);
 
 	async function loadPasskeys() {

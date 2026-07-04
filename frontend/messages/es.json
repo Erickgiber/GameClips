@@ -217,5 +217,8 @@
 	"settings_profile_title": "Ajustes / Perfil",
 	"settings_security_title": "Ajustes / Seguridad",
 	"settings_language_title": "Ajustes / Idioma",
-	"login_with_passkey": "Iniciar sesión con Passkey"
+	"login_with_passkey": "Iniciar sesión con Passkey",
+	"share_profile": "Compartir Perfil",
+	"share_profile_text": "¡Echa un vistazo al perfil de {username} en GameClips!",
+	"instagram_share_tip": "Enlace copiado. Pégalo en tu historia o biografía de Instagram."
 }

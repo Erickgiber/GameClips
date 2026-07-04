@@ -39,10 +39,8 @@
 
 	async function handleShare() {
 		const url = window.location.href;
-		const title = m.share_profile?.() ?? 'Compartir Perfil';
-		const text =
-			m.share_profile_text?.({ username: user.username }) ??
-			`Echa un vistazo al perfil de ${user.username} en GameClips!`;
+		const title = m.share_profile();
+		const text = m.share_profile_text({ username: user.username });
 
 		let isNativeShareAvailable: boolean;
 		try {
@@ -77,10 +75,7 @@
 
 	function shareSocial(platform: string) {
 		const url = encodeURIComponent(window.location.href);
-		const text = encodeURIComponent(
-			m.share_profile_text?.({ username: user.username }) ??
-				`Echa un vistazo al perfil de ${user.username} en GameClips!`
-		);
+		const text = encodeURIComponent(m.share_profile_text({ username: user.username }));
 		let shareUrl = '';
 
 		switch (platform) {
@@ -98,10 +93,7 @@
 				break;
 			case 'instagram':
 				copyUrl();
-				alert(
-					m.instagram_share_tip?.() ??
-						'Link copiado. Pégalo en tu historia o biografía de Instagram.'
-				);
+				alert(m.instagram_share_tip());
 				shareUrl = `https://instagram.com`;
 				break;
 		}
@@ -166,7 +158,12 @@
 </script>
 
 <div class="size-full overflow-y-auto bg-background text-foreground">
-	<TopNavProfile showShare={true} onShare={handleShare} />
+	<TopNavProfile
+		showShare={true}
+		onShare={handleShare}
+		showSettings={user.id === currentUser.id}
+		customTitle=""
+	/>
 
 	<div class="mx-auto max-w-7xl px-4 pb-8 lg:px-6" in:fly={{ y: 16, duration: 300, delay: 100 }}>
 		<div class="pt-6 pb-8">
@@ -405,7 +402,7 @@
 		>
 			<div class="relative border-b border-border p-5 text-center">
 				<h3 class="text-lg font-black text-foreground">
-					{m.share_profile?.() ?? 'Compartir Perfil'}
+					{m.share_profile()}
 				</h3>
 				<button
 					class="absolute top-5 right-5 text-muted-foreground transition-colors hover:text-foreground md:cursor-pointer"

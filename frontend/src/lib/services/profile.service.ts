@@ -33,7 +33,7 @@ export async function ensureProfileForUser(payload: {
 
 export async function getCurrentProfile(): Promise<User | null> {
 	try {
-		const profile = await api.get('/profile');
+		const profile = await api.get<User>('/profile');
 		return profile;
 	} catch (error) {
 		console.error('[getCurrentProfile] failed:', error);
@@ -43,7 +43,7 @@ export async function getCurrentProfile(): Promise<User | null> {
 
 export async function getProfileByUsername(username: string): Promise<User | null> {
 	try {
-		const profile = await api.get(`/profile/${username}`);
+		const profile = await api.get<User>(`/profile/${username}`);
 		return profile;
 	} catch (error) {
 		console.error(`[getProfileByUsername] failed for ${username}:`, error);
@@ -54,7 +54,7 @@ export async function getProfileByUsername(username: string): Promise<User | nul
 export async function buildAppUserFromAuth(authUser: SupabaseAuthUser): Promise<User> {
 	// The auth token is retrieved from getSession() in the api request.
 	// Since we are authenticated, we just fetch /profile.
-	const profile = await api.get('/profile');
+	const profile = await api.get<User>('/profile');
 	return {
 		...profile,
 		email: authUser.email || profile.email
