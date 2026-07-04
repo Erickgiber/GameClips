@@ -18,7 +18,7 @@ export const supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
 		autoRefreshToken: false,
 		persistSession: false,
 		experimental: {
-			passkey: true,
+			passkey: true
 		}
 	}
 });
