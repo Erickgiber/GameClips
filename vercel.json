@@ -1,27 +1,7 @@
 {
-    "services": {
-        "frontend": {
-            "root": "frontend",
-            "framework": "sveltekit-1"
-        },
-        "backend": {
-            "root": "backend"
-        }
-    },
-    "rewrites": [
-        {
-            "source": "/api(/.*)?",
-            "destination": {
-                "type": "service",
-                "service": "backend"
-            }
-        },
-        {
-            "source": "/(.*)",
-            "destination": {
-                "type": "service",
-                "service": "frontend"
-            }
-        }
-    ]
+	"cleanUrls": true,
+	"outputDirectory": "frontend/build",
+	"rewrites": [
+		{ "source": "/(.*)", "destination": "/index.html" }
+	]
 }
