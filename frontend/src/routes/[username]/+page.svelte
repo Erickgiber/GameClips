@@ -45,10 +45,6 @@
 
 		loadProfile();
 	});
-
-	$effect(() => {
-		console.log(fetchedProfile);
-	});
 </script>
 
 {#if isLoaded && userProfile}
